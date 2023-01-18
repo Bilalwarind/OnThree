@@ -1,6 +1,6 @@
-import React from "react";
-import { Platform, Text, View } from "react-native";
-import { hp } from "./responsive";
+import React from 'react';
+import {Platform, Text, View} from 'react-native';
+import {hp} from './responsive';
 
 const CustomText = ({
   title,
@@ -48,8 +48,7 @@ const CustomText = ({
       marginLeft: marginleft,
       marginRight: marginright,
       flexDirection: flexdirection,
-    }}
-  >
+    }}>
     <Text
       onPress={onpress}
       numberOfLines={numberOfLines}
@@ -70,8 +69,7 @@ const CustomText = ({
         borderRadius: txtborder,
         fontFamily: fontfamily,
         fontWeight: fontweight,
-      }}
-    >
+      }}>
       {title}
     </Text>
   </View>
