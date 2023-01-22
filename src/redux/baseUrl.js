@@ -10,7 +10,6 @@ baseUrl.interceptors.request.use(
       ...config.headers,
     };
     function User() {
-      // Rule 2: call hooks in function component
       const {token} = useSelector(state => state.auth);
       return <>{token}</>;
     }

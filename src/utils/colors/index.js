@@ -1,7 +1,8 @@
 export const color = {
   primary: '#000',
-  primaryLight: '#88ACCD',
+  bg: '#F5F5F5',
+  border: '#CECECE',
   white: '#fff',
-  gray: '#F3F3F3',
+  gray: '#E5E5E6',
   red: '#D22020',
 };

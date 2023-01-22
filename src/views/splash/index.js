@@ -19,7 +19,7 @@ const Splash = ({params}) => {
       <StatusBar hidden />
 
       <View style={styles.ViewStyle}>
-        <Image style={styles.logo} source={Images.logo} resizeMode="cover" />
+        <Image style={styles.logo} source={Images.logo} resizeMode="contain" />
       </View>
     </View>
   );
@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   logo: {
-    height: hp(5),
+    height: hp(20),
     width: wp(50),
     tintColor: '#fff',
   },

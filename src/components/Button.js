@@ -18,6 +18,7 @@ const CustomButton = ({
   alighitems,
   Icon,
   flexdirection,
+  justifycontent,
   marginhori,
   flex,
   marginleft,
@@ -54,6 +55,7 @@ const CustomButton = ({
           flexDirection: flexdirection,
           alignItems: alighitems,
           alignSelf: alignSelf,
+          justifyContent: justifycontent,
           backgroundcolor: 'white',
         }}>
         {Icon}

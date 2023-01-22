@@ -8,7 +8,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: color.white,
   },
+  input: {
+    height: hp(16),
+    justifyContent: 'center',
+  },
   logo: {
+    marginTop: hp(5),
+    marginBottom: hp(3),
+    alignSelf: 'center',
     width: wp(45),
     tintColor: '#000',
   },
@@ -22,8 +29,8 @@ const styles = StyleSheet.create({
     width: wp(100),
   },
   socialIcon: {
-    width: wp(20),
-    height: wp(15),
+    width: wp(17),
+    height: wp(13),
     margin: wp(3),
     borderRadius: wp(2),
     alignItems: 'center',

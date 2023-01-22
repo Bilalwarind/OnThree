@@ -5,7 +5,8 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import InVisible from 'react-native-vector-icons/MaterialIcons';
 const CustomTextInput = ({
   placeholder,
-  placeholderStyle,
+  numberOfLines,
+  multiline,
   marginhorizontal,
   marginbottom,
   marginvertical,
@@ -74,10 +75,12 @@ const CustomTextInput = ({
 
     <TextInput
       placeholder={placeholder}
-      style={placeholderStyle}
+      style={{fontFamily: fontfamily}}
       onChangeText={onchangetext}
       value={value}
       secureTextEntry={isSecure}
+      multiline={multiline}
+      numberOfLines={numberOfLines}
     />
     {isPassword && (
       <TouchableOpacity onPress={oneyepress}>

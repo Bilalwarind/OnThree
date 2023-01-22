@@ -1,15 +1,14 @@
-import { createStore, applyMiddleware } from "redux";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { persistStore, persistReducer } from "redux-persist";
+import {createStore, applyMiddleware} from 'redux';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {persistStore, persistReducer} from 'redux-persist';
 
-import reducers from "./reducers";
-import middlewares from "./middlewares";
+import reducers from './reducers';
+import middlewares from './middlewares';
 
 const persistConfig = {
-  key: "root",
+  key: 'root',
   storage: AsyncStorage,
-  blacklist: ["values"],
-  //   whitelist: ['values'], // only navigation will be persist
+  blacklist: ['values'],
 };
 
 const pReducer = persistReducer(persistConfig, reducers);
@@ -18,4 +17,4 @@ const store = createStore(pReducer, applyMiddleware(...middlewares));
 
 const persister = persistStore(store);
 
-export { store, persister };
+export {store, persister};
