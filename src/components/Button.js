@@ -17,6 +17,7 @@ const CustomButton = ({
   textalignvertical,
   alighitems,
   Icon,
+  IconRight,
   flexdirection,
   justifycontent,
   marginhori,
@@ -56,7 +57,6 @@ const CustomButton = ({
           alignItems: alighitems,
           alignSelf: alignSelf,
           justifyContent: justifycontent,
-          backgroundcolor: 'white',
         }}>
         {Icon}
         <Text
@@ -74,6 +74,7 @@ const CustomButton = ({
           }}>
           {title}
         </Text>
+        {IconRight}
       </View>
     </TouchableOpacity>
   </View>

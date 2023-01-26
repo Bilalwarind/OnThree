@@ -4,4 +4,5 @@ export const Images = {
   profile: require('./profile.png'),
   chain: require('./chain.png'),
   story: require('./story.png'),
+  partners: require('./partners.png'),
 };
