@@ -1,16 +1,5 @@
-import React, {useState, useEffect, useRef, useCallback} from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  Image,
-  Platform,
-  TouchableOpacity,
-  Keyboard,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-} from 'react-native';
+import React, {useState} from 'react';
+import {View, Image, StatusBar} from 'react-native';
 import {wp, hp, Size, color, Images, IOS, familyFont} from '../../utils/';
 import CustomText from '../../components/CustomText';
 import CustomButton from '../../components/Button';
