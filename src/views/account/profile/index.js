@@ -11,18 +11,18 @@ import {
   StatusBar,
   StyleSheet,
 } from 'react-native';
-import {wp, hp, Size, color, Images, IOS, familyFont} from '../../utils/';
-import CustomText from '../../components/CustomText';
-import CustomButton from '../../components/Button';
+import {wp, hp, Size, color, Images, IOS, familyFont} from '../../../utils/';
+import CustomText from '../../../components/CustomText';
+import CustomButton from '../../../components/Button';
 import {useNavigation} from '@react-navigation/native';
-import {loginUser} from '../../redux';
-import CustomTextInput from '../../components/CutomTextInput';
+import {loginUser} from '../../../redux';
+import CustomTextInput from '../../../components/CutomTextInput';
 import {Paragraph, Dialog, Portal} from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux';
 import Feather from 'react-native-vector-icons/Feather';
 import styles from './style';
 
-const Login = () => {
+const Profile = () => {
   const dispatch = useDispatch();
   const nav = useNavigation();
   const {token, userId, isLoading} = useSelector(state => state.auth);
@@ -46,13 +46,13 @@ const Login = () => {
         backgroundColor="transparent"
       />
       <View style={styles.row1}>
-        <View style={styles.header}>
+        <TouchableOpacity onPress={() => nav.goBack()} style={styles.header}>
           <Image
             style={styles.logo}
             source={Images.undo}
             resizeMode="contain"
           />
-        </View>
+        </TouchableOpacity>
         <View style={styles.header2}>
           <Image
             style={styles.profile}
@@ -95,7 +95,6 @@ const Login = () => {
         borderradius={hp(1)}
         textcolor={color.primary}
         padding={hp(1)}
-        textalign="center"
         marginvertical={hp(3)}
         flexdirection="row"
         justifycontent="center"
@@ -243,7 +242,7 @@ const Login = () => {
           justifycontent="center"
           alighitems="center"
           onpress={() => {
-            onRegister();
+            nav.navigate('StorySwipe');
           }}
           Icon=<Feather name="video" size={19} color={color.white} />
         />
@@ -335,4 +334,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Profile;

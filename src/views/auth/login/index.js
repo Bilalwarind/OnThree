@@ -11,12 +11,12 @@ import {
   StatusBar,
   StyleSheet,
 } from 'react-native';
-import {wp, hp, Size, color, Images, IOS, familyFont} from '../../utils/';
-import CustomText from '../../components/CustomText';
-import CustomButton from '../../components/Button';
+import {wp, hp, Size, color, Images, IOS, familyFont} from '../../../utils/';
+import CustomText from '../../../components/CustomText';
+import CustomButton from '../../../components/Button';
 import {useNavigation} from '@react-navigation/native';
-import {loginUser} from '../../redux';
-import CustomTextInput from '../../components/CutomTextInput';
+import {loginUser} from '../../../redux';
+import CustomTextInput from '../../../components/CutomTextInput';
 import {Paragraph, Dialog, Portal} from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -140,7 +140,7 @@ const Login = () => {
         textalign="center"
         fontweight="bold"
         onpress={() => {
-          onRegister();
+          nav.navigate('Register');
         }}
       />
       <CustomText
