@@ -12,7 +12,7 @@ import {wp, hp, Size, color, Images, IOS} from '../../utils/';
 const Splash = ({params}) => {
   const navigation = useNavigation();
   window.setTimeout(async () => {
-    navigation.navigate('Login');
+    navigation.navigate('PlayStory');
   }, 2000);
   return (
     <View style={styles.container}>

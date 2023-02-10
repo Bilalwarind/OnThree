@@ -7,7 +7,7 @@ import Login from '../views/auth/login';
 import Register from '../views/auth/register';
 import Profile from '../views/account/profile';
 import UpdateProfile from '../views/account/updateProfile';
-
+import PlayStory from '../views/PlayStory/PlayStory';
 import {useDispatch, useSelector} from 'react-redux';
 
 const Stack = createNativeStackNavigator();
@@ -33,6 +33,7 @@ function AuthStack() {
       <Stack.Screen name="Profile" component={Profile} />
       <Stack.Screen name="UpdateProfile" component={UpdateProfile} />
       <Stack.Screen name="StorySwipe" component={StorySwipe} />
+      <Stack.Screen name="PlayStory" component={PlayStory} />
     </Stack.Navigator>
   );
 }
