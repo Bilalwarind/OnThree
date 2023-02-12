@@ -9,12 +9,11 @@ const styles = StyleSheet.create({
     backgroundColor: color.white,
   },
   input: {
-    height: hp(15),
+    height: hp(12),
     justifyContent: 'center',
   },
   logo: {
-    marginTop: hp(5),
-    marginBottom: hp(3),
+    marginVertical: hp(6),
     alignSelf: 'center',
     width: wp(45),
     tintColor: '#000',

@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
     marginBottom: hp(1),
   },
   header2: {
-    height: hp(10),
+    height: hp(9),
     alignItems: 'center',
     flexDirection: 'row',
   },
@@ -27,8 +27,22 @@ const styles = StyleSheet.create({
     height: wp(7),
     marginRight: wp(3),
   },
+  chat: {
+    width: wp(7),
+    height: wp(7),
+    marginLeft: hp(2),
+  },
+  upload: {
+    width: wp(7),
+    height: wp(7),
+  },
   logo: {
     tintColor: color.white,
+  },
+  bookmark: {
+    backgroundColor: color.primary,
+    padding: hp(1.5),
+    borderRadius: hp(1),
   },
 });
 

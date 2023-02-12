@@ -21,6 +21,7 @@ import {Paragraph, Dialog, Portal} from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux';
 import Feather from 'react-native-vector-icons/Feather';
 import Entypo from 'react-native-vector-icons/Entypo';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import styles from './style';
 
 const StorySwipe = () => {
@@ -67,6 +68,71 @@ const StorySwipe = () => {
             textcolor={color.white}
             fontfamily={familyFont.reg}
           />
+        </View>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+          }}>
+          <TouchableOpacity style={styles.bookmark}>
+            <Image
+              style={styles.upload}
+              source={Images.upload}
+              resizeMode="contain"
+            />
+          </TouchableOpacity>
+          <CustomButton
+            title="5.2K"
+            fontsize={Size(1.7)}
+            backgroundcolor={color.primary}
+            borderradius={hp(1)}
+            textcolor={color.white}
+            padding={hp(1.5)}
+            paddinghori={hp(2)}
+            flexdirection="row"
+            justifycontent="center"
+            alignitems="center"
+            fontfamily={familyFont.bold}
+            onpress={() => {
+              onRegister();
+            }}
+            Icon=<AntDesign
+              name="hearto"
+              size={22}
+              color={color.white}
+              style={{paddingLeft: hp(2)}}
+            />
+          />
+          <CustomButton
+            title="992K"
+            fontsize={Size(1.7)}
+            backgroundcolor={color.primary}
+            borderradius={hp(1)}
+            textcolor={color.white}
+            padding={hp(1.5)}
+            paddinghori={hp(2)}
+            flexdirection="row"
+            justifycontent="center"
+            alignitems="center"
+            fontfamily={familyFont.bold}
+            onpress={() => {
+              onRegister();
+            }}
+            Icon=<Image
+              style={styles.chat}
+              source={Images.chat}
+              resizeMode="contain"
+            />
+          />
+
+          <TouchableOpacity>
+            <Feather
+              name="bookmark"
+              size={30}
+              color={color.white}
+              style={styles.bookmark}
+            />
+          </TouchableOpacity>
         </View>
         <CustomText
           title={'ABOUT'}
@@ -169,7 +235,7 @@ const StorySwipe = () => {
           textcolor={color.white}
           marginvertical={hp(2)}
           flexdirection="row"
-          // alighitems="center"
+          // alignitems="center"
           fontfamily={familyFont.reg}
           onpress={() => {
             onRegister();
@@ -189,7 +255,7 @@ const StorySwipe = () => {
           borderradius={hp(1)}
           padding={hp(2.2)}
           flexdirection="row"
-          alighitems="center"
+          alignitems="center"
           textalign="center"
           marginvertical={hp(3)}
           onpress={() => {

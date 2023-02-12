@@ -98,7 +98,7 @@ const Profile = () => {
         marginvertical={hp(3)}
         flexdirection="row"
         justifycontent="center"
-        alighitems="center"
+        alignitems="center"
         fontfamily={familyFont.semiBold}
         onpress={() => {
           onRegister();
@@ -121,7 +121,7 @@ const Profile = () => {
           paddinghori={hp(2)}
           flexdirection="row"
           justifycontent="center"
-          alighitems="center"
+          alignitems="center"
           width={wp(29)}
           fontfamily={familyFont.meduim}
           onpress={() => {
@@ -139,7 +139,7 @@ const Profile = () => {
           paddinghori={hp(2)}
           flexdirection="row"
           justifycontent="center"
-          alighitems="center"
+          alignitems="center"
           width={wp(29)}
           fontfamily={familyFont.meduim}
           onpress={() => {
@@ -157,7 +157,7 @@ const Profile = () => {
           paddinghori={hp(2)}
           flexdirection="row"
           justifycontent="center"
-          alighitems="center"
+          alignitems="center"
           width={wp(29)}
           fontfamily={familyFont.meduim}
           onpress={() => {
@@ -240,7 +240,7 @@ const Profile = () => {
           marginvertical={hp(3)}
           flexdirection="row"
           justifycontent="center"
-          alighitems="center"
+          alignitems="center"
           onpress={() => {
             nav.navigate('StorySwipe');
           }}
@@ -259,7 +259,7 @@ const Profile = () => {
           marginvertical={hp(3)}
           flexdirection="row"
           justifycontent="center"
-          alighitems="center"
+          alignitems="center"
           onpress={() => {
             onRegister();
           }}

@@ -44,58 +44,6 @@ const styles = StyleSheet.create({
     padding: hp(1.5),
     borderRadius: hp(1),
   },
-  ////////
-
-  main: {
-    flex: 1,
-    backgroundColor: 'black',
-  },
-  sideBar: {
-    position: 'absolute',
-    flexDirection: 'column',
-    alignItems: 'center',
-    width: '14%',
-    height: '50%',
-    right: '2%',
-    bottom: 110,
-  },
-  feedType: {
-    position: 'absolute',
-    width: hp(60),
-    top: hp(10),
-    alignSelf: 'center',
-  },
-  video: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    bottom: 0,
-    right: 0,
-    backgroundColor: 'black',
-    justifyContent: 'center',
-  },
-  pageContainer: {
-    flex: 1,
-    width: wp(100),
-    height: hp(50),
-    top: 0,
-  },
-  playBtn: {
-    position: 'absolute',
-    width: hp(12),
-    heihpt: hp(12),
-    alignSelf: 'center',
-    resizeMode: 'contain',
-    top: hp(44),
-    opacity: 0.5,
-  },
-  feedContent: {
-    position: 'absolute',
-    flexDirection: 'column',
-    width: '60%',
-    left: '3%',
-    bottom: 95,
-  },
 });
 
 export default styles;

@@ -7,6 +7,7 @@ import Login from '../views/auth/login';
 import Register from '../views/auth/register';
 import Profile from '../views/account/profile';
 import UpdateProfile from '../views/account/updateProfile';
+import StoryPlay from '../views/storyPlay';
 
 import {useDispatch, useSelector} from 'react-redux';
 
@@ -27,6 +28,7 @@ function AuthStack() {
       screenOptions={{
         headerShown: false,
       }}>
+      <Stack.Screen name="StoryPlay" component={StoryPlay} />
       <Stack.Screen name="Splash" component={Splash} />
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="Register" component={Register} />
