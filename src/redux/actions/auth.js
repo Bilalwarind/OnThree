@@ -3,6 +3,7 @@ import baseUrl from '../baseUrl';
 import {
   REGISTER_SUCCESS,
   LOGIN_SUCCESS,
+  LOGOUT_SUCCESS,
   DATA_FAILED,
   DATA_LOADING,
 } from '../actions/types';
@@ -49,5 +50,15 @@ export const loginUser = data => {
           type: DATA_FAILED,
         });
       });
+  };
+};
+export const logoutUser = () => {
+  return dispatch => {
+    dispatch({
+      type: DATA_LOADING,
+    });
+    dispatch({
+      type: LOGOUT_SUCCESS,
+    });
   };
 };

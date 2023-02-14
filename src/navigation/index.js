@@ -17,7 +17,7 @@ const Navigation = ({params}) => {
   const {token} = useSelector(state => state.auth);
   return (
     <NavigationContainer>
-      {1 == 2 ? <AppStack /> : <AuthStack />}
+      {token ? <AppStack /> : <AuthStack />}
     </NavigationContainer>
   );
 };
@@ -28,25 +28,22 @@ function AuthStack() {
       screenOptions={{
         headerShown: false,
       }}>
-      <Stack.Screen name="StoryPlay" component={StoryPlay} />
       <Stack.Screen name="Splash" component={Splash} />
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="Register" component={Register} />
-      <Stack.Screen name="Profile" component={Profile} />
-      <Stack.Screen name="UpdateProfile" component={UpdateProfile} />
-      <Stack.Screen name="StorySwipe" component={StorySwipe} />
     </Stack.Navigator>
   );
 }
 function AppStack() {
   return (
     <Stack.Navigator
-      initialRouteName="UpdateProfile"
       screenOptions={{
         headerShown: false,
       }}>
+      <Stack.Screen name="StoryPlay" component={StoryPlay} />
       <Stack.Screen name="Profile" component={Profile} />
       <Stack.Screen name="UpdateProfile" component={UpdateProfile} />
+      <Stack.Screen name="StorySwipe" component={StorySwipe} />
     </Stack.Navigator>
   );
 }

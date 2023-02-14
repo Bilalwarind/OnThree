@@ -1,6 +1,7 @@
 import {
   REGISTER_SUCCESS,
   LOGIN_SUCCESS,
+  LOGOUT_SUCCESS,
   DATA_FAILED,
   DATA_LOADING,
 } from '../actions/types';
@@ -37,14 +38,14 @@ export const authReducer = (state = initialState, action) => {
         userId: action?.payload?.id,
         isLoading: false,
       };
-    // case LOGOUT:
-    //   return {
-    //     ...state,
-    //     user: null,
-    //     token: null,
-    //     userId: null,
-    //     isLoading: false,
-    //   };
+    case LOGOUT_SUCCESS:
+      return {
+        ...state,
+        user: null,
+        token: null,
+        userId: null,
+        isLoading: false,
+      };
 
     default:
       return state;

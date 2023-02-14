@@ -9,7 +9,7 @@ import {
   Keyboard,
   ScrollView,
   StatusBar,
-  StyleSheet,
+  Alert,
   FlatList,
 } from 'react-native';
 import {wp, hp, Size, color, Images, IOS, familyFont} from '../../utils/';
@@ -17,6 +17,7 @@ import CustomText from '../../components/CustomText';
 import CustomButton from '../../components/Button';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
+import {logoutUser} from '../../redux';
 import styles from './style';
 import VideoPlayer from 'react-native-video-player';
 import RBSheet from 'react-native-raw-bottom-sheet';
@@ -72,11 +73,66 @@ const StoryPlay = () => {
             uri: 'https://images.pexels.com/photos/1995730/pexels-photo-1995730.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
           }}
         />
-        <TouchableOpacity
-          style={{position: 'absolute', top: hp(80)}}
-          onPress={() => {
-            refRBSheet.current.open();
+        <View
+          style={{
+            position: 'absolute',
+            top: hp(10),
+            left: wp(2),
+            right: wp(2),
           }}>
+          <View style={styles.header}>
+            <TouchableOpacity
+              onPress={() => {
+                Alert.alert(
+                  '',
+                  'Do you want to logout?',
+                  [
+                    {
+                      text: 'NO',
+                      onPress: () => console.log('Cancel Pressed'),
+                      style: 'cancel',
+                    },
+                    {
+                      text: 'YES',
+                      onPress: () => {
+                        dispatch(logoutUser());
+                        // nav.reset({
+                        //   routes: [{name: 'login'}],
+                        // });
+                      },
+                    },
+                  ],
+                  {cancelable: false},
+                );
+              }}>
+              <Image
+                style={styles.profile}
+                source={Images.logo}
+                resizeMode="contain"
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                nav.navigate('Profile');
+              }}>
+              <Image
+                style={styles.profile2}
+                source={Images.profile}
+                resizeMode="contain"
+              />
+            </TouchableOpacity>
+          </View>
+          <TouchableOpacity
+            style={{
+              alignSelf: 'center',
+              marginBottom: hp(4),
+              marginTop: hp(60),
+            }}
+            onPress={() => {
+              refRBSheet.current.open();
+            }}>
+            <AntDesign name="up" size={25} color={color.white} />
+          </TouchableOpacity>
           <CustomText
             title={item?.heading}
             textcolor={color.white}
@@ -97,7 +153,7 @@ const StoryPlay = () => {
               fontfamily={familyFont.reg}
             />
           </View>
-        </TouchableOpacity>
+        </View>
         <RBSheet
           height={hp(80)}
           ref={refRBSheet}
