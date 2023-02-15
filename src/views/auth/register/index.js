@@ -58,7 +58,7 @@ const Register = () => {
       last_name: 'ahmad',
       phone: '03032334323',
     };
-    dispatch(registerUser(data));
+    dispatch(registerUser(data, nav));
   };
 
   return (
@@ -201,6 +201,22 @@ const Register = () => {
         onpress={onRegister}
       />
       {false && (
+        <View
+          style={{
+            position: 'absolute',
+            paddingTop: hp(50),
+            backgroundColor: 'rgba(245, 245, 245, 0.7)',
+            width: wp(100),
+            height: hp(100),
+          }}>
+          <ActivityIndicator
+            animating={true}
+            color={color.primary}
+            size="large"
+          />
+        </View>
+      )}
+      {isLoading && (
         <View
           style={{
             position: 'absolute',

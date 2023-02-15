@@ -8,7 +8,7 @@ import {
   DATA_LOADING,
 } from '../actions/types';
 
-export const registerUser = data => {
+export const registerUser = (data, nav) => {
   return dispatch => {
     dispatch({
       type: DATA_LOADING,
@@ -16,21 +16,29 @@ export const registerUser = data => {
     baseUrl
       .post('mobilesignup', data)
       .then(async res => {
-        Alert.alert(res.data.message);
-        dispatch({
-          type: REGISTER_SUCCESS,
-          payload: res.data.data,
-        });
+        if (res?.data?.success !== 0) {
+          Alert.alert(res?.data?.message);
+          dispatch({
+            type: REGISTER_SUCCESS,
+            payload: res?.data?.data,
+          });
+          nav.navigate('StoryPlay');
+        } else {
+          Alert.alert(res?.data?.message);
+          dispatch({
+            type: DATA_FAILED,
+          });
+        }
       })
       .catch(err => {
-        // Alert.alert(JSON.stringify(err));
+        Alert.alert('Something went wrong');
         dispatch({
           type: DATA_FAILED,
         });
       });
   };
 };
-export const loginUser = data => {
+export const loginUser = (data, nav) => {
   return dispatch => {
     dispatch({
       type: DATA_LOADING,
@@ -41,18 +49,19 @@ export const loginUser = data => {
         // alert(JSON.stringify(res));
         dispatch({
           type: LOGIN_SUCCESS,
-          payload: res.data.data.user,
+          payload: res?.data?.data?.user,
         });
+        nav.navigate('StoryPlay');
       })
       .catch(err => {
-        // Alert.alert(JSON.stringify(err));
+        Alert.alert('Email or password is wrong');
         dispatch({
           type: DATA_FAILED,
         });
       });
   };
 };
-export const logoutUser = () => {
+export const logoutUser = nav => {
   return dispatch => {
     dispatch({
       type: DATA_LOADING,
@@ -60,5 +69,6 @@ export const logoutUser = () => {
     dispatch({
       type: LOGOUT_SUCCESS,
     });
+    nav.navigate('Login');
   };
 };
