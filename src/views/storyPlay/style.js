@@ -12,8 +12,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginBottom: hp(1),
   },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
   header2: {
-    height: hp(9),
+    height: hp(5),
     alignItems: 'center',
     flexDirection: 'row',
   },
@@ -21,6 +25,10 @@ const styles = StyleSheet.create({
     width: wp(10),
     height: wp(10),
     marginRight: wp(2),
+  },
+  profile2: {
+    width: wp(10),
+    height: wp(10),
   },
   partners: {
     width: wp(7),

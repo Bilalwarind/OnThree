@@ -15,7 +15,7 @@ const CustomButton = ({
   alignSelf,
   textalign,
   textalignvertical,
-  alighitems,
+  alignitems,
   Icon,
   IconRight,
   flexdirection,
@@ -40,7 +40,7 @@ const CustomButton = ({
       marginVertical: marginvertical,
       width: width,
       alignSelf,
-      alignItems: alighitems,
+      alignItems: alignitems,
       marginHorizontal: marginhori,
       flex: flex,
       marginLeft: marginleft,
@@ -54,7 +54,7 @@ const CustomButton = ({
       <View
         style={{
           flexDirection: flexdirection,
-          alignItems: alighitems,
+          alignItems: alignitems,
           alignSelf: alignSelf,
           justifyContent: justifycontent,
         }}>
