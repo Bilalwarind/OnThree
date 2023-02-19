@@ -20,6 +20,7 @@
     "react-native-detect-navbar-android": "^0.3.0",
     "react-native-extra-dimensions-android": "^1.2.5",
     "react-native-gesture-handler": "^2.5.0",
+    "react-native-image-picker": "^5.1.0",
     "react-native-paper": "^4.12.4",
     "react-native-raw-bottom-sheet": "^2.2.0",
     "react-native-reanimated": "2.4",
