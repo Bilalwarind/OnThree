@@ -32,10 +32,6 @@ function AuthStack() {
       screenOptions={{
         headerShown: false,
       }}>
-      <Stack.Screen name="ForgetPassword" component={ForgetPassword} />
-      <Stack.Screen name="PublishStory" component={PublishStory} />
-      <Stack.Screen name="RecordStory" component={RecordStory} />
-      <Stack.Screen name="CreateStory" component={CreateStory} />
       <Stack.Screen name="Splash" component={Splash} />
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="Register" component={Register} />
@@ -49,6 +45,10 @@ function AppStack() {
         headerShown: false,
       }}>
       <Stack.Screen name="StoryPlay" component={StoryPlay} />
+      <Stack.Screen name="ForgetPassword" component={ForgetPassword} />
+      <Stack.Screen name="PublishStory" component={PublishStory} />
+      <Stack.Screen name="RecordStory" component={RecordStory} />
+      <Stack.Screen name="CreateStory" component={CreateStory} />
       <Stack.Screen name="Profile" component={Profile} />
       <Stack.Screen name="UpdateProfile" component={UpdateProfile} />
       <Stack.Screen name="StorySwipe" component={StorySwipe} />
