@@ -10,12 +10,13 @@ import {
   ScrollView,
   StatusBar,
   StyleSheet,
+  Alert,
 } from 'react-native';
 import {wp, hp, Size, color, Images, IOS, familyFont} from '../../../utils/';
 import CustomText from '../../../components/CustomText';
 import CustomButton from '../../../components/Button';
 import {useNavigation} from '@react-navigation/native';
-import {loginUser} from '../../../redux';
+import {forgetPassword} from '../../../redux';
 import CustomTextInput from '../../../components/CutomTextInput';
 import {Paragraph, Dialog, Portal} from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux';
@@ -29,7 +30,6 @@ const ForgetPassword = () => {
   const {token, userId, isLoading} = useSelector(state => state.auth);
   const [secureTextEntry, setSecureTextEntry] = useState(true);
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [isError, setIsError] = useState(false);
   const [show, setShow] = useState(false);
 
@@ -39,16 +39,16 @@ const ForgetPassword = () => {
       setIsError(true);
       return;
     }
-    if (email.length > 0 && password.length <= 0) {
-      setIsError2(true);
-      return;
-    }
-
     const data = {
       email: email,
-      password: password,
     };
-    dispatch(loginUser(data));
+    dispatch(forgetPassword(data))
+      .then(val =>
+        val.data.success == 0
+          ? (setShow(false), Alert.alert('Please enter valid Email!'))
+          : setShow(true),
+      )
+      .catch(err => console.log(err));
   };
 
   return (
@@ -141,7 +141,7 @@ const ForgetPassword = () => {
             fontweight="bold"
             textalign="center"
             marginvertical={hp(5)}
-            onpress={onRegister}
+            onpress={() => nav.navigate('Login')}
           />
         </View>
       )}

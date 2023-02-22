@@ -134,13 +134,15 @@ const Login = () => {
           />
         )}
       </View>
-      <CustomText
-        title={'Forgot Password?'}
+      <CustomButton
+        title="Forgot Password?"
         fontsize={Size(1.7)}
         textcolor={color.primary}
         fontfamily={familyFont.reg}
+        borderradius={hp(1)}
+        marginvertical={hp(5)}
         marginleft={wp(2)}
-        marginvertical={hp(3)}
+        onpress={() => nav.navigate('ForgetPassword')}
       />
       <CustomButton
         title="Log In"
@@ -150,9 +152,8 @@ const Login = () => {
         backgroundcolor={color.primary}
         borderradius={hp(1)}
         padding={hp(2.2)}
-        fontweight="bold"
         textalign="center"
-        marginvertical={hp(3)}
+        marginbottom={hp(5)}
         onpress={onRegister}
       />
       <CustomButton
@@ -164,7 +165,6 @@ const Login = () => {
         borderradius={hp(1)}
         padding={hp(1)}
         textalign="center"
-        fontweight="bold"
         onpress={() => {
           nav.navigate('Register');
         }}

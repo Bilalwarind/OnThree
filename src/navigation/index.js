@@ -35,6 +35,7 @@ function AuthStack() {
       <Stack.Screen name="Splash" component={Splash} />
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="Register" component={Register} />
+      <Stack.Screen name="ForgetPassword" component={ForgetPassword} />
     </Stack.Navigator>
   );
 }
@@ -45,7 +46,6 @@ function AppStack() {
         headerShown: false,
       }}>
       <Stack.Screen name="StoryPlay" component={StoryPlay} />
-      <Stack.Screen name="ForgetPassword" component={ForgetPassword} />
       <Stack.Screen name="PublishStory" component={PublishStory} />
       <Stack.Screen name="RecordStory" component={RecordStory} />
       <Stack.Screen name="CreateStory" component={CreateStory} />
