@@ -46,22 +46,45 @@ export const loginUser = (data, nav) => {
     baseUrl
       .post('mobilelogin', data)
       .then(async res => {
-        // alert(JSON.stringify(res));
-        dispatch({
-          type: LOGIN_SUCCESS,
-          payload: res?.data?.data?.user,
-        });
-        nav.navigate('StoryPlay');
+        if (res.data.success !== 0) {
+          dispatch({
+            type: LOGIN_SUCCESS,
+            payload: res.data.data.user,
+          });
+        } else {
+          Alert.alert('There is a problem with your email or password!');
+          dispatch({
+            type: DATA_FAILED,
+          });
+        }
       })
       .catch(err => {
-        Alert.alert('Email or password is wrong');
         dispatch({
           type: DATA_FAILED,
         });
       });
   };
 };
-export const logoutUser = nav => {
+export const forgetPassword = data => {
+  return dispatch => {
+    dispatch({
+      type: DATA_LOADING,
+    });
+    const res = baseUrl.post('forgotpassword', data);
+    if (res.success !== 0) {
+      dispatch({
+        type: DATA_FAILED,
+      });
+    } else {
+      dispatch({
+        type: DATA_FAILED,
+      });
+    }
+    return res;
+  };
+};
+export const logoutUser = () => {
+
   return dispatch => {
     dispatch({
       type: DATA_LOADING,
