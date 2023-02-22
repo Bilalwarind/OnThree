@@ -95,7 +95,7 @@ const StoryPlay = () => {
                     {
                       text: 'YES',
                       onPress: () => {
-                        dispatch(logoutUser());
+                        dispatch(logoutUser(nav));
                         // nav.reset({
                         //   routes: [{name: 'login'}],
                         // });
@@ -194,12 +194,14 @@ const StoryPlay = () => {
                 onpress={() => {
                   onRegister();
                 }}
-                Icon=<AntDesign
-                  name="hearto"
-                  size={22}
-                  color={color.white}
-                  style={{paddingLeft: hp(2)}}
-                />
+                Icon={
+                  <AntDesign
+                    name="hearto"
+                    size={22}
+                    color={color.white}
+                    style={{paddingLeft: hp(2)}}
+                  />
+                }
               />
               <CustomButton
                 title="992K"
@@ -216,11 +218,13 @@ const StoryPlay = () => {
                 onpress={() => {
                   onRegister();
                 }}
-                Icon=<Image
-                  style={styles.chat}
-                  source={Images.chat}
-                  resizeMode="contain"
-                />
+                Icon={
+                  <Image
+                    style={styles.chat}
+                    source={Images.chat}
+                    resizeMode="contain"
+                  />
+                }
               />
 
               <TouchableOpacity>
@@ -305,9 +309,9 @@ const StoryPlay = () => {
                 onpress={() => {
                   onRegister();
                 }}
-                Icon=<Entypo name="link" size={25} color={color.white} />
+                Icon={<Entypo name="link" size={25} color={color.white} />}
+                // {<Feather name="external-link" size={25} color={color.white} />}
               />
-              <Feather name="external-link" size={25} color={color.white} />
             </View>
             <View
               style={{
@@ -334,11 +338,13 @@ const StoryPlay = () => {
               onpress={() => {
                 onRegister();
               }}
-              Icon=<Image
-                style={styles.partners}
-                source={Images.partners}
-                resizeMode="contain"
-              />
+              Icon={
+                <Image
+                  style={styles.partners}
+                  source={Images.partners}
+                  resizeMode="contain"
+                />
+              }
             />
             <CustomButton
               title="Play Full Story"
@@ -355,11 +361,9 @@ const StoryPlay = () => {
               onpress={() => {
                 onRegister();
               }}
-              Icon=<Feather
-                name="play-circle"
-                size={30}
-                color={color.primary}
-              />
+              Icon={
+                <Feather name="play-circle" size={30} color={color.primary} />
+              }
             />
           </View>
         </RBSheet>
@@ -376,9 +380,7 @@ const StoryPlay = () => {
       <FlatList
         ItemSeparatorComponent={
           Platform.OS !== 'android' &&
-          (({highlighted}) => (
-            <View style={[style.separator, highlighted && {marginLeft: 0}]} />
-          ))
+          (({highlighted}) => <View style={[highlighted && {marginLeft: 0}]} />)
         }
         data={videos}
         keyExtractor={item => item?.id}
