@@ -242,9 +242,9 @@ const Profile = () => {
           justifycontent="center"
           alignitems="center"
           onpress={() => {
-            nav.navigate('StorySwipe');
+            nav.navigate('CreateStory');
           }}
-          Icon=<Feather name="video" size={19} color={color.white} />
+          Icon={<Feather name="video" size={19} color={color.white} />}
         />
       ) : (
         <CustomButton
@@ -263,7 +263,7 @@ const Profile = () => {
           onpress={() => {
             onRegister();
           }}
-          Icon=<Feather name="search" size={17} color={color.white} />
+          Icon={<Feather name="search" size={17} color={color.white} />}
         />
       )}
       <View style={{flexDirection: 'row'}}>
@@ -325,11 +325,11 @@ const Profile = () => {
         </View>
       </View>
 
-      <Dialog visible={isLoading}>
+      {/* <Dialog visible={isLoading}>
         <Dialog.Content>
           <Paragraph>isLoading</Paragraph>
         </Dialog.Content>
-      </Dialog>
+      </Dialog> */}
     </View>
   );
 };

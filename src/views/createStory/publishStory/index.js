@@ -15,7 +15,7 @@ import {wp, hp, Size, color, Images, IOS, familyFont} from '../../../utils/';
 import CustomText from '../../../components/CustomText';
 import CustomButton from '../../../components/Button';
 import {useNavigation} from '@react-navigation/native';
-import {loginUser} from '../../../redux';
+import {addStory} from '../../../redux';
 import CustomTextInput from '../../../components/CutomTextInput';
 import {Paragraph, Dialog, Portal} from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux';
@@ -24,20 +24,37 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import VideoPlayer from 'react-native-video-player';
 import styles from './style';
 
-const PublishStory = () => {
+const PublishStory = ({route}) => {
+  const {videoData} = route.params;
   const dispatch = useDispatch();
   const nav = useNavigation();
   const {token, userId, isLoading} = useSelector(state => state.auth);
-  const [secureTextEntry, setSecureTextEntry] = useState(true);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [isError, setIsError] = useState(false);
-  const [activeBtn, setActiveBtn] = useState(1);
+  const [title, setTiltle] = useState('');
+  const [about, setAbout] = useState('');
+  const [tag, setTag] = useState('');
 
   const onRegister = async () => {
-    if (password.length <= 0) {
-      setIsError(true);
-    }
+    const data = {
+      token: token,
+      user_id: userId,
+      title: title,
+      about: about,
+      other_story_id: 1,
+      uservideo: videoData.uri,
+      external_link: videoData.uri,
+      'story_tag[0]': tag,
+    };
+
+    // const data = new FormData();
+    // data.append('token', token);
+    // data.append('user_id', userId);
+    // data.append('title', title);
+    // data.append('about', about);
+    // data.append('other_story_id', 1);
+    // data.append('uservideo', videoData.uri);
+    // data.append('external_link', videoData.uri);
+    // data.append('story_tag[0]', tag);
+    dispatch(addStory(JSON.stringify(data)));
   };
 
   return (
@@ -66,7 +83,7 @@ const PublishStory = () => {
         <View style={styles.story}>
           <VideoPlayer
             video={{
-              uri: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/VolkswagenGTIReview.mp4',
+              uri: videoData.uri,
             }}
             videoWidth={wp(100)}
             videoHeight={hp(100)}
@@ -99,7 +116,7 @@ const PublishStory = () => {
             bordercolor={color.border}
             bgcolor={color.white}
             paddinghorizontal={hp(2)}
-            onchangetext={text => {}}
+            onchangetext={val => setTiltle(val)}
             paddingverti={Platform.OS === 'android' ? hp(0.2) : hp(3)}
           />
         </View>
@@ -123,7 +140,7 @@ const PublishStory = () => {
             paddinghorizontal={hp(2)}
             numberOfLines={3}
             multiline={true}
-            onchangetext={text => {}}
+            onchangetext={val => setAbout(val)}
             paddingverti={Platform.OS === 'android' ? hp(0.2) : hp(3)}
           />
         </View>
@@ -145,7 +162,7 @@ const PublishStory = () => {
             bordercolor={color.border}
             bgcolor={color.white}
             paddinghorizontal={hp(2)}
-            onchangetext={text => {}}
+            onchangetext={val => setTag(val)}
             paddingverti={Platform.OS === 'android' ? hp(0.2) : hp(3)}
           />
         </View>
@@ -161,6 +178,7 @@ const PublishStory = () => {
           />
           <CustomTextInput
             placeholder={'Add a URL here'}
+            value={videoData.uri}
             placeholderStyle={{fontWeight: 'bold'}}
             borderradius={hp(1.5)}
             borderwidth={wp(0.6)}
@@ -183,6 +201,7 @@ const PublishStory = () => {
           />
           <CustomTextInput
             placeholder={'Add Partners with @'}
+            value="hi saeed"
             placeholderStyle={{fontWeight: 'bold'}}
             borderradius={hp(1.5)}
             borderwidth={wp(0.6)}
@@ -194,7 +213,7 @@ const PublishStory = () => {
           />
         </View>
         <CustomButton
-          title="Publish"
+          title="Publish Video"
           fontfamily={familyFont.semiBold}
           fontsize={Size(2.1)}
           backgroundcolor={color.primary}
@@ -206,17 +225,15 @@ const PublishStory = () => {
           flexdirection="row"
           justifycontent="center"
           alignitems="center"
-          onpress={() => {
-            nav.navigate('StorySwipe');
-          }}
+          onpress={onRegister}
           Icon=<Feather name="video" size={19} color={color.white} />
         />
       </ScrollView>
-      <Dialog visible={isLoading}>
+      {/* <Dialog visible={isLoading}>
         <Dialog.Content>
           <Paragraph>isLoading</Paragraph>
         </Dialog.Content>
-      </Dialog>
+      </Dialog> */}
     </View>
   );
 };

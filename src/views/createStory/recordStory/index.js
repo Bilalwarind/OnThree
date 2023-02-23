@@ -23,10 +23,28 @@ import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import styles from './style';
 
-const RecordStory = () => {
+const RecordStory = ({route}) => {
+  const {camType} = route.params;
   const dispatch = useDispatch();
   const nav = useNavigation();
+  const [timerCount, setTimer] = useState(3);
   const {token, userId, isLoading} = useSelector(state => state.auth);
+  useEffect(() => {
+    let interval = setInterval(() => {
+      setTimer(lastTimerCount => {
+        lastTimerCount <= 1 && clearInterval(interval);
+        return lastTimerCount - 1;
+      });
+    }, 1000); //each count lasts for a second
+    //cleanup the interval on complete
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    if (timerCount <= 0) {
+      captureImage('video', camType);
+    }
+  }, [timerCount]);
 
   const requestCameraPermission = async () => {
     if (Platform.OS === 'android') {
@@ -65,10 +83,11 @@ const RecordStory = () => {
       return false;
     } else return true;
   };
-  const captureImage = async type => {
+  const captureImage = async (type, mode) => {
     // toggleModal();
     let options = {
       mediaType: type,
+      cameraType: mode,
       maxWidth: 300,
       maxHeight: 550,
       quality: 1,
@@ -95,52 +114,16 @@ const RecordStory = () => {
           alert(response.errorMessage);
           return;
         }
-        const data = new FormData();
-        data.append('user_id', userId);
-        data.append('token', token);
-        data.append('image', {
+
+        const data = {
           uri: response?.assets[0]?.uri,
           name: `test.jpg`,
           type: response?.assets[0]?.type,
-        });
-        dispatch(changeProfilePhoto(data, token, userId));
+        };
+
+        nav.navigate('PublishStory', {videoData: data});
       });
     }
-  };
-  const chooseFile = type => {
-    toggleModal();
-    let options = {
-      mediaType: type,
-      maxWidth: 300,
-      maxHeight: 550,
-      quality: 1,
-    };
-    launchImageLibrary(options, response => {
-      console.log('Response = ', response);
-
-      if (response.didCancel) {
-        alert('User cancelled camera picker');
-        return;
-      } else if (response.errorCode == 'camera_unavailable') {
-        alert('Camera not available on device');
-        return;
-      } else if (response.errorCode == 'permission') {
-        alert('Permission not satisfied');
-        return;
-      } else if (response.errorCode == 'others') {
-        alert(response.errorMessage);
-        return;
-      }
-      const data = new FormData();
-      data.append('user_id', userId);
-      data.append('token', token);
-      data.append('image', {
-        uri: response?.assets[0]?.uri,
-        name: `test.jpg`,
-        type: response?.assets[0]?.type,
-      });
-      dispatch(changeProfilePhoto(data, token, userId));
-    });
   };
   return (
     <View style={styles.container}>
@@ -150,7 +133,7 @@ const RecordStory = () => {
         backgroundColor="transparent"
       />
       <CustomText
-        title="3"
+        title={timerCount}
         textcolor={color.white}
         fontsize={Size(15)}
         aligntext={'center'}
@@ -173,14 +156,14 @@ const RecordStory = () => {
         justifycontent="center"
         alignitems="center"
         onpress={() => {
-          captureImage('video');
+          '';
         }}
       />
-      <Dialog visible={isLoading}>
+      {/* <Dialog visible={isLoading}>
         <Dialog.Content>
           <Paragraph>isLoading</Paragraph>
         </Dialog.Content>
-      </Dialog>
+      </Dialog> */}
     </View>
   );
 };
