@@ -14,7 +14,7 @@ import {
 import {wp, hp, Size, color, Images, IOS, familyFont} from '../../../utils/';
 import CustomText from '../../../components/CustomText';
 import CustomButton from '../../../components/Button';
-import {useNavigation} from '@react-navigation/native';
+import {NavigationContainer, useNavigation} from '@react-navigation/native';
 import {loginUser} from '../../../redux';
 import CustomTextInput from '../../../components/CutomTextInput';
 import {Paragraph, Dialog, Portal} from 'react-native-paper';
@@ -28,6 +28,7 @@ const RecordStory = ({route}) => {
   const dispatch = useDispatch();
   const nav = useNavigation();
   const [timerCount, setTimer] = useState(3);
+  const navigation = useNavigation();
   const {token, userId, isLoading} = useSelector(state => state.auth);
   useEffect(() => {
     let interval = setInterval(() => {
@@ -156,7 +157,7 @@ const RecordStory = ({route}) => {
         justifycontent="center"
         alignitems="center"
         onpress={() => {
-          '';
+          navigation.goBack();
         }}
       />
       {/* <Dialog visible={isLoading}>

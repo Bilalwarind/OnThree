@@ -10,6 +10,7 @@ import {
   ScrollView,
   StatusBar,
   StyleSheet,
+  PermissionsAndroid,
 } from 'react-native';
 import {wp, hp, Size, color, Images, IOS, familyFont} from '../../utils/';
 import CustomText from '../../components/CustomText';
@@ -22,6 +23,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import Feather from 'react-native-vector-icons/Feather';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import styles from './style';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
 const CreateStory = () => {
   const dispatch = useDispatch();
@@ -29,7 +31,85 @@ const CreateStory = () => {
   const {token, userId, isLoading} = useSelector(state => state.auth);
   const [activeBtn, setActiveBtn] = useState(1);
   const [camMode, setCamMode] = useState('front');
+  const requestCameraPermission = async () => {
+    if (Platform.OS === 'android') {
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.CAMERA,
+          {
+            title: 'Camera Permission',
+            message: 'App needs camera permission',
+          },
+        );
+        // If CAMERA Permission is granted
+        return granted === PermissionsAndroid.RESULTS.GRANTED;
+      } catch (err) {
+        console.warn(err);
+        return false;
+      }
+    } else return true;
+  };
+  const requestExternalWritePermission = async () => {
+    if (Platform.OS === 'android') {
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+          {
+            title: 'External Storage Write Permission',
+            message: 'App needs write permission',
+          },
+        );
+        // If WRITE_EXTERNAL_STORAGE Permission is granted
+        return granted === PermissionsAndroid.RESULTS.GRANTED;
+      } catch (err) {
+        console.warn(err);
+        alert('Write permission err', err);
+      }
+      return false;
+    } else return true;
+  };
+  const openGallery = async () => {
+    // toggleModal();
+    let options = {
+      mediaType: 'video',
+      // cameraType: mode,
+      maxWidth: 300,
+      maxHeight: 550,
+      quality: 1,
+      videoQuality: 'low',
+      // durationLimit: 30, //Video max duration in seconds
+      saveToPhotos: true,
+    };
+    let isCameraPermitted = await requestCameraPermission();
+    let isStoragePermitted = await requestExternalWritePermission();
+    if (isCameraPermitted && isStoragePermitted) {
+      launchImageLibrary(options, response => {
+        console.log('Response = ', response);
 
+        if (response.didCancel) {
+          alert('User cancelled camera picker');
+          return;
+        } else if (response.errorCode == 'camera_unavailable') {
+          alert('Camera not available on device');
+          return;
+        } else if (response.errorCode == 'permission') {
+          alert('Permission not satisfied');
+          return;
+        } else if (response.errorCode == 'others') {
+          alert(response.errorMessage);
+          return;
+        }
+
+        const data = {
+          uri: response?.assets[0]?.uri,
+          name: `test.jpg`,
+          type: response?.assets[0]?.type,
+        };
+
+        nav.navigate('PublishStory', {videoData: data});
+      });
+    }
+  };
   return (
     <View style={styles.container}>
       <StatusBar
@@ -130,7 +210,7 @@ const CreateStory = () => {
           justifycontent="center"
           alignitems="center"
           onpress={() => {
-            '';
+            openGallery();
           }}
         />
       </ScrollView>
