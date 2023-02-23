@@ -27,17 +27,8 @@ const CreateStory = () => {
   const dispatch = useDispatch();
   const nav = useNavigation();
   const {token, userId, isLoading} = useSelector(state => state.auth);
-  const [secureTextEntry, setSecureTextEntry] = useState(true);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [isError, setIsError] = useState(false);
   const [activeBtn, setActiveBtn] = useState(1);
-
-  const onRegister = async () => {
-    if (password.length <= 0) {
-      setIsError(true);
-    }
-  };
+  const [camMode, setCamMode] = useState('front');
 
   return (
     <View style={styles.container}>
@@ -61,90 +52,93 @@ const CreateStory = () => {
           <AntDesign name="close" size={22} color={color.primary} />
         </View>
       </View>
-      <View style={styles.topTab}>
-        <CustomButton
-          title="Front-Facing"
-          fontsize={Size(1.4)}
-          backgroundcolor={activeBtn == 1 ? color.white : color.gray}
-          borderradius={hp(1)}
+      <ScrollView>
+        <View style={styles.topTab}>
+          <CustomButton
+            title="Front-Facing"
+            fontsize={Size(1.4)}
+            backgroundcolor={activeBtn == 1 ? color.white : color.gray}
+            borderradius={hp(1)}
+            textcolor={color.primary}
+            padding={hp(1)}
+            textalign="center"
+            paddinghori={hp(2)}
+            flexdirection="row"
+            justifycontent="center"
+            alignitems="center"
+            width={wp(42)}
+            fontfamily={familyFont.semiBold}
+            onpress={() => {
+              setActiveBtn(1);
+              setCamMode('front');
+            }}
+          />
+          <CustomButton
+            title="Rear-Facing"
+            fontsize={Size(1.4)}
+            backgroundcolor={activeBtn == 2 ? color.white : color.gray}
+            borderradius={hp(1)}
+            textcolor={color.primary}
+            padding={hp(1)}
+            textalign="center"
+            paddinghori={hp(2)}
+            flexdirection="row"
+            justifycontent="center"
+            alignitems="center"
+            width={wp(42)}
+            fontfamily={familyFont.semiBold}
+            onpress={() => {
+              setActiveBtn(2);
+              setCamMode('back');
+            }}
+          />
+        </View>
+        <View style={styles.story} />
+        <CustomText
+          title="Video counts down from 3"
           textcolor={color.primary}
-          padding={hp(1)}
+          fontsize={Size(1.4)}
+          aligntext={'center'}
+          marginTop={hp(4)}
+          fontfamily={familyFont.reg}
+        />
+        <CustomButton
+          title="Record Video"
+          fontfamily={familyFont.semiBold}
+          fontsize={Size(2.1)}
+          backgroundcolor={color.primary}
+          borderradius={hp(1)}
+          textcolor={color.white}
+          padding={hp(2)}
           textalign="center"
-          paddinghori={hp(2)}
+          marginvertical={hp(3)}
           flexdirection="row"
           justifycontent="center"
           alignitems="center"
-          width={wp(42)}
-          fontfamily={familyFont.semiBold}
           onpress={() => {
-            setActiveBtn(1);
+            nav.navigate('RecordStory', {camType: camMode});
           }}
+          Icon=<Feather name="video" size={19} color={color.white} />
         />
         <CustomButton
-          title="Rear-Facing"
-          fontsize={Size(1.4)}
-          backgroundcolor={activeBtn == 2 ? color.white : color.gray}
-          borderradius={hp(1)}
+          title="Upload Video"
+          fontfamily={familyFont.semiBold}
+          fontsize={Size(1.7)}
           textcolor={color.primary}
-          padding={hp(1)}
           textalign="center"
-          paddinghori={hp(2)}
           flexdirection="row"
           justifycontent="center"
           alignitems="center"
-          width={wp(42)}
-          fontfamily={familyFont.semiBold}
           onpress={() => {
-            setActiveBtn(2);
+            '';
           }}
         />
-      </View>
-      <View style={styles.story} />
-      <CustomText
-        title="Video counts down from 3"
-        textcolor={color.primary}
-        fontsize={Size(1.4)}
-        aligntext={'center'}
-        marginTop={hp(4)}
-        fontfamily={familyFont.reg}
-      />
-      <CustomButton
-        title="Record Video"
-        fontfamily={familyFont.semiBold}
-        fontsize={Size(2.1)}
-        backgroundcolor={color.primary}
-        borderradius={hp(1)}
-        textcolor={color.white}
-        padding={hp(2)}
-        textalign="center"
-        marginvertical={hp(3)}
-        flexdirection="row"
-        justifycontent="center"
-        alignitems="center"
-        onpress={() => {
-          nav.navigate('StorySwipe');
-        }}
-        Icon=<Feather name="video" size={19} color={color.white} />
-      />
-      <CustomButton
-        title="Upload Video"
-        fontfamily={familyFont.semiBold}
-        fontsize={Size(1.7)}
-        textcolor={color.primary}
-        textalign="center"
-        flexdirection="row"
-        justifycontent="center"
-        alignitems="center"
-        onpress={() => {
-          nav.navigate('StorySwipe');
-        }}
-      />
-
-      <Dialog visible={isLoading}>
+      </ScrollView>
+      {/* <Dialog visible={isLoading}>
         <Dialog.Content>
           <Paragraph>isLoading</Paragraph>
         </Dialog.Content>
-      </Dialog>
+      </Dialog> */}
     </View>
   );
 };
