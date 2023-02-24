@@ -11,12 +11,13 @@ import {
   StatusBar,
   Alert,
   StyleSheet,
+  ActivityIndicator,
 } from 'react-native';
 import {wp, hp, Size, color, Images, IOS, familyFont} from '../../../utils/';
 import CustomText from '../../../components/CustomText';
 import CustomButton from '../../../components/Button';
 import {useNavigation} from '@react-navigation/native';
-import {loginUser} from '../../../redux';
+import {userProfileUpdate} from '../../../redux';
 import CustomTextInput from '../../../components/CutomTextInput';
 import {Paragraph, Dialog, Portal} from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux';
@@ -27,17 +28,20 @@ import styles from './style';
 const UpdateProfile = () => {
   const dispatch = useDispatch();
   const nav = useNavigation();
-  const {token, userId, isLoading} = useSelector(state => state.auth);
-  const [secureTextEntry, setSecureTextEntry] = useState(true);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [isError, setIsError] = useState(false);
-  const [activeBtn, setActiveBtn] = useState(1);
+  const {token, userId} = useSelector(state => state.auth);
+  const {isLoading} = useSelector(state => state.home);
 
   const onRegister = async () => {
-    if (password.length <= 0) {
-      setIsError(true);
-    }
+    const formdata = new FormData();
+    formdata.append('token', token);
+    formdata.append('user_id', userId);
+    formdata.append('first_name', 'Test');
+    formdata.append('last_name', 'User');
+    formdata.append('about', '123123123123');
+    formdata.append('url', '32423423423423');
+    formdata.append('image', 'https://source.unsplash.com/user/c_v_r/100×100');
+
+    dispatch(userProfileUpdate(formdata));
   };
 
   const deletePhoto = () => {
@@ -78,7 +82,7 @@ const UpdateProfile = () => {
             marginvertical={hp(3)}
           />
         </View>
-        <View style={styles.header1}>
+        <TouchableOpacity onPress={onRegister} style={styles.header1}>
           <CustomText
             title={'Save'}
             textcolor={color.primary}
@@ -87,7 +91,7 @@ const UpdateProfile = () => {
             aligntext={'center'}
             marginvertical={hp(3)}
           />
-        </View>
+        </TouchableOpacity>
       </View>
       <View style={styles.row1}>
         <View style={styles.header2}>
@@ -195,11 +199,22 @@ const UpdateProfile = () => {
           paddingverti={Platform.OS === 'android' ? hp(0.2) : hp(3)}
         />
       </View>
-      <Dialog visible={isLoading}>
-        <Dialog.Content>
-          <Paragraph>isLoading</Paragraph>
-        </Dialog.Content>
-      </Dialog>
+      {isLoading && (
+        <View
+          style={{
+            position: 'absolute',
+            paddingTop: hp(50),
+            backgroundColor: 'rgba(245, 245, 245, 0.7)',
+            width: wp(100),
+            height: hp(100),
+          }}>
+          <ActivityIndicator
+            animating={true}
+            color={color.primary}
+            size="large"
+          />
+        </View>
+      )}
     </View>
   );
 };

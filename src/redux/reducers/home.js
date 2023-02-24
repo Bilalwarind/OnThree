@@ -1,10 +1,14 @@
-import {ADD_STORY_SUCCESS, DATA_FAILED, DATA_LOADING} from '../actions/types';
+import {
+  PROFILE_SUCCESS,
+  PROFILE_UPDATE_SUCCESS,
+  DATA_FAILED,
+  DATA_LOADING,
+  ALL_STORIES_SUCCESS,
+} from '../actions/types';
 const initialState = {
+  userProfile: '',
   isLoading: false,
-  token: '',
-  userId: '',
-  userData: null,
-  isLoading: false,
+  allStoriesData: '',
 };
 
 export const homeReducer = (state = initialState, action) => {
@@ -19,10 +23,23 @@ export const homeReducer = (state = initialState, action) => {
         ...state,
         isLoading: false,
       };
-    case ADD_STORY_SUCCESS:
+    case ALL_STORIES_SUCCESS:
       return {
         ...state,
         isLoading: false,
+        allStoriesData: action?.payload,
+      };
+    case PROFILE_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        userProfile: action?.payload,
+      };
+    case PROFILE_UPDATE_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        // userProfile: action?.payload,
       };
 
     default:

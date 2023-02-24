@@ -17,7 +17,7 @@ import CustomText from '../../components/CustomText';
 import CustomButton from '../../components/Button';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
-import {logoutUser} from '../../redux';
+import {getAllStories} from '../../redux';
 import styles from './style';
 import VideoPlayer from 'react-native-video-player';
 import RBSheet from 'react-native-raw-bottom-sheet';
@@ -29,36 +29,40 @@ const StoryPlay = () => {
   const dispatch = useDispatch();
   const nav = useNavigation();
   const refRBSheet = useRef();
-  const {token, userId, isLoading} = useSelector(state => state.auth);
+  const {allStoriesData, isLoading} = useSelector(state => state.home);
+  const {token, userId} = useSelector(state => state.auth);
   const [secureTextEntry, setSecureTextEntry] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isError, setIsError] = useState(false);
-  const videos = [
-    {
-      id: 1,
-      heading: 'Getting Back on My Feet',
-      title: 'title of video',
-      url: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/VolkswagenGTIReview.mp4',
-    },
-    {
-      id: 2,
-      heading: 'Getting Back on My Feet',
-      title: 'title of video',
-      url: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/VolkswagenGTIReview.mp4',
-    },
-    {
-      id: 3,
-      heading: 'Getting Back on My Feet',
-      title: 'title of video',
-      url: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/VolkswagenGTIReview.mp4',
-    },
-  ];
-  const onRegister = async () => {
-    if (password.length <= 0) {
-      setIsError(true);
-    }
+  // const videos = [
+  //   {
+  //     id: 1,
+  //     heading: 'Getting Back on My Feet',
+  //     title: 'title of video',
+  //     url: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/VolkswagenGTIReview.mp4',
+  //   },
+  //   {
+  //     id: 2,
+  //     heading: 'Getting Back on My Feet',
+  //     title: 'title of video',
+  //     url: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/VolkswagenGTIReview.mp4',
+  //   },
+  //   {
+  //     id: 3,
+  //     heading: 'Getting Back on My Feet',
+  //     title: 'title of video',
+  //     url: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/VolkswagenGTIReview.mp4',
+  //   },
+  // ];
+  const data = {
+    token: token,
+    user_id: userId,
   };
+  useEffect(() => {
+    dispatch(getAllStories(data));
+  }, []);
+
   const renderItems = ({item, separators}) => {
     return (
       <View>
@@ -70,7 +74,7 @@ const StoryPlay = () => {
           videoHeight={hp(100)}
           // autoplay={true}
           thumbnail={{
-            uri: 'https://images.pexels.com/photos/1995730/pexels-photo-1995730.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+            uri: item?.url,
           }}
         />
         <View
@@ -382,7 +386,7 @@ const StoryPlay = () => {
           Platform.OS !== 'android' &&
           (({highlighted}) => <View style={[highlighted && {marginLeft: 0}]} />)
         }
-        data={videos}
+        data={allStoriesData}
         keyExtractor={item => item?.id}
         renderItem={renderItems}
       />

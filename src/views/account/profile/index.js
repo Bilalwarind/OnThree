@@ -15,7 +15,7 @@ import {wp, hp, Size, color, Images, IOS, familyFont} from '../../../utils/';
 import CustomText from '../../../components/CustomText';
 import CustomButton from '../../../components/Button';
 import {useNavigation} from '@react-navigation/native';
-import {loginUser} from '../../../redux';
+import {userProfileInfo} from '../../../redux';
 import CustomTextInput from '../../../components/CutomTextInput';
 import {Paragraph, Dialog, Portal} from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux';
@@ -25,18 +25,16 @@ import styles from './style';
 const Profile = () => {
   const dispatch = useDispatch();
   const nav = useNavigation();
-  const {token, userId, isLoading} = useSelector(state => state.auth);
-  const [secureTextEntry, setSecureTextEntry] = useState(true);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [isError, setIsError] = useState(false);
+  const {userProfile, isLoading} = useSelector(state => state.auth);
+  const {token, userId} = useSelector(state => state.auth);
   const [activeBtn, setActiveBtn] = useState(1);
-
-  const onRegister = async () => {
-    if (password.length <= 0) {
-      setIsError(true);
-    }
+  const data = {
+    token: token,
+    user_id: userId,
   };
+  useEffect(() => {
+    dispatch(userProfileInfo(data));
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -60,7 +58,9 @@ const Profile = () => {
             resizeMode="contain"
           />
         </View>
-        <View style={styles.header}>
+        <TouchableOpacity
+          onPress={() => nav.navigate('UpdateProfile')}
+          style={styles.header}>
           <CustomText
             title={'Edit'}
             textcolor={color.primary}
@@ -69,7 +69,7 @@ const Profile = () => {
             aligntext={'center'}
             marginvertical={hp(3)}
           />
-        </View>
+        </TouchableOpacity>
       </View>
 
       <CustomText
