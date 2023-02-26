@@ -106,7 +106,7 @@ const CreateStory = () => {
           type: response?.assets[0]?.type,
         };
 
-        nav.navigate('PublishStory', {videoData: data});
+        nav.replace('PublishStory', {videoData: data});
       });
     }
   };

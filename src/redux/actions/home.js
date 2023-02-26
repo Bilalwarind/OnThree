@@ -10,19 +10,26 @@ import {
 import axios from 'axios';
 import {json} from 'stream/consumers';
 
-export const addStory = data => {
+export const addStory = (data, token, nav) => {
   console.log('adta', data);
   return async dispatch => {
     const res = await axios
-      .post(`https://theonlinetest.info/onethree/api/add-story/`, data)
+      .post('https://theonlinetest.info/onethree/api/add-story', data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      })
       .then(res => {
         console.log('res', res?.data);
-        alert('Video uploaded');
+        Alert.alert('Upload Story', res?.data?.message, [
+          {text: 'OK', onPress: () => nav.goBack()},
+        ]);
         return res;
       })
       .catch(e => {
+        alert(res?.data?.message);
         console.log('e', e);
-        alert('Video uploaded');
         return e;
       });
 

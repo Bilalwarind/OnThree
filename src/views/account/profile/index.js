@@ -249,7 +249,7 @@ const Profile = () => {
           justifycontent="center"
           alignitems="center"
           onpress={() => {
-            nav.navigate('CreateStory');
+            nav.replace('CreateStory');
           }}
           Icon={<Feather name="video" size={19} color={color.white} />}
         />
