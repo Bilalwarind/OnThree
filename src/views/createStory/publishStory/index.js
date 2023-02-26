@@ -42,7 +42,11 @@ const PublishStory = ({route}) => {
     //   title: title,
     //   about: about,
     //   other_story_id: 1,
-    //   uservideo: videoData.uri,
+    //   uservideo: {
+    //     uri: videoData.uri,
+    //     type: videoData.type,
+    //     name: Math.floor(Math.random() * 100) + 1 + 'story.mp4',
+    //   },
     //   external_link: videoData.uri,
     //   'story_tag[0]': tag,
     // };
@@ -52,16 +56,17 @@ const PublishStory = ({route}) => {
     data.append('user_id', userId);
     data.append('title', title);
     data.append('about', about);
-    data.append('other_story_id', 1);
+    data.append('other_story_id', '1');
     // data.append('uservideo', videoData.uri);
     data.append('uservideo', {
       uri: videoData.uri,
-      type: 'video/mp4',
-      name: Math.floor(Math.random() * 100) + 1 + 'story.jpg',
+      type: videoData.type,
+      name: Math.floor(Math.random() * 100) + 1 + 'story.mp4',
     });
     data.append('external_link', videoData.uri);
     data.append('story_tag[0]', tag);
-    const res = await dispatch(addStory(data));
+    console.log('data', data);
+    const res = await dispatch(addStory(data, token));
     if (res) {
       setloading(false);
     } else {
@@ -244,7 +249,9 @@ const PublishStory = ({route}) => {
           flexdirection="row"
           justifycontent="center"
           alignitems="center"
-          onpress={onUpload}
+          onpress={() => {
+            onUpload();
+          }}
           Icon=<Feather name="video" size={19} color={color.white} />
         />
       </ScrollView>

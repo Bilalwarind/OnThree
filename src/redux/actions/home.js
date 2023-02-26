@@ -9,13 +9,18 @@ import {
 } from '../actions/types';
 import axios from 'axios';
 
-export const addStory = data => {
+export const addStory = (data, token) => {
   console.log('adta', data);
   return async dispatch => {
     const res = await axios
-      .post(`https://theonlinetest.info/onethree/api/add-story/`, data)
+      .post('https://theonlinetest.info/onethree/api/add-story', data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      })
       .then(res => {
-        console.log('res', res?.data);
+        console.log('res', res.data);
         alert('Video uploaded');
         return res;
       })
