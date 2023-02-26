@@ -10,7 +10,6 @@ const initialState = {
   token: '',
   userId: '',
   userData: null,
-  isLoading: false,
 };
 
 export const authReducer = (state = initialState, action) => {

@@ -15,7 +15,7 @@ import {wp, hp, Size, color, Images, IOS, familyFont} from '../../../utils/';
 import CustomText from '../../../components/CustomText';
 import CustomButton from '../../../components/Button';
 import {useNavigation} from '@react-navigation/native';
-import {loginUser} from '../../../redux';
+import {userProfileInfo} from '../../../redux';
 import CustomTextInput from '../../../components/CutomTextInput';
 import {Paragraph, Dialog, Portal} from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux';
@@ -25,19 +25,23 @@ import styles from './style';
 const Profile = () => {
   const dispatch = useDispatch();
   const nav = useNavigation();
-  const {token, userId, isLoading} = useSelector(state => state.auth);
-  const [secureTextEntry, setSecureTextEntry] = useState(true);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [isError, setIsError] = useState(false);
+  const {userProfile, isLoading} = useSelector(state => state.home);
+  const {token, userId} = useSelector(state => state.auth);
   const [activeBtn, setActiveBtn] = useState(1);
-
-  const onRegister = async () => {
-    if (password.length <= 0) {
-      setIsError(true);
-    }
+  const data = {
+    token: token,
+    user_id: userId,
   };
+  useEffect(() => {
+    dispatch(userProfileInfo(data));
+    const unsubscribe = nav.addListener('focus', () => {
+      dispatch(userProfileInfo(data));
+    });
 
+    // Return the function to unsubscribe from the event so it gets removed on unmount
+    return unsubscribe;
+  }, []);
+  alert(JSON.stringify(userProfile));
   return (
     <View style={styles.container}>
       <StatusBar
@@ -56,11 +60,17 @@ const Profile = () => {
         <View style={styles.header2}>
           <Image
             style={styles.profile}
-            source={Images.profile}
+            source={{
+              uri:
+                userProfile?.profile_image ||
+                'https://icon-library.com/images/user-profile-icon/user-profile-icon-24.jpg',
+            }}
             resizeMode="contain"
           />
         </View>
-        <View style={styles.header}>
+        <TouchableOpacity
+          onPress={() => nav.navigate('UpdateProfile')}
+          style={styles.header}>
           <CustomText
             title={'Edit'}
             textcolor={color.primary}
@@ -69,33 +79,30 @@ const Profile = () => {
             aligntext={'center'}
             marginvertical={hp(3)}
           />
-        </View>
+        </TouchableOpacity>
       </View>
-
       <CustomText
-        title="Megan McAllan"
+        title={`${userProfile?.first_name} ${userProfile?.last_name}`}
         textcolor={color.primary}
         fontsize={Size(2.2)}
         aligntext={'center'}
-        marginvertical={hp(0.5)}
         fontfamily={familyFont.semiBold}
       />
       <CustomText
-        title={'Mom, Fighter, True Believer, Sagitarius'}
+        title={userProfile?.about}
         textcolor={color.primary}
         fontsize={Size(1.4)}
         fontfamily={familyFont.reg}
         aligntext={'center'}
-        marginvertical={hp(0)}
+        marginvertical={hp(1.5)}
       />
       <CustomButton
-        title="https://bit.ly/yasqueen"
+        title={userProfile?.slug}
         fontsize={Size(1.4)}
         backgroundcolor={color.white}
         borderradius={hp(1)}
         textcolor={color.primary}
-        padding={hp(1)}
-        marginvertical={hp(3)}
+        marginbottom={hp(4)}
         flexdirection="row"
         justifycontent="center"
         alignitems="center"

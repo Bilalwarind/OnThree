@@ -17,49 +17,47 @@ import CustomText from '../../components/CustomText';
 import CustomButton from '../../components/Button';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
-import {logoutUser} from '../../redux';
+import {getAllStories, likeStory, commentsStory, logoutUser} from '../../redux';
 import styles from './style';
 import VideoPlayer from 'react-native-video-player';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Feather from 'react-native-vector-icons/Feather';
 import Entypo from 'react-native-vector-icons/Entypo';
+import {createThumbnail} from 'react-native-create-thumbnail';
 
 const StoryPlay = () => {
   const dispatch = useDispatch();
   const nav = useNavigation();
   const refRBSheet = useRef();
-  const {token, userId, isLoading} = useSelector(state => state.auth);
+  const {allStoriesData, isLoading} = useSelector(state => state.home);
+  const {token, userId} = useSelector(state => state.auth);
   const [secureTextEntry, setSecureTextEntry] = useState(true);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [isError, setIsError] = useState(false);
-  const videos = [
-    {
-      id: 1,
-      heading: 'Getting Back on My Feet',
-      title: 'title of video',
-      url: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/VolkswagenGTIReview.mp4',
-    },
-    {
-      id: 2,
-      heading: 'Getting Back on My Feet',
-      title: 'title of video',
-      url: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/VolkswagenGTIReview.mp4',
-    },
-    {
-      id: 3,
-      heading: 'Getting Back on My Feet',
-      title: 'title of video',
-      url: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/VolkswagenGTIReview.mp4',
-    },
-  ];
-  const onRegister = async () => {
-    if (password.length <= 0) {
-      setIsError(true);
-    }
+  const [likeStoryStatus, setLikeStoryStatus] = useState({});
+  const [val, setVal] = useState('');
+  const [position, setPosition] = useState({
+    show: 0,
+    top: 70,
+  });
+  const data = {
+    token: token,
+    user_id: userId,
   };
-  const renderItems = ({item, separators}) => {
+  useEffect(() => {
+    dispatch(getAllStories(data));
+  }, []);
+  const createThumbnails = uri => {
+    createThumbnail({
+      url: uri,
+      timeStamp: 5000,
+    })
+      .then(response => {
+        setVal(response.path);
+      })
+      .catch(err => console.log({err}));
+  };
+  const renderItems = ({item, index}) => {
+    // createThumbnails(item?.url);
     return (
       <View>
         <VideoPlayer
@@ -69,94 +67,119 @@ const StoryPlay = () => {
           videoWidth={wp(100)}
           videoHeight={hp(100)}
           // autoplay={true}
-          thumbnail={{
-            uri: 'https://images.pexels.com/photos/1995730/pexels-photo-1995730.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-          }}
+          // thumbnail={{
+          //   uri: val,
+          // }}
         />
         <View
           style={{
             position: 'absolute',
-            top: hp(10),
+            top: hp(2),
             left: wp(2),
             right: wp(2),
           }}>
-          <View style={styles.header}>
-            <TouchableOpacity
-              onPress={() => {
-                Alert.alert(
-                  '',
-                  'Do you want to logout?',
-                  [
-                    {
-                      text: 'NO',
-                      onPress: () => console.log('Cancel Pressed'),
-                      style: 'cancel',
-                    },
-                    {
-                      text: 'YES',
-                      onPress: () => {
-                        dispatch(logoutUser(nav));
-                        // nav.reset({
-                        //   routes: [{name: 'login'}],
-                        // });
+          {position.show == 0 && (
+            <View style={styles.header}>
+              <TouchableOpacity
+                onPress={() => {
+                  Alert.alert(
+                    '',
+                    'Do you want to logout?',
+                    [
+                      {
+                        text: 'NO',
+                        onPress: () => console.log('Cancel Pressed'),
+                        style: 'cancel',
                       },
-                    },
-                  ],
-                  {cancelable: false},
-                );
-              }}>
+                      {
+                        text: 'YES',
+                        onPress: () => {
+                          dispatch(logoutUser());
+                        },
+                      },
+                    ],
+                    {cancelable: false},
+                  );
+                }}>
+                <Image
+                  style={styles.profile3}
+                  source={Images.logo2}
+                  resizeMode="contain"
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  nav.navigate('Profile');
+                }}>
+                <Image
+                  style={styles.profile2}
+                  source={Images.profile}
+                  resizeMode="contain"
+                />
+              </TouchableOpacity>
+            </View>
+          )}
+          <View>
+            {position.show == 0 ? (
+              <TouchableOpacity
+                style={{
+                  alignSelf: 'center',
+                  marginBottom: hp(4),
+                  marginTop: hp(position.top),
+                }}
+                onPress={() => {
+                  setPosition({
+                    show: 1,
+                    top: 0,
+                  });
+                  setLikeStoryStatus(item);
+                  refRBSheet.current.open();
+                }}>
+                <AntDesign name="up" size={25} color={color.white} />
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                style={{
+                  alignSelf: 'center',
+                  marginBottom: hp(2.5),
+                  marginTop: hp(position.top),
+                }}
+                onPress={() => {
+                  setPosition({
+                    show: 0,
+                    top: 70,
+                  });
+                  refRBSheet.current.close();
+                }}>
+                <AntDesign name="down" size={25} color={color.white} />
+              </TouchableOpacity>
+            )}
+            <CustomText
+              title={item?.title}
+              textcolor={color.white}
+              fontsize={Size(3)}
+              fontfamily={familyFont.semiBold}
+              aligntext={'left'}
+            />
+            <View style={styles.header2}>
               <Image
                 style={styles.profile}
-                source={Images.logo}
-                resizeMode="contain"
-              />
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => {
-                nav.navigate('Profile');
-              }}>
-              <Image
-                style={styles.profile2}
                 source={Images.profile}
                 resizeMode="contain"
               />
-            </TouchableOpacity>
-          </View>
-          <TouchableOpacity
-            style={{
-              alignSelf: 'center',
-              marginBottom: hp(4),
-              marginTop: hp(60),
-            }}
-            onPress={() => {
-              refRBSheet.current.open();
-            }}>
-            <AntDesign name="up" size={25} color={color.white} />
-          </TouchableOpacity>
-          <CustomText
-            title={item?.heading}
-            textcolor={color.white}
-            fontsize={Size(3)}
-            fontfamily={familyFont.semiBold}
-            aligntext={'left'}
-          />
-          <View style={styles.header2}>
-            <Image
-              style={styles.profile}
-              source={Images.profile}
-              resizeMode="contain"
-            />
-            <CustomText
-              title={'Sandrine Betrecinich'}
-              fontsize={Size(1.7)}
-              textcolor={color.white}
-              fontfamily={familyFont.reg}
-            />
+              <CustomText
+                title={'Sandrine Betrecinich'}
+                fontsize={Size(1.7)}
+                textcolor={color.white}
+                fontfamily={familyFont.reg}
+              />
+            </View>
           </View>
         </View>
         <RBSheet
-          height={hp(80)}
+          height={hp(76)}
           ref={refRBSheet}
+          onClose={() => setPosition({show: 0, top: 70})}
           customStyles={{
             wrapper: {
               backgroundColor: 'transparent',
@@ -180,7 +203,7 @@ const StoryPlay = () => {
                 />
               </TouchableOpacity>
               <CustomButton
-                title="5.2K"
+                title={likeStoryStatus?.get_story_likes?.length}
                 fontsize={Size(1.7)}
                 backgroundcolor={color.primary}
                 borderradius={hp(1)}
@@ -192,7 +215,13 @@ const StoryPlay = () => {
                 alignitems="center"
                 fontfamily={familyFont.bold}
                 onpress={() => {
-                  onRegister();
+                  dispatch(
+                    likeStory({
+                      token: token,
+                      user_id: userId,
+                      story_id: likeStoryStatus?.id,
+                    }),
+                  );
                 }}
                 Icon={
                   <AntDesign
@@ -216,7 +245,7 @@ const StoryPlay = () => {
                 alignitems="center"
                 fontfamily={familyFont.bold}
                 onpress={() => {
-                  onRegister();
+                  '';
                 }}
                 Icon={
                   <Image
@@ -378,11 +407,8 @@ const StoryPlay = () => {
         backgroundColor="transparent"
       />
       <FlatList
-        ItemSeparatorComponent={
-          Platform.OS !== 'android' &&
-          (({highlighted}) => <View style={[highlighted && {marginLeft: 0}]} />)
-        }
-        data={videos}
+        showsVerticalScrollIndicator={false}
+        data={allStoriesData}
         keyExtractor={item => item?.id}
         renderItem={renderItems}
       />

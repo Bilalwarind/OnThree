@@ -84,7 +84,6 @@ export const forgetPassword = data => {
   };
 };
 export const logoutUser = () => {
-
   return dispatch => {
     dispatch({
       type: DATA_LOADING,
@@ -92,6 +91,5 @@ export const logoutUser = () => {
     dispatch({
       type: LOGOUT_SUCCESS,
     });
-    nav.navigate('Login');
   };
 };

@@ -26,6 +26,12 @@ const styles = StyleSheet.create({
     height: wp(10),
     marginRight: wp(2),
   },
+  profile3: {
+    width: wp(10),
+    height: wp(10),
+    marginRight: wp(2),
+    tintColor: color.white,
+  },
   profile2: {
     width: wp(10),
     height: wp(10),

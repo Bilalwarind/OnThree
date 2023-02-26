@@ -32,11 +32,12 @@ const styles = StyleSheet.create({
     marginBottom: hp(4),
   },
   logo: {
-    width: wp(15),
+    width: wp(8),
     tintColor: '#000',
   },
   profile: {
-    width: wp(20),
+    width: wp(12),
+    height: wp(12),
   },
   storyImg: {
     height: hp(22),
