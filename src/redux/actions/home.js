@@ -69,23 +69,21 @@ export const userProfileInfo = data => {
     baseUrl
       .post('getuserinfo', data)
       .then(async res => {
-        alert(JSON.stringify(res.data));
         if (res.data.success !== 0) {
           dispatch({
             type: PROFILE_SUCCESS,
-            payload: res.data,
+            payload: res.data.data.user,
           });
         }
       })
       .catch(err => {
-        console.log('res.data', err);
         dispatch({
           type: DATA_FAILED,
         });
       });
   };
 };
-export const userProfileUpdate = data => {
+export const userProfileUpdate = (data, nav) => {
   return dispatch => {
     dispatch({
       type: DATA_LOADING,
@@ -93,13 +91,9 @@ export const userProfileUpdate = data => {
     baseUrl
       .post('profile-update', data)
       .then(async res => {
-        Alert.alert(res.data.message);
-        if (res.data.success !== 0) {
-          dispatch({
-            type: PROFILE_UPDATE_SUCCESS,
-            payload: res.data,
-          });
-        }
+        alert(JSON.stringify(res.data));
+        // Alert.alert(res.data.message);
+        nav.navigate('Profile');
       })
       .catch(err => {
         console.log('res.data', err);
@@ -123,6 +117,52 @@ export const getAllStories = data => {
             payload: res.data.data.user,
           });
         }
+      })
+      .catch(err => {
+        dispatch({
+          type: DATA_FAILED,
+        });
+      });
+  };
+};
+export const likeStory = data => {
+  return dispatch => {
+    dispatch({
+      type: DATA_LOADING,
+    });
+    baseUrl
+      .post('add-likes', data)
+      .then(async res => {
+        alert(JSON.stringify(res.data));
+        // if (res.data.success !== 0) {
+        //   dispatch({
+        //     type: ALL_STORIES_SUCCESS,
+        //     payload: res.data.data.user,
+        //   });
+        // }
+      })
+      .catch(err => {
+        dispatch({
+          type: DATA_FAILED,
+        });
+      });
+  };
+};
+export const commentsStory = data => {
+  return dispatch => {
+    dispatch({
+      type: DATA_LOADING,
+    });
+    baseUrl
+      .post('add-comment', data)
+      .then(async res => {
+        alert(JSON.stringify(res.data));
+        // if (res.data.success !== 0) {
+        //   dispatch({
+        //     type: ALL_STORIES_SUCCESS,
+        //     payload: res.data.data.user,
+        //   });
+        // }
       })
       .catch(err => {
         dispatch({

@@ -39,7 +39,6 @@ export const homeReducer = (state = initialState, action) => {
       return {
         ...state,
         isLoading: false,
-        // userProfile: action?.payload,
       };
 
     default:

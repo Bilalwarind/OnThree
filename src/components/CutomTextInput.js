@@ -36,6 +36,11 @@ const CustomTextInput = ({
   shadowrdius,
   shadowoffset,
   eleva,
+  marginTop,
+  isButton,
+  fontsize,
+  fontsize2,
+  width2,
 }) => (
   <View
     style={{
@@ -47,6 +52,7 @@ const CustomTextInput = ({
       marginHorizontal: marginhorizontal,
       marginBottom: marginbottom,
       marginVertical: marginvertical,
+      marginTop: marginTop,
       paddingHorizontal: paddinghorizontal,
       paddingVertical: paddingverti,
       flexDirection: flexdirection,
@@ -54,7 +60,6 @@ const CustomTextInput = ({
       alignItems: alignitems,
       width: width,
       height: height,
-      fontFamily: fontfamily,
     }}>
     {/* Search icon*/}
     {isSearch && <AntDesign name="eye" size={10} color="red" />}
@@ -75,7 +80,7 @@ const CustomTextInput = ({
 
     <TextInput
       placeholder={placeholder}
-      style={{fontFamily: fontfamily}}
+      style={{fontFamily: fontfamily, fontSize: fontsize2, width: width2}}
       onChangeText={onchangetext}
       value={value}
       secureTextEntry={isSecure}
@@ -89,6 +94,11 @@ const CustomTextInput = ({
         ) : (
           <InVisible name="visibility-off" size={20} />
         )}
+      </TouchableOpacity>
+    )}
+    {isButton && (
+      <TouchableOpacity onPress={oneyepress}>
+        <Text style={{fontFamily: fontfamily, fontSize: fontsize}}>Post</Text>
       </TouchableOpacity>
     )}
   </View>

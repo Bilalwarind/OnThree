@@ -12,17 +12,15 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginBottom: hp(1),
   },
-  header: {
-    paddingHorizontal: wp(5),
-  },
   header2: {
+    height: hp(9),
+    alignItems: 'center',
     flexDirection: 'row',
-    marginBottom: hp(2),
   },
   profile: {
     width: wp(10),
     height: wp(10),
-    marginRight: wp(2.5),
+    marginRight: wp(2),
   },
   partners: {
     width: wp(7),
@@ -32,7 +30,14 @@ const styles = StyleSheet.create({
   chat: {
     width: wp(7),
     height: wp(7),
-    marginRight: wp(2),
+    marginLeft: hp(2),
+  },
+  upload: {
+    width: wp(7),
+    height: wp(7),
+  },
+  logo: {
+    tintColor: color.white,
   },
   bookmark: {
     backgroundColor: color.primary,

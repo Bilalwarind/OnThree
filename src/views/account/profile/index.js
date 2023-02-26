@@ -25,7 +25,7 @@ import styles from './style';
 const Profile = () => {
   const dispatch = useDispatch();
   const nav = useNavigation();
-  const {userProfile, isLoading} = useSelector(state => state.auth);
+  const {userProfile, isLoading} = useSelector(state => state.home);
   const {token, userId} = useSelector(state => state.auth);
   const [activeBtn, setActiveBtn] = useState(1);
   const data = {
@@ -34,8 +34,14 @@ const Profile = () => {
   };
   useEffect(() => {
     dispatch(userProfileInfo(data));
-  }, []);
+    const unsubscribe = nav.addListener('focus', () => {
+      dispatch(userProfileInfo(data));
+    });
 
+    // Return the function to unsubscribe from the event so it gets removed on unmount
+    return unsubscribe;
+  }, []);
+  alert(JSON.stringify(userProfile));
   return (
     <View style={styles.container}>
       <StatusBar
@@ -54,7 +60,11 @@ const Profile = () => {
         <View style={styles.header2}>
           <Image
             style={styles.profile}
-            source={Images.profile}
+            source={{
+              uri:
+                userProfile?.profile_image ||
+                'https://icon-library.com/images/user-profile-icon/user-profile-icon-24.jpg',
+            }}
             resizeMode="contain"
           />
         </View>
@@ -71,31 +81,28 @@ const Profile = () => {
           />
         </TouchableOpacity>
       </View>
-
       <CustomText
-        title="Megan McAllan"
+        title={`${userProfile?.first_name} ${userProfile?.last_name}`}
         textcolor={color.primary}
         fontsize={Size(2.2)}
         aligntext={'center'}
-        marginvertical={hp(0.5)}
         fontfamily={familyFont.semiBold}
       />
       <CustomText
-        title={'Mom, Fighter, True Believer, Sagitarius'}
+        title={userProfile?.about}
         textcolor={color.primary}
         fontsize={Size(1.4)}
         fontfamily={familyFont.reg}
         aligntext={'center'}
-        marginvertical={hp(0)}
+        marginvertical={hp(1.5)}
       />
       <CustomButton
-        title="https://bit.ly/yasqueen"
+        title={userProfile?.slug}
         fontsize={Size(1.4)}
         backgroundcolor={color.white}
         borderradius={hp(1)}
         textcolor={color.primary}
-        padding={hp(1)}
-        marginvertical={hp(3)}
+        marginbottom={hp(4)}
         flexdirection="row"
         justifycontent="center"
         alignitems="center"

@@ -42,8 +42,9 @@ const styles = StyleSheet.create({
     tintColor: '#000',
   },
   profile: {
-    width: wp(22),
-    height: wp(22),
+    width: wp(18),
+    height: wp(18),
+    borderRadius: wp(18),
     marginRight: wp(5),
   },
   storyImg: {
