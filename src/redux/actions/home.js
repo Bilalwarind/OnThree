@@ -9,7 +9,7 @@ import {
 } from '../actions/types';
 import axios from 'axios';
 
-export const addStory = (data, token) => {
+export const addStory = (data, token, nav) => {
   console.log('adta', data);
   return async dispatch => {
     const res = await axios
@@ -20,14 +20,15 @@ export const addStory = (data, token) => {
         },
       })
       .then(res => {
-        console.log('res', res.data);
-        alert('Video uploaded');
+        console.log('res', res?.data);
+        Alert.alert('Upload Story', res?.data?.message, [
+          {text: 'OK', onPress: () => nav.replace('Profile')},
+        ]);
         return res;
       })
       .catch(e => {
+        alert(res?.data?.message);
         console.log('e', e);
-        alert('Video uploaded');
-
         return e;
       });
 

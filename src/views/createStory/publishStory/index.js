@@ -66,7 +66,7 @@ const PublishStory = ({route}) => {
     data.append('external_link', videoData.uri);
     data.append('story_tag[0]', tag);
     console.log('data', data);
-    const res = await dispatch(addStory(data, token));
+    const res = await dispatch(addStory(data, token, nav));
     if (res) {
       setloading(false);
     } else {
@@ -113,7 +113,7 @@ const PublishStory = ({route}) => {
             videoHeight={hp(100)}
             // autoplay={true}
             thumbnail={{
-              uri: 'https://images.pexels.com/photos/1995730/pexels-photo-1995730.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+              uri: videoData.uri,
             }}
             style={{
               width: wp(50),
