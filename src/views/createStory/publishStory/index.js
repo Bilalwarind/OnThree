@@ -10,6 +10,7 @@ import {
   ScrollView,
   StatusBar,
   StyleSheet,
+  Alert,
 } from 'react-native';
 import {wp, hp, Size, color, Images, IOS, familyFont} from '../../../utils/';
 import CustomText from '../../../components/CustomText';
@@ -23,6 +24,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import VideoPlayer from 'react-native-video-player';
 import styles from './style';
+import {BackHandler} from 'react-native';
 
 const PublishStory = ({route}) => {
   const {videoData} = route.params;
@@ -33,7 +35,25 @@ const PublishStory = ({route}) => {
   const [title, setTiltle] = useState('');
   const [about, setAbout] = useState('');
   const [tag, setTag] = useState('');
-  const navigation = useNavigation();
+  function handleBackButtonClick() {
+    Alert.alert('Exit', 'Do you want to go back?', [
+      {
+        text: 'Cancel',
+        onPress: () => console.log('Cancel', 'Cancel'),
+      },
+      {text: 'OK', onPress: () => nav.goBack()},
+    ]);
+    return true;
+  }
+  useEffect(() => {
+    BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
+    return () => {
+      BackHandler.removeEventListener(
+        'hardwareBackPress',
+        handleBackButtonClick,
+      );
+    };
+  }, []);
   const onUpload = async () => {
     setloading(true);
     // const data = {
@@ -98,7 +118,13 @@ const PublishStory = ({route}) => {
             size={22}
             color={color.primary}
             onPress={() => {
-              navigation.goBack();
+              Alert.alert('Exit', 'Do you want to go back?', [
+                {
+                  text: 'Cancel',
+                  onPress: () => console.log('Cancel', 'Cancel'),
+                },
+                {text: 'OK', onPress: () => nav.goBack()},
+              ]);
             }}
           />
         </View>

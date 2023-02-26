@@ -22,7 +22,7 @@ export const addStory = (data, token, nav) => {
       .then(res => {
         console.log('res', res?.data);
         Alert.alert('Upload Story', res?.data?.message, [
-          {text: 'OK', onPress: () => nav.replace('Profile')},
+          {text: 'OK', onPress: () => nav.goBack()},
         ]);
         return res;
       })
