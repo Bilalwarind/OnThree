@@ -10,6 +10,7 @@ import {
   ScrollView,
   StatusBar,
   StyleSheet,
+  Alert,
 } from 'react-native';
 import {wp, hp, Size, color, Images, IOS, familyFont} from '../../../utils/';
 import CustomText from '../../../components/CustomText';
@@ -23,6 +24,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import VideoPlayer from 'react-native-video-player';
 import styles from './style';
+import {BackHandler} from 'react-native';
 
 const PublishStory = ({route}) => {
   const {videoData} = route.params;
@@ -33,7 +35,25 @@ const PublishStory = ({route}) => {
   const [title, setTiltle] = useState('');
   const [about, setAbout] = useState('');
   const [tag, setTag] = useState('');
-  const navigation = useNavigation();
+  function handleBackButtonClick() {
+    Alert.alert('Exit', 'Do you want to go back?', [
+      {
+        text: 'Cancel',
+        onPress: () => console.log('Cancel', 'Cancel'),
+      },
+      {text: 'OK', onPress: () => nav.goBack()},
+    ]);
+    return true;
+  }
+  useEffect(() => {
+    BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
+    return () => {
+      BackHandler.removeEventListener(
+        'hardwareBackPress',
+        handleBackButtonClick,
+      );
+    };
+  }, []);
   const onUpload = async () => {
     setloading(true);
     // const data = {
@@ -42,7 +62,11 @@ const PublishStory = ({route}) => {
     //   title: title,
     //   about: about,
     //   other_story_id: 1,
-    //   uservideo: videoData.uri,
+    //   uservideo: {
+    //     uri: videoData.uri,
+    //     type: videoData.type,
+    //     name: Math.floor(Math.random() * 100) + 1 + 'story.mp4',
+    //   },
     //   external_link: videoData.uri,
     //   'story_tag[0]': tag,
     // };
@@ -52,16 +76,17 @@ const PublishStory = ({route}) => {
     data.append('user_id', userId);
     data.append('title', title);
     data.append('about', about);
-    data.append('other_story_id', 1);
+    data.append('other_story_id', '1');
     // data.append('uservideo', videoData.uri);
     data.append('uservideo', {
       uri: videoData.uri,
-      type: 'video/mp4',
-      name: Math.floor(Math.random() * 100) + 1 + 'story.jpg',
+      type: videoData.type,
+      name: Math.floor(Math.random() * 100) + 1 + 'story.mp4',
     });
     data.append('external_link', videoData.uri);
     data.append('story_tag[0]', tag);
-    const res = await dispatch(addStory(data));
+    console.log('data', data);
+    const res = await dispatch(addStory(data, token, nav));
     if (res) {
       setloading(false);
     } else {
@@ -93,7 +118,13 @@ const PublishStory = ({route}) => {
             size={22}
             color={color.primary}
             onPress={() => {
-              navigation.goBack();
+              Alert.alert('Exit', 'Do you want to go back?', [
+                {
+                  text: 'Cancel',
+                  onPress: () => console.log('Cancel', 'Cancel'),
+                },
+                {text: 'OK', onPress: () => nav.goBack()},
+              ]);
             }}
           />
         </View>
@@ -108,7 +139,7 @@ const PublishStory = ({route}) => {
             videoHeight={hp(100)}
             // autoplay={true}
             thumbnail={{
-              uri: 'https://images.pexels.com/photos/1995730/pexels-photo-1995730.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+              uri: videoData.uri,
             }}
             style={{
               width: wp(50),
@@ -244,7 +275,9 @@ const PublishStory = ({route}) => {
           flexdirection="row"
           justifycontent="center"
           alignitems="center"
-          onpress={onUpload}
+          onpress={() => {
+            onUpload();
+          }}
           Icon=<Feather name="video" size={19} color={color.white} />
         />
       </ScrollView>
