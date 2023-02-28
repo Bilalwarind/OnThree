@@ -11,7 +11,7 @@ import {
 import {wp, hp, Size, color, Images, IOS} from '../../utils/';
 const Splash = ({params}) => {
   const navigation = useNavigation();
-  window.setTimeout(async () => {
+  setTimeout(async () => {
     navigation.navigate('Login');
   }, 2000);
   return (

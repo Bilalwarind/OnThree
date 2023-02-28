@@ -2,8 +2,9 @@ import {Alert} from 'react-native';
 import baseUrl from '../baseUrl';
 import {
   PROFILE_SUCCESS,
-  PROFILE_UPDATE_SUCCESS,
+  ALL_USER_LIST_SUCCESS,
   ALL_STORIES_SUCCESS,
+  USER_STORIES_SUCCESS,
   DATA_FAILED,
   DATA_LOADING,
 } from '../actions/types';
@@ -90,6 +91,28 @@ export const userProfileInfo = data => {
       });
   };
 };
+export const userAllStories = data => {
+  return dispatch => {
+    dispatch({
+      type: DATA_LOADING,
+    });
+    baseUrl
+      .post('get-user-all-stories', data)
+      .then(async res => {
+        if (res.data.success !== 0) {
+          dispatch({
+            type: USER_STORIES_SUCCESS,
+            payload: res.data.data.stories,
+          });
+        }
+      })
+      .catch(err => {
+        dispatch({
+          type: DATA_FAILED,
+        });
+      });
+  };
+};
 export const userProfileUpdate = (data, nav) => {
   return dispatch => {
     dispatch({
@@ -118,9 +141,32 @@ export const getAllStories = data => {
     baseUrl
       .post('get-all-stories', data)
       .then(async res => {
+        // alert(JSON.stringify(res.data.data.user[1].liked_story));
         if (res.data.success !== 0) {
           dispatch({
             type: ALL_STORIES_SUCCESS,
+            payload: res.data.data.user,
+          });
+        }
+      })
+      .catch(err => {
+        dispatch({
+          type: DATA_FAILED,
+        });
+      });
+  };
+};
+export const getAllUserList = data => {
+  return dispatch => {
+    dispatch({
+      type: DATA_LOADING,
+    });
+    baseUrl
+      .post('users-list', data)
+      .then(async res => {
+        if (res.data.success !== 0) {
+          dispatch({
+            type: ALL_USER_LIST_SUCCESS,
             payload: res.data.data.user,
           });
         }
@@ -141,14 +187,10 @@ export const likeStory = data => {
       .post('add-likes', data)
       .then(async res => {
         alert(JSON.stringify(res.data));
-        // if (res.data.success !== 0) {
-        //   dispatch({
-        //     type: ALL_STORIES_SUCCESS,
-        //     payload: res.data.data.user,
-        //   });
-        // }
+        dispatch(getAllStories(data));
       })
       .catch(err => {
+        alert(JSON.stringify(err));
         dispatch({
           type: DATA_FAILED,
         });
@@ -172,6 +214,7 @@ export const commentsStory = data => {
         // }
       })
       .catch(err => {
+        alert(JSON.stringify(err));
         dispatch({
           type: DATA_FAILED,
         });

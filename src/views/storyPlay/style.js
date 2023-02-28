@@ -26,7 +26,9 @@ const styles = StyleSheet.create({
     height: wp(10),
     borderRadius: wp(5),
     marginRight: wp(2),
+    borderRadius: wp(10),
     overflow: 'hidden',
+
   },
   profile3: {
     width: wp(10),
@@ -39,7 +41,8 @@ const styles = StyleSheet.create({
   profile2: {
     width: wp(10),
     height: wp(10),
-    
+    borderRadius: wp(10),
+    backgroundColor: color.white,
   },
   partners: {
     width: wp(7),
@@ -57,6 +60,29 @@ const styles = StyleSheet.create({
   },
   logo: {
     tintColor: color.white,
+  },
+  bookmark: {
+    backgroundColor: color.primary,
+    padding: hp(1.5),
+    borderRadius: hp(1),
+  },
+
+  header5: {
+    paddingHorizontal: wp(5),
+  },
+  header6: {
+    flexDirection: 'row',
+    marginBottom: hp(2),
+  },
+  partners: {
+    width: wp(7),
+    height: wp(7),
+    marginRight: wp(3),
+  },
+  chat2: {
+    width: wp(7),
+    height: wp(7),
+    marginRight: wp(2),
   },
   bookmark: {
     backgroundColor: color.primary,

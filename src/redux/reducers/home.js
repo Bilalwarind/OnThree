@@ -1,14 +1,17 @@
 import {
   PROFILE_SUCCESS,
-  PROFILE_UPDATE_SUCCESS,
+  ALL_USER_LIST_SUCCESS,
   DATA_FAILED,
   DATA_LOADING,
   ALL_STORIES_SUCCESS,
+  USER_STORIES_SUCCESS,
 } from '../actions/types';
 const initialState = {
   userProfile: '',
   isLoading: false,
   allStoriesData: '',
+  userStoriesData: '',
+  allUserList: '',
 };
 
 export const homeReducer = (state = initialState, action) => {
@@ -29,16 +32,23 @@ export const homeReducer = (state = initialState, action) => {
         isLoading: false,
         allStoriesData: action?.payload,
       };
+    case USER_STORIES_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        userStoriesData: action?.payload,
+      };
     case PROFILE_SUCCESS:
       return {
         ...state,
         isLoading: false,
         userProfile: action?.payload,
       };
-    case PROFILE_UPDATE_SUCCESS:
+    case ALL_USER_LIST_SUCCESS:
       return {
         ...state,
         isLoading: false,
+        allUserList: action?.payload,
       };
 
     default:

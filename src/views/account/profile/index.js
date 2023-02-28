@@ -15,25 +15,30 @@ import {wp, hp, Size, color, Images, IOS, familyFont} from '../../../utils/';
 import CustomText from '../../../components/CustomText';
 import CustomButton from '../../../components/Button';
 import {useNavigation} from '@react-navigation/native';
-import {userProfileInfo} from '../../../redux';
+import {userProfileInfo, userAllStories} from '../../../redux';
 import CustomTextInput from '../../../components/CutomTextInput';
 import {Paragraph, Dialog, Portal} from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux';
 import Feather from 'react-native-vector-icons/Feather';
 import styles from './style';
+import moment from 'moment/moment';
 
 const Profile = () => {
   const dispatch = useDispatch();
   const nav = useNavigation();
-  const {userProfile, isLoading} = useSelector(state => state.home);
+  const {userProfile, userStoriesData, isLoading} = useSelector(
+    state => state.home,
+  );
   const {token, userId} = useSelector(state => state.auth);
   const [activeBtn, setActiveBtn] = useState(1);
   const data = {
     token: token,
     user_id: userId,
+    story_user_id: userId,
   };
   useEffect(() => {
     dispatch(userProfileInfo(data));
+    dispatch(userAllStories(data));
     const unsubscribe = nav.addListener('focus', () => {
       dispatch(userProfileInfo(data));
     });
@@ -41,7 +46,6 @@ const Profile = () => {
     // Return the function to unsubscribe from the event so it gets removed on unmount
     return unsubscribe;
   }, []);
-  alert(JSON.stringify(userProfile));
   return (
     <View style={styles.container}>
       <StatusBar
@@ -65,7 +69,6 @@ const Profile = () => {
                 userProfile?.profile_image ||
                 'https://icon-library.com/images/user-profile-icon/user-profile-icon-24.jpg',
             }}
-            resizeMode="contain"
           />
         </View>
         <TouchableOpacity
@@ -173,51 +176,30 @@ const Profile = () => {
         />
       </View>
       {activeBtn == 1 && (
-        <CustomButton
+        <CustomText
           title="Stories"
           fontfamily={familyFont.reg}
           fontsize={Size(2.2)}
-          backgroundcolor={color.white}
-          borderradius={hp(1)}
           textcolor={color.primary}
-          padding={hp(1)}
-          textalign="center"
-          marginvertical={hp(1)}
-          onpress={() => {
-            onRegister();
-          }}
+          alignitems="center"
         />
       )}
       {activeBtn == 2 && (
-        <CustomButton
+        <CustomText
           title="Bookmarks"
           fontfamily={familyFont.reg}
           fontsize={Size(2.2)}
-          backgroundcolor={color.white}
-          borderradius={hp(1)}
           textcolor={color.primary}
-          padding={hp(1)}
-          textalign="center"
-          marginvertical={hp(1)}
-          onpress={() => {
-            onRegister();
-          }}
+          alignitems="center"
         />
       )}
       {activeBtn == 3 && (
-        <CustomButton
+        <CustomText
           title="Comments"
           fontfamily={familyFont.reg}
           fontsize={Size(2.2)}
-          backgroundcolor={color.white}
-          borderradius={hp(1)}
           textcolor={color.primary}
-          padding={hp(1)}
-          textalign="center"
-          marginvertical={hp(1)}
-          onpress={() => {
-            onRegister();
-          }}
+          alignitems="center"
         />
       )}
       <CustomButton
@@ -273,70 +255,58 @@ const Profile = () => {
           Icon={<Feather name="search" size={17} color={color.white} />}
         />
       )}
-      <View style={{flexDirection: 'row'}}>
-        <View style={styles.story}>
-          <Image
-            style={styles.storyImg}
-            source={Images.story}
-            resizeMode="contain"
-          />
-        </View>
-        <View style={styles.storyDetail}>
-          <CustomText
-            title="Jan 1, 2023"
-            textcolor={color.primary}
-            fontsize={Size(1.1)}
-            marginvertical={hp(0.5)}
-            fontfamily={familyFont.bold}
-          />
-          <CustomText
-            title="This is a story title here if it..."
-            textcolor={color.primary}
-            fontsize={Size(1.8)}
-            marginvertical={hp(0.5)}
-            fontfamily={familyFont.bold}
-          />
-          <CustomText
-            title="This is the description / about for a story it is able to wrap onto the next line and it can even go to three lines"
-            textcolor={color.primary}
-            fontsize={Size(1.3)}
-            marginvertical={hp(0.5)}
-            fontfamily={familyFont.meduim}
-          />
-          <View style={{flexDirection: 'row', marginTop: hp(1)}}>
-            <CustomButton
-              title="Perserverance"
-              fontsize={Size(1.2)}
-              backgroundcolor={color.gray}
-              borderradius={hp(1)}
-              textcolor={color.primary}
-              padding={hp(1)}
-              paddinghori={hp(2)}
-              marginright={wp(2)}
-              fontfamily={familyFont.semiBold}
-              onpress={() => {}}
-            />
-            <CustomButton
-              title="+2 more"
-              fontsize={Size(1.2)}
-              backgroundcolor={color.gray}
-              borderradius={hp(1)}
-              textcolor={color.primary}
-              padding={hp(1)}
-              paddinghori={hp(2)}
-              marginright={wp(2)}
-              fontfamily={familyFont.semiBold}
-              onpress={() => {}}
-            />
-          </View>
-        </View>
-      </View>
 
-      {/* <Dialog visible={isLoading}>
-        <Dialog.Content>
-          <Paragraph>isLoading</Paragraph>
-        </Dialog.Content>
-      </Dialog> */}
+      <ScrollView showsVerticalScrollIndicator={false}>
+        {userStoriesData?.map(item => (
+          <View style={{flexDirection: 'row', marginVertical: hp(0.8)}}>
+            <View style={styles.story}>
+              <Image
+                style={styles.storyImg}
+                source={Images.story}
+                resizeMode="contain"
+              />
+            </View>
+            <View style={styles.storyDetail}>
+              <CustomText
+                title={moment(item?.created_at).format('ll')}
+                textcolor={color.primary}
+                fontsize={Size(1.1)}
+                marginvertical={hp(0.5)}
+                fontfamily={familyFont.bold}
+              />
+              <CustomText
+                title={item?.title}
+                textcolor={color.primary}
+                fontsize={Size(1.8)}
+                marginvertical={hp(0.5)}
+                fontfamily={familyFont.bold}
+              />
+              <CustomText
+                title={item?.about}
+                textcolor={color.primary}
+                fontsize={Size(1.3)}
+                marginvertical={hp(0.5)}
+                fontfamily={familyFont.meduim}
+              />
+              {item?.get_story_tags.map(item => (
+                <View style={{flexDirection: 'row', marginTop: hp(1)}}>
+                  <CustomText
+                    title={item?.tag}
+                    fontsize={Size(1.2)}
+                    backgroundcolor={color.gray}
+                    borderradius={hp(1)}
+                    textcolor={color.primary}
+                    padding={hp(1)}
+                    paddinghori={hp(2)}
+                    marginright={wp(2)}
+                    fontfamily={familyFont.semiBold}
+                  />
+                </View>
+              ))}
+            </View>
+          </View>
+        ))}
+      </ScrollView>
     </View>
   );
 };
