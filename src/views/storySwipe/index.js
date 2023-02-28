@@ -35,11 +35,6 @@ const StorySwipe = () => {
 
   return (
     <View style={styles.container}>
-      <StatusBar
-        translucent
-        barStyle="dark-content"
-        backgroundColor="transparent"
-      />
       <View
         style={{
           flexDirection: 'row',
@@ -84,7 +79,7 @@ const StorySwipe = () => {
           />
           <CustomText
             title={
-              'Sandrine Betrecinich thanks everyone for listening. Happy to answer any questions in the comments!! 🙏 👇'
+              'thanks everyone for listening. Happy to answer any questions in the comments!! 🙏 👇'
             }
             fontsize={Size(1.7)}
             width={wp(78)}

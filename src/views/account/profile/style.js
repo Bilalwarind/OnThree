@@ -4,7 +4,7 @@ import {wp, hp, Size, color, Images, IOS} from '../../../utils/';
 const styles = StyleSheet.create({
   container: {
     height: hp(100),
-    paddingHorizontal: wp(5),
+    padding: wp(5),
     backgroundColor: color.white,
   },
   row1: {
@@ -36,8 +36,10 @@ const styles = StyleSheet.create({
     tintColor: '#000',
   },
   profile: {
-    width: wp(12),
-    height: wp(12),
+    width: wp(18),
+    height: wp(18),
+    borderRadius: wp(18),
+    marginRight: wp(5),
   },
   storyImg: {
     height: hp(22),

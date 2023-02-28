@@ -39,6 +39,7 @@ const CustomText = ({
   flex,
   Icon,
   textAlignVertical,
+  alignitems,
 }) => (
   <View
     style={{
@@ -53,6 +54,8 @@ const CustomText = ({
       marginLeft: marginleft,
       marginRight: marginright,
       flexDirection: flexdirection,
+      backgroundColor: backgroundcolor,
+      alignItems: alignitems,
     }}>
     {Icon}
     <Text
@@ -70,10 +73,8 @@ const CustomText = ({
         width: width,
         lineHeight: lineheight,
         fontStyle: fontstyle,
-        backgroundColor: backgroundcolor,
         padding: padding,
         textDecorationLine: textdecoration,
-        borderRadius: txtborder,
         fontFamily: fontfamily,
         fontWeight: fontweight,
       }}>
@@ -94,7 +95,6 @@ const CustomText = ({
           backgroundColor: backgroundcolor,
           padding: padding,
           textDecorationLine: textdecoration,
-          borderRadius: txtborder,
           fontFamily: fontfamily2,
           fontWeight: fontweight,
         }}>
