@@ -24,14 +24,19 @@ const styles = StyleSheet.create({
   profile: {
     width: wp(10),
     height: wp(10),
+    borderRadius: wp(5),
     marginRight: wp(2),
     borderRadius: wp(10),
+    overflow: 'hidden',
+
   },
   profile3: {
     width: wp(10),
     height: wp(10),
+    borderRadius: wp(5),
     marginRight: wp(2),
     tintColor: color.white,
+    overflow: 'hidden',
   },
   profile2: {
     width: wp(10),

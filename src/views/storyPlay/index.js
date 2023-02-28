@@ -47,6 +47,12 @@ const StoryPlay = () => {
     token: token,
     user_id: userId,
   };
+  const handleClosePress = useCallback(() => {
+    refRBSheet.current?.close();
+  }, []);
+  const handleOpenPress = useCallback(() => {
+    refRBSheet.current?.open();
+  }, []);
   useEffect(() => {
     dispatch(getAllStories(data));
   }, []);
@@ -140,7 +146,7 @@ const StoryPlay = () => {
                     top: 0,
                   });
                   setLikeStoryStatus(item);
-                  refRBSheet.current.open();
+                  handleOpenPress();
                 }}>
                 <AntDesign name="up" size={25} color={color.white} />
               </TouchableOpacity>
@@ -156,7 +162,7 @@ const StoryPlay = () => {
                     show: 0,
                     top: 70,
                   });
-                  refRBSheet.current.close();
+                  handleClosePress();
                 }}>
                 <AntDesign name="down" size={25} color={color.white} />
               </TouchableOpacity>
