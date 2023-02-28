@@ -24,8 +24,8 @@ import styles from './style';
 import moment from 'moment/moment';
 
 const Profile = () => {
-  const dispatch = useDispatch();
   const nav = useNavigation();
+  const dispatch = useDispatch();
   const {userProfile, userStoriesData, isLoading} = useSelector(
     state => state.home,
   );
@@ -39,9 +39,14 @@ const Profile = () => {
   useEffect(() => {
     dispatch(userProfileInfo(data));
     dispatch(userAllStories(data));
-    const unsubscribe = nav.addListener('focus', () => {
-      dispatch(userProfileInfo(data));
-    });
+    const unsubscribe = nav.addListener(
+      'focus',
+      () => {
+        dispatch(userProfileInfo(data));
+        dispatch(userAllStories(data));
+      },
+      [],
+    );
 
     // Return the function to unsubscribe from the event so it gets removed on unmount
     return unsubscribe;
@@ -111,7 +116,7 @@ const Profile = () => {
         alignitems="center"
         fontfamily={familyFont.semiBold}
         onpress={() => {
-          onRegister();
+          '';
         }}
         Icon=<Image
           style={styles.logo}
@@ -213,7 +218,7 @@ const Profile = () => {
         textalign="center"
         marginvertical={hp(1)}
         onpress={() => {
-          onRegister();
+          '';
         }}
       />
       {activeBtn == 1 ? (
@@ -250,63 +255,70 @@ const Profile = () => {
           justifycontent="center"
           alignitems="center"
           onpress={() => {
-            onRegister();
+            '';
           }}
           Icon={<Feather name="search" size={17} color={color.white} />}
         />
       )}
-
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {userStoriesData?.map(item => (
-          <View style={{flexDirection: 'row', marginVertical: hp(0.8)}}>
-            <View style={styles.story}>
-              <Image
-                style={styles.storyImg}
-                source={Images.story}
-                resizeMode="contain"
-              />
-            </View>
-            <View style={styles.storyDetail}>
-              <CustomText
-                title={moment(item?.created_at).format('ll')}
-                textcolor={color.primary}
-                fontsize={Size(1.1)}
-                marginvertical={hp(0.5)}
-                fontfamily={familyFont.bold}
-              />
-              <CustomText
-                title={item?.title}
-                textcolor={color.primary}
-                fontsize={Size(1.8)}
-                marginvertical={hp(0.5)}
-                fontfamily={familyFont.bold}
-              />
-              <CustomText
-                title={item?.about}
-                textcolor={color.primary}
-                fontsize={Size(1.3)}
-                marginvertical={hp(0.5)}
-                fontfamily={familyFont.meduim}
-              />
-              {item?.get_story_tags.map(item => (
-                <View style={{flexDirection: 'row', marginTop: hp(1)}}>
-                  <CustomText
-                    title={item?.tag}
-                    fontsize={Size(1.2)}
-                    backgroundcolor={color.gray}
-                    borderradius={hp(1)}
-                    textcolor={color.primary}
-                    padding={hp(1)}
-                    paddinghori={hp(2)}
-                    marginright={wp(2)}
-                    fontfamily={familyFont.semiBold}
-                  />
+      <View style={{height: hp(26)}}>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          {userProfile && userStoriesData
+            ? userStoriesData?.map(item => (
+                <View style={{flexDirection: 'row', marginVertical: hp(0.8)}}>
+                  <View style={styles.story}>
+                    <Image
+                      style={styles.storyImg}
+                      source={Images.story}
+                      resizeMode="contain"
+                    />
+                  </View>
+                  <View style={styles.storyDetail}>
+                    <CustomText
+                      title={moment(item?.created_at)?.format('ll')}
+                      textcolor={color.primary}
+                      fontsize={Size(1.1)}
+                      marginvertical={hp(0.5)}
+                      fontfamily={familyFont.bold}
+                    />
+                    <CustomText
+                      title={item?.title}
+                      textcolor={color.primary}
+                      fontsize={Size(1.8)}
+                      marginvertical={hp(0.5)}
+                      fontfamily={familyFont.bold}
+                    />
+                    <CustomText
+                      title={item?.about}
+                      textcolor={color.primary}
+                      fontsize={Size(1.3)}
+                      marginvertical={hp(0.5)}
+                      fontfamily={familyFont.meduim}
+                    />
+                    {item?.get_story_tags?.map(item => (
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          marginTop: hp(1),
+                        }}>
+                        <CustomText
+                          title={item?.tag}
+                          fontsize={Size(1.2)}
+                          backgroundcolor={color.gray}
+                          borderradius={hp(1)}
+                          textcolor={color.primary}
+                          padding={hp(1)}
+                          paddinghori={hp(2)}
+                          marginright={wp(2)}
+                          fontfamily={familyFont.semiBold}
+                        />
+                      </View>
+                    ))}
+                  </View>
                 </View>
-              ))}
-            </View>
-          </View>
-        ))}
-      </ScrollView>
+              ))
+            : null}
+        </ScrollView>
+      </View>
     </View>
   );
 };

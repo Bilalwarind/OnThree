@@ -15,6 +15,7 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    marginTop: hp(5),
   },
   header2: {
     height: hp(5),
@@ -28,7 +29,6 @@ const styles = StyleSheet.create({
     marginRight: wp(2),
     borderRadius: wp(10),
     overflow: 'hidden',
-
   },
   profile3: {
     width: wp(10),

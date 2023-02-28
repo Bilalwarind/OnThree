@@ -99,6 +99,7 @@ export const userAllStories = data => {
     baseUrl
       .post('get-user-all-stories', data)
       .then(async res => {
+        // alert(JSON.stringify(res.data.data.stories));
         if (res.data.success !== 0) {
           dispatch({
             type: USER_STORIES_SUCCESS,
@@ -107,6 +108,7 @@ export const userAllStories = data => {
         }
       })
       .catch(err => {
+        console.log('err', err);
         dispatch({
           type: DATA_FAILED,
         });
@@ -187,7 +189,6 @@ export const likeStory = data => {
       .post('add-likes', data)
       .then(async res => {
         alert(JSON.stringify(res.data));
-        dispatch(getAllStories(data));
       })
       .catch(err => {
         alert(JSON.stringify(err));

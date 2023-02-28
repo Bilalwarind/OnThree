@@ -53,9 +53,7 @@ const StoryPlay = () => {
   const handleOpenPress = useCallback(() => {
     refRBSheet.current?.open();
   }, []);
-
   useEffect(() => {
-    refRBSheet.current?.open();
     dispatch(getAllStories(data));
   }, []);
   // const createThumbnails = uri => {
@@ -79,9 +77,9 @@ const StoryPlay = () => {
           videoWidth={wp(100)}
           videoHeight={hp(100)}
           // autoplay={true}
-          thumbnail={{
-            uri: 'https://i.pinimg.com/originals/5f/c4/c1/5fc4c1667a0e69106841f1e9036137e5.jpg',
-          }}
+          // thumbnail={{
+          //   uri: val,
+          // }}
         />
         <View
           style={{
@@ -196,6 +194,103 @@ const StoryPlay = () => {
           </View>
         </View>
 
+        {/* <View style={styles.container}>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              marginBottom: hp(2),
+              paddingHorizontal: wp(7),
+            }}>
+            <View />
+            <CustomText
+              title={'922K Comments'}
+              fontsize={Size(1.8)}
+              textcolor={color.white}
+              fontfamily={familyFont.bold}
+              flexdirection="row"
+              justifycontent="center"
+              Icon={
+                <Image
+                  style={styles.chat2}
+                  source={Images.chat}
+                  resizeMode="contain"
+                />
+              }
+            />
+            <TouchableOpacity style={styles.bookmark}>
+              <AntDesign name="close" size={25} color={color.white} />
+            </TouchableOpacity>
+          </View>
+          <View
+            style={{
+              borderTopWidth: hp(0.15),
+              borderColor: color.btnColor,
+              marginBottom: hp(1.8),
+            }}
+          />
+          <View style={styles.header5}>
+            <View style={styles.header6}>
+              <Image
+                style={styles.profile}
+                source={{uri: item?.user_details?.profile_image}}
+              />
+              {item?.get_story_comment.map(item => {
+                <CustomText
+                  title={item?.comment}
+                  fontsize={Size(1.7)}
+                  width={wp(78)}
+                  textcolor={color.white}
+                  fontfamily={familyFont.reg}
+                  title2={`${item?.user_details?.first_name} ${item?.user_details?.last_name} `}
+                  fontsize2={Size(1.8)}
+                  fontfamily2={familyFont.bold}
+                />;
+              })}
+            </View>
+            <CustomText
+              title={moment(item?.get_story_comment?.created_at).fromNow()}
+              fontsize={Size(1.4)}
+              textcolor={color.white}
+              marginleft={wp(13)}
+              fontfamily={familyFont.bold}
+            />
+
+            <CustomTextInput
+              placeholder={'Add your comment here...'}
+              borderradius={hp(1.5)}
+              borderwidth={wp(0.6)}
+              bordercolor={color.border}
+              bgcolor={color.white}
+              paddinghorizontal={hp(2)}
+              flexdirection="row"
+              alignitems={'center'}
+              // multiline={true}
+              // numberOfLines={6}
+              justifycontent="space-between"
+              marginTop={hp(5)}
+              onchangetext={val => setComment(val)}
+              paddingverti={Platform.OS === 'android' ? hp(0.2) : hp(3)}
+              isButton={true}
+              fontfamily={familyFont.semiBold}
+              fontsize={Size(1.8)}
+              fontsize2={Size(1.4)}
+              width2={wp(70)}
+              oneyepress={() =>
+                dispatch(
+                  commentsStory({
+                    token: token,
+                    user_id: userId,
+                    story_id: item?.id,
+                    comment: comment,
+                  }),
+                )
+              }
+            />
+          </View>
+        </View> */}
+
         <RBSheet
           height={hp(76)}
           ref={refRBSheet}
@@ -240,7 +335,6 @@ const StoryPlay = () => {
                       token: token,
                       user_id: userId,
                       story_id: item?.id,
-                      liked: item?.liked_story,
                     }),
                   );
                 }}
@@ -303,26 +397,38 @@ const StoryPlay = () => {
               marginvertical={hp(2)}
             />
             <CustomText
-              title={item?.about}
+              title={
+                'This is the description of the video. It’s input by the creator of the story when they are creating and uploading.We can input whatever we like 💪 💪'
+              }
               fontsize={Size(1.6)}
               textcolor={color.white}
               fontfamily={familyFont.reg}
             />
             <View style={{flexDirection: 'row', marginVertical: hp(3)}}>
-              {item?.get_story_tags?.map(item => (
-                <CustomButton
-                  title={item?.tag}
-                  fontsize={Size(1.2)}
-                  backgroundcolor={color.btnColor}
-                  borderradius={hp(1)}
-                  textcolor={color.white}
-                  padding={hp(1)}
-                  paddinghori={hp(2)}
-                  marginright={wp(2)}
-                  fontfamily={familyFont.semiBold}
-                  onpress={() => {}}
-                />
-              ))}
+              <CustomButton
+                title="Perserverance"
+                fontsize={Size(1.2)}
+                backgroundcolor={color.btnColor}
+                borderradius={hp(1)}
+                textcolor={color.white}
+                padding={hp(1)}
+                paddinghori={hp(2)}
+                marginright={wp(2)}
+                fontfamily={familyFont.semiBold}
+                onpress={() => {}}
+              />
+              <CustomButton
+                title="Health & Wellness"
+                fontsize={Size(1.2)}
+                backgroundcolor={color.btnColor}
+                borderradius={hp(1)}
+                textcolor={color.white}
+                padding={hp(1)}
+                paddinghori={hp(2)}
+                marginright={wp(2)}
+                fontfamily={familyFont.semiBold}
+                onpress={() => {}}
+              />
             </View>
             <View
               style={{

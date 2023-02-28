@@ -29,7 +29,7 @@ import styles from './style';
 import {BackHandler} from 'react-native';
 
 const PublishStory = ({route}) => {
-  // const {videoData} = route.params;
+  const {videoData} = route.params;
   const dispatch = useDispatch();
   const [loader, setloading] = useState(false);
   const nav = useNavigation();
@@ -38,9 +38,9 @@ const PublishStory = ({route}) => {
   const [title, setTiltle] = useState('');
   const [about, setAbout] = useState('');
   const [tag, setTag] = useState('');
-  const [search, setSearch] = useState('');
-  const [filteredDataSource, setFilteredDataSource] = useState(allUserList);
-  const [masterDataSource, setMasterDataSource] = useState(allUserList);
+  const [Partners, setPartners] = useState('');
+  const [show, setShow] = useState(false);
+  const [filteredDataSource, setFilteredDataSource] = useState('');
   function handleBackButtonClick() {
     Alert.alert('Exit', 'Do you want to go back?', [
       {
@@ -64,7 +64,7 @@ const PublishStory = ({route}) => {
         handleBackButtonClick,
       );
     };
-  }, []);
+  }, [show, filteredDataSource]);
   const onUpload = async () => {
     setloading(true);
 
@@ -75,12 +75,12 @@ const PublishStory = ({route}) => {
     data.append('about', about);
     data.append('other_story_id', '1');
     // data.append('uservideo', videoData.uri);
-    // data.append('uservideo', {
-    //   uri: videoData.uri,
-    //   type: videoData.type,
-    //   name: Math.floor(Math.random() * 100) + 1 + 'story.mp4',
-    // });
-    // data.append('external_link', videoData.uri);
+    data.append('uservideo', {
+      uri: videoData.uri,
+      type: videoData.type,
+      name: Math.floor(Math.random() * 100) + 1 + 'story.mp4',
+    });
+    data.append('external_link', videoData.uri);
     data.append('story_tag[0]', tag);
     console.log('data', data);
     const res = await dispatch(addStory(data, token, nav));
@@ -91,56 +91,43 @@ const PublishStory = ({route}) => {
     }
   };
   const searchFilterFunction = text => {
-    // Check if searched text is not blank
-    if (text) {
-      // Inserted text is not blank
-      // Filter the masterDataSource
-      // Update FilteredDataSource
-      const newData = masterDataSource.filter(function (item) {
-        const itemData = item.title
-          ? item.title.toUpperCase()
+    if (text !== null || '') {
+      setShow(true);
+      setPartners(text);
+      const newData = allUserList.filter(function (item) {
+        const itemData = item?.first_name
+          ? item?.first_name.toUpperCase()
           : ''.toUpperCase();
         const textData = text.toUpperCase();
         return itemData.indexOf(textData) > -1;
       });
       setFilteredDataSource(newData);
-      setSearch(text);
-    } else {
-      // Inserted text is blank
-      // Update FilteredDataSource with masterDataSource
-      setFilteredDataSource(masterDataSource);
-      setSearch(text);
     }
   };
-  const ItemView = ({item}) => {
+  const ItemView = ({item, index}) => {
     return (
-      <View
+      <TouchableOpacity
+        onPress={() => {
+          setShow(false);
+          setPartners(`${item?.first_name} ${item?.last_name}`);
+        }}
         style={{
-          backgroundColor: color.red,
+          backgroundColor: color.white,
           padding: hp(2),
-          width: wp(100),
+          borderWidth: wp(0.45),
+          borderColor: color.border,
+          borderBottomLeftRadius:
+            index == filteredDataSource.length - 1 ? hp(1.5) : 0,
+          borderBottomRightRadius:
+            index == filteredDataSource.length - 1 ? hp(1.5) : 0,
         }}>
         <Text
           style={{
-            color: color.white,
-          }}
-          onPress={() => console.log(item)}>
+            color: color.primary,
+          }}>
           {`${item?.first_name} ${item?.last_name}`}
         </Text>
-      </View>
-    );
-  };
-
-  const ItemSeparatorView = () => {
-    return (
-      // Flat List Item Separator
-      <View
-        style={{
-          height: hp(0.3),
-          width: wp(100),
-          backgroundColor: '#C8C8C8',
-        }}
-      />
+      </TouchableOpacity>
     );
   };
 
@@ -180,7 +167,7 @@ const PublishStory = ({route}) => {
         </View>
       </View>
       <ScrollView showsVerticalScrollIndicator={false}>
-        {/* <View style={styles.story}>
+        <View style={styles.story}>
           <VideoPlayer
             video={{
               uri: videoData.uri,
@@ -197,7 +184,7 @@ const PublishStory = ({route}) => {
               borderRadius: wp(3),
             }}
           />
-        </View> */}
+        </View>
         <View style={{height: hp(15), justifyContent: 'center'}}>
           <CustomText
             title={'Title'}
@@ -266,7 +253,7 @@ const PublishStory = ({route}) => {
             paddingverti={Platform.OS === 'android' ? hp(0.2) : hp(3)}
           />
         </View>
-        {/* <View style={{height: hp(12), justifyContent: 'center'}}>
+        <View style={{height: hp(12), justifyContent: 'center'}}>
           <CustomText
             title={'URL'}
             textcolor={color.primary}
@@ -288,7 +275,7 @@ const PublishStory = ({route}) => {
             onchangetext={text => {}}
             paddingverti={Platform.OS === 'android' ? hp(0.2) : hp(3)}
           />
-        </View> */}
+        </View>
         <View style={{height: hp(12), justifyContent: 'center'}}>
           <CustomText
             title={'Partners'}
@@ -309,17 +296,19 @@ const PublishStory = ({route}) => {
             paddinghorizontal={hp(2)}
             onchangetext={text => searchFilterFunction(text)}
             paddingverti={Platform.OS === 'android' ? hp(0.2) : hp(3)}
+            value={Partners}
           />
         </View>
       </ScrollView>
-      <FlatList
-        showsVerticalScrollIndicator={false}
-        data={filteredDataSource}
-        keyExtractor={(item, index) => index.toString()}
-        ItemSeparatorComponent={ItemSeparatorView}
-        renderItem={ItemView}
-        style={{height: hp(15)}}
-      />
+      {show && (
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          data={filteredDataSource ? filteredDataSource : allUserList}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={ItemView}
+          style={{height: hp(15)}}
+        />
+      )}
       <CustomButton
         title="Publish Video"
         fontfamily={familyFont.semiBold}
@@ -329,9 +318,8 @@ const PublishStory = ({route}) => {
         textcolor={color.white}
         padding={hp(1.5)}
         textalign="center"
-        marginvertical={hp(3)}
+        marginvertical={hp(1)}
         flexdirection="row"
-        justifycontent="center"
         alignitems="center"
         onpress={() => {
           onUpload();
