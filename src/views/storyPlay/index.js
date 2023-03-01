@@ -27,6 +27,8 @@ import Feather from 'react-native-vector-icons/Feather';
 import Entypo from 'react-native-vector-icons/Entypo';
 import CustomTextInput from '../../components/CutomTextInput';
 import moment from 'moment/moment';
+import {Button, Modal} from 'react-native-paper';
+import BottomSheet from 'react-native-bottomsheet-reanimated';
 
 const StoryPlay = () => {
   const dispatch = useDispatch();
@@ -39,6 +41,9 @@ const StoryPlay = () => {
   const [secureTextEntry, setSecureTextEntry] = useState(true);
   const [likeStoryStatus, setLikeStoryStatus] = useState({});
   const [comment, setComment] = useState('');
+  const [modalVisible, setModalVisible] = useState('0%');
+  const [initia, setInitia] = useState('0%');
+
   const [position, setPosition] = useState({
     show: 0,
     top: 70,
@@ -47,12 +52,23 @@ const StoryPlay = () => {
     token: token,
     user_id: userId,
   };
-  const handleClosePress = useCallback(() => {
+  const handleClosePress = () => {
+    setPosition({
+      show: 0,
+      top: 70,
+    });
+    setModalVisible(false);
     refRBSheet.current?.close();
-  }, []);
-  const handleOpenPress = useCallback(() => {
+  };
+  const handleOpenPress = () => {
+    setPosition({
+      show: 1,
+      top: 0,
+    });
+    setModalVisible(true);
+
     refRBSheet.current?.open();
-  }, []);
+  };
   useEffect(() => {
     dispatch(getAllStories(data));
   }, []);
@@ -141,12 +157,13 @@ const StoryPlay = () => {
                   marginTop: hp(position.top),
                 }}
                 onPress={() => {
+                  setLikeStoryStatus(item);
                   setPosition({
                     show: 1,
                     top: 0,
                   });
-                  setLikeStoryStatus(item);
-                  handleOpenPress();
+                  refRBSheet.current?.open();
+                  setModalVisible(true);
                 }}>
                 <AntDesign name="up" size={25} color={color.white} />
               </TouchableOpacity>
@@ -158,11 +175,9 @@ const StoryPlay = () => {
                   marginTop: hp(position.top),
                 }}
                 onPress={() => {
-                  setPosition({
-                    show: 0,
-                    top: 70,
-                  });
-                  handleClosePress();
+                  setModalVisible(false);
+
+                  // handleClosePress();
                 }}>
                 <AntDesign name="down" size={25} color={color.white} />
               </TouchableOpacity>
@@ -193,7 +208,7 @@ const StoryPlay = () => {
             </View>
           </View>
         </View>
-        <View style={{flex: 1}}>
+        {/* <View style={{flex: 1}}>
           <View style={{backgroundColor: '#0F0F0F', padding: wp(4)}}>
             <View
               style={{
@@ -505,7 +520,7 @@ const StoryPlay = () => {
               }
             />
           </View>
-        </View>
+        </View> */}
         {/* <RBSheet
           height={hp(76)}
           ref={refRBSheet}
@@ -514,219 +529,249 @@ const StoryPlay = () => {
           customStyles={{
             wrapper: {
               backgroundColor: 'transparent',
+              flex: 1,
             },
             container: {
               borderTopRightRadius: wp(5),
               borderTopLeftRadius: wp(5),
             },
-          }}>
-          <View style={{backgroundColor: '#0F0F0F', padding: wp(4)}}>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-              }}>
-              <TouchableOpacity style={styles.bookmark}>
-                <Image
-                  style={styles.upload}
-                  source={Images.upload}
-                  resizeMode="contain"
-                />
-              </TouchableOpacity>
-              <CustomButton
-                title={likeStoryStatus?.get_story_likes?.length}
-                fontsize={Size(1.7)}
-                backgroundcolor={color.primary}
-                borderradius={hp(1)}
-                textcolor={color.white}
-                padding={hp(1.5)}
-                paddinghori={hp(2)}
-                flexdirection="row"
-                justifycontent="center"
-                alignitems="center"
-                fontfamily={familyFont.bold}
-                onpress={() => {
-                  dispatch(
-                    likeStory({
-                      token: token,
-                      user_id: userId,
-                      story_id: likeStoryStatus?.id,
-                    }),
-                  );
+          }}> */}
+        <BottomSheet
+          keyboardAware
+          bottomSheerColor="#FFFFFF"
+          ref="BottomSheet"
+          initialPosition={initia} //200, 300
+          snapPoints={[modalVisible, '100%']}
+          isBackDrop={true}
+          isBackDropDismissByPress={true}
+          isRoundBorderWithTipHeader={true}
+          // backDropColor="red"
+          // isModal
+          // containerStyle={{backgroundColor:"red"}}
+          // tipStyle={{backgroundColor:"red"}}
+          // headerStyle={{backgroundColor:"red"}}
+          // bodyStyle={{backgroundColor:"red",flex:1}}
+          header={
+            <View>
+              <Text
+                onPress={() => {
+                  setModalVisible('80%');
+                  setInitia('80%');
                 }}
-                Icon={
-                  <AntDesign
-                    name="hearto"
-                    size={22}
-                    color={color.white}
-                    style={{paddingLeft: hp(2)}}
+                style={styles.text}>
+                Header
+              </Text>
+            </View>
+          }
+          body={
+            <View style={{backgroundColor: '#0F0F0F', padding: wp(4)}}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                }}>
+                <TouchableOpacity style={styles.bookmark}>
+                  <Image
+                    style={styles.upload}
+                    source={Images.upload}
+                    resizeMode="contain"
                   />
+                </TouchableOpacity>
+                <CustomButton
+                  title={likeStoryStatus?.get_story_likes?.length}
+                  fontsize={Size(1.7)}
+                  backgroundcolor={color.primary}
+                  borderradius={hp(1)}
+                  textcolor={color.white}
+                  padding={hp(1.5)}
+                  paddinghori={hp(2)}
+                  flexdirection="row"
+                  justifycontent="center"
+                  alignitems="center"
+                  fontfamily={familyFont.bold}
+                  onpress={() => {
+                    dispatch(
+                      likeStory({
+                        token: token,
+                        user_id: userId,
+                        story_id: likeStoryStatus?.id,
+                      }),
+                    );
+                  }}
+                  Icon={
+                    <AntDesign
+                      name="hearto"
+                      size={22}
+                      color={color.white}
+                      style={{paddingLeft: hp(2)}}
+                    />
+                  }
+                />
+                <CustomButton
+                  title="992K"
+                  fontsize={Size(1.7)}
+                  backgroundcolor={color.primary}
+                  borderradius={hp(1)}
+                  textcolor={color.white}
+                  padding={hp(1.5)}
+                  paddinghori={hp(2)}
+                  flexdirection="row"
+                  justifycontent="center"
+                  alignitems="center"
+                  fontfamily={familyFont.bold}
+                  onpress={() => {
+                    '';
+                  }}
+                  Icon={
+                    <Image
+                      style={styles.chat}
+                      source={Images.chat}
+                      resizeMode="contain"
+                    />
+                  }
+                />
+
+                <TouchableOpacity>
+                  <Feather
+                    name="bookmark"
+                    size={30}
+                    color={color.white}
+                    style={styles.bookmark}
+                  />
+                </TouchableOpacity>
+              </View>
+              <CustomText
+                title={'ABOUT'}
+                fontsize={Size(1.4)}
+                textcolor={color.white}
+                fontfamily={familyFont.reg}
+                marginvertical={hp(2)}
+              />
+              <CustomText
+                title={
+                  'This is the description of the video. It’s input by the creator of the story when they are creating and uploading.We can input whatever we like 💪 💪'
                 }
+                fontsize={Size(1.6)}
+                textcolor={color.white}
+                fontfamily={familyFont.reg}
+              />
+              <View style={{flexDirection: 'row', marginVertical: hp(3)}}>
+                <CustomButton
+                  title="Perserverance"
+                  fontsize={Size(1.2)}
+                  backgroundcolor={color.btnColor}
+                  borderradius={hp(1)}
+                  textcolor={color.white}
+                  padding={hp(1)}
+                  paddinghori={hp(2)}
+                  marginright={wp(2)}
+                  fontfamily={familyFont.semiBold}
+                  onpress={() => {}}
+                />
+                <CustomButton
+                  title="Health & Wellness"
+                  fontsize={Size(1.2)}
+                  backgroundcolor={color.btnColor}
+                  borderradius={hp(1)}
+                  textcolor={color.white}
+                  padding={hp(1)}
+                  paddinghori={hp(2)}
+                  marginright={wp(2)}
+                  fontfamily={familyFont.semiBold}
+                  onpress={() => {}}
+                />
+              </View>
+              <View
+                style={{
+                  borderTopWidth: hp(0.15),
+                  borderColor: color.btnColor,
+                  marginVertical: hp(2),
+                }}
+              />
+              <CustomText
+                title={'LINKS'}
+                fontsize={Size(1.4)}
+                textcolor={color.white}
+                fontfamily={familyFont.reg}
+              />
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                }}>
+                <CustomButton
+                  title="Super Boost Yoga Pant"
+                  fontsize={Size(1.4)}
+                  // backgroundcolor={color.white}
+                  borderradius={hp(1)}
+                  textcolor={color.white}
+                  padding={hp(1)}
+                  marginvertical={hp(3)}
+                  flexdirection="row"
+                  fontfamily={familyFont.semiBold}
+                  onpress={() => {
+                    onRegister();
+                  }}
+                  Icon={<Entypo name="link" size={25} color={color.white} />}
+                  // {<Feather name="external-link" size={25} color={color.white} />}
+                />
+              </View>
+              <View
+                style={{
+                  borderTopWidth: hp(0.15),
+                  borderColor: color.btnColor,
+                }}
+              />
+              <CustomText
+                title={'PARTNERS'}
+                fontsize={Size(1.4)}
+                textcolor={color.white}
+                fontfamily={familyFont.reg}
+                marginTop={hp(2)}
               />
               <CustomButton
-                title="992K"
+                title="Lululemon Athletica"
                 fontsize={Size(1.7)}
-                backgroundcolor={color.primary}
                 borderradius={hp(1)}
                 textcolor={color.white}
-                padding={hp(1.5)}
-                paddinghori={hp(2)}
+                marginvertical={hp(2)}
                 flexdirection="row"
-                justifycontent="center"
-                alignitems="center"
-                fontfamily={familyFont.bold}
+                // alignitems="center"
+                fontfamily={familyFont.reg}
                 onpress={() => {
-                  '';
+                  onRegister();
                 }}
                 Icon={
                   <Image
-                    style={styles.chat}
-                    source={Images.chat}
+                    style={styles.partners}
+                    source={Images.partners}
                     resizeMode="contain"
                   />
                 }
               />
-
-              <TouchableOpacity>
-                <Feather
-                  name="bookmark"
-                  size={30}
-                  color={color.white}
-                  style={styles.bookmark}
-                />
-              </TouchableOpacity>
-            </View>
-            <CustomText
-              title={'ABOUT'}
-              fontsize={Size(1.4)}
-              textcolor={color.white}
-              fontfamily={familyFont.reg}
-              marginvertical={hp(2)}
-            />
-            <CustomText
-              title={
-                'This is the description of the video. It’s input by the creator of the story when they are creating and uploading.We can input whatever we like 💪 💪'
-              }
-              fontsize={Size(1.6)}
-              textcolor={color.white}
-              fontfamily={familyFont.reg}
-            />
-            <View style={{flexDirection: 'row', marginVertical: hp(3)}}>
               <CustomButton
-                title="Perserverance"
-                fontsize={Size(1.2)}
-                backgroundcolor={color.btnColor}
-                borderradius={hp(1)}
-                textcolor={color.white}
-                padding={hp(1)}
-                paddinghori={hp(2)}
-                marginright={wp(2)}
+                title="Play Full Story"
+                fontsize={Size(2.1)}
+                textcolor={color.primary}
                 fontfamily={familyFont.semiBold}
-                onpress={() => {}}
-              />
-              <CustomButton
-                title="Health & Wellness"
-                fontsize={Size(1.2)}
-                backgroundcolor={color.btnColor}
+                backgroundcolor={color.white}
                 borderradius={hp(1)}
-                textcolor={color.white}
-                padding={hp(1)}
-                paddinghori={hp(2)}
-                marginright={wp(2)}
-                fontfamily={familyFont.semiBold}
-                onpress={() => {}}
-              />
-            </View>
-            <View
-              style={{
-                borderTopWidth: hp(0.15),
-                borderColor: color.btnColor,
-                marginVertical: hp(2),
-              }}
-            />
-            <CustomText
-              title={'LINKS'}
-              fontsize={Size(1.4)}
-              textcolor={color.white}
-              fontfamily={familyFont.reg}
-            />
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}>
-              <CustomButton
-                title="Super Boost Yoga Pant"
-                fontsize={Size(1.4)}
-                // backgroundcolor={color.white}
-                borderradius={hp(1)}
-                textcolor={color.white}
-                padding={hp(1)}
-                marginvertical={hp(3)}
+                padding={hp(2.2)}
                 flexdirection="row"
-                fontfamily={familyFont.semiBold}
+                alignitems="center"
+                textalign="center"
+                marginvertical={hp(3)}
                 onpress={() => {
                   onRegister();
                 }}
-                Icon={<Entypo name="link" size={25} color={color.white} />}
-                // {<Feather name="external-link" size={25} color={color.white} />}
+                Icon={
+                  <Feather name="play-circle" size={30} color={color.primary} />
+                }
               />
             </View>
-            <View
-              style={{
-                borderTopWidth: hp(0.15),
-                borderColor: color.btnColor,
-              }}
-            />
-            <CustomText
-              title={'PARTNERS'}
-              fontsize={Size(1.4)}
-              textcolor={color.white}
-              fontfamily={familyFont.reg}
-              marginTop={hp(2)}
-            />
-            <CustomButton
-              title="Lululemon Athletica"
-              fontsize={Size(1.7)}
-              borderradius={hp(1)}
-              textcolor={color.white}
-              marginvertical={hp(2)}
-              flexdirection="row"
-              // alignitems="center"
-              fontfamily={familyFont.reg}
-              onpress={() => {
-                onRegister();
-              }}
-              Icon={
-                <Image
-                  style={styles.partners}
-                  source={Images.partners}
-                  resizeMode="contain"
-                />
-              }
-            />
-            <CustomButton
-              title="Play Full Story"
-              fontsize={Size(2.1)}
-              textcolor={color.primary}
-              fontfamily={familyFont.semiBold}
-              backgroundcolor={color.white}
-              borderradius={hp(1)}
-              padding={hp(2.2)}
-              flexdirection="row"
-              alignitems="center"
-              textalign="center"
-              marginvertical={hp(3)}
-              onpress={() => {
-                onRegister();
-              }}
-              Icon={
-                <Feather name="play-circle" size={30} color={color.primary} />
-              }
-            />
-          </View>
-        </RBSheet> */}
+          }
+        />
       </View>
     );
   };

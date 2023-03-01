@@ -3,7 +3,6 @@ import {wp, hp, Size, color, Images, IOS} from '../../utils/';
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     justifyContent: 'center',
     backgroundColor: color.bg2,
   },
@@ -28,7 +27,6 @@ const styles = StyleSheet.create({
     marginRight: wp(2),
     borderRadius: wp(10),
     overflow: 'hidden',
-
   },
   profile3: {
     width: wp(10),
