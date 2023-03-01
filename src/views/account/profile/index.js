@@ -22,6 +22,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import Feather from 'react-native-vector-icons/Feather';
 import styles from './style';
 import moment from 'moment/moment';
+import VideoPlayer from 'react-native-video-player';
 
 const Profile = () => {
   const nav = useNavigation();
@@ -264,12 +265,22 @@ const Profile = () => {
         <ScrollView showsVerticalScrollIndicator={false}>
           {userProfile && userStoriesData
             ? userStoriesData?.map(item => (
-                <View style={{flexDirection: 'row', marginVertical: hp(0.8)}}>
+                <TouchableOpacity
+                  onPress={() => {
+                    nav.navigate('PlayFullStory', {url: item?.url});
+                  }}
+                  style={{flexDirection: 'row', marginVertical: hp(0.8)}}>
                   <View style={styles.story}>
-                    <Image
+                    <VideoPlayer
                       style={styles.storyImg}
                       source={Images.story}
-                      resizeMode="contain"
+                      video={{
+                        uri: item?.url,
+                      }}
+                      // autoplay={true}
+                      thumbnail={{
+                        uri: item?.url,
+                      }}
                     />
                   </View>
                   <View style={styles.storyDetail}>
@@ -314,7 +325,7 @@ const Profile = () => {
                       </View>
                     ))}
                   </View>
-                </View>
+                </TouchableOpacity>
               ))
             : null}
         </ScrollView>

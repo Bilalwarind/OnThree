@@ -23,8 +23,9 @@ import {useDispatch, useSelector} from 'react-redux';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {ActivityIndicator, MD2Colors} from 'react-native-paper';
 import styles from './style';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
-const ForgetPassword = () => {
+const ForgetPassword = ({navigation}) => {
   const dispatch = useDispatch();
   const nav = useNavigation();
   const {token, userId, isLoading} = useSelector(state => state.auth);
@@ -52,11 +53,25 @@ const ForgetPassword = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <StatusBar
         translucent
         barStyle="dark-content"
         backgroundColor="transparent"
+      />
+      <AntDesign
+        name="back"
+        size={22}
+        color={color.primary}
+        onPress={() => {
+          Alert.alert('Exit', 'Do you want to go back?', [
+            {
+              text: 'Cancel',
+              onPress: () => console.log('Cancel', 'Cancel'),
+            },
+            {text: 'OK', onPress: () => navigation.goBack()},
+          ]);
+        }}
       />
       <Image style={styles.logo} source={Images.logo} resizeMode="contain" />
       <CustomText
@@ -161,7 +176,7 @@ const ForgetPassword = () => {
           />
         </View>
       )}
-    </View>
+    </SafeAreaView>
   );
 };
 

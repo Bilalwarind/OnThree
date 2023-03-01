@@ -32,6 +32,8 @@ const StoryPlay = () => {
   const dispatch = useDispatch();
   const nav = useNavigation();
   const refRBSheet = useRef();
+  const refRBSheetComment = useRef();
+  const [isComment, setIsComment] = useState(false);
   const {allStoriesData, userProfile, isLoading} = useSelector(
     state => state.home,
   );
@@ -53,9 +55,14 @@ const StoryPlay = () => {
   const handleOpenPress = useCallback(() => {
     refRBSheet.current?.open();
   }, []);
-
+  // useEffect(() => {
+  //   if (position.show === 1) {
+  //     refRBSheet.current.close();
+  //   } else {
+  //     refRBSheet.current.open();
+  //   }
+  // }, [likeStoryStatus]);
   useEffect(() => {
-    refRBSheet.current?.open();
     dispatch(getAllStories(data));
   }, []);
   // const createThumbnails = uri => {
@@ -68,6 +75,127 @@ const StoryPlay = () => {
   //     })
   //     .catch(err => console.log({err}));
   // };
+  const renderCommentBottomSheet = () => {
+    {
+      return (
+        <RBSheet
+          height={hp(76)}
+          key={likeStoryStatus[0]?.id}
+          ref={refRBSheetComment}
+          // onClose={() => setPosition({show: 0, top: 70})}
+          customStyles={{
+            wrapper: {
+              backgroundColor: 'transparent',
+            },
+            container: {
+              borderTopRightRadius: wp(5),
+              borderTopLeftRadius: wp(5),
+            },
+          }}>
+          <View style={styles.container}>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                marginBottom: hp(2),
+                paddingHorizontal: wp(7),
+              }}>
+              <View />
+              <CustomText
+                title={'922K Comments'}
+                fontsize={Size(1.8)}
+                textcolor={color.white}
+                fontfamily={familyFont.bold}
+                flexdirection="row"
+                justifycontent="center"
+                Icon={
+                  <Image
+                    style={styles.chat2}
+                    source={Images.chat}
+                    resizeMode="contain"
+                  />
+                }
+              />
+              <TouchableOpacity style={styles.bookmark}>
+                <AntDesign name="close" size={25} color={color.white} />
+              </TouchableOpacity>
+            </View>
+            <View
+              style={{
+                borderTopWidth: hp(0.15),
+                borderColor: color.btnColor,
+                marginBottom: hp(1.8),
+              }}
+            />
+            <View style={styles.header5}>
+              <View style={styles.header6}>
+                <Image
+                  style={styles.profile}
+                  source={{
+                    uri: likeStoryStatus[0]?.user_details?.profile_image,
+                  }}
+                />
+                {likeStoryStatus[0]?.get_story_comment.map(item => {
+                  <CustomText
+                    title={item?.comment}
+                    fontsize={Size(1.7)}
+                    width={wp(78)}
+                    textcolor={color.white}
+                    fontfamily={familyFont.reg}
+                    title2={`${item?.user_details?.first_name} ${item?.user_details?.last_name} `}
+                    fontsize2={Size(1.8)}
+                    fontfamily2={familyFont.bold}
+                  />;
+                })}
+              </View>
+              <CustomText
+                title={moment(
+                  likeStoryStatus[0]?.get_story_comment?.created_at,
+                ).fromNow()}
+                fontsize={Size(1.4)}
+                textcolor={color.white}
+                marginleft={wp(13)}
+                fontfamily={familyFont.bold}
+              />
+
+              <CustomTextInput
+                placeholder={'Add your comment here...'}
+                borderradius={hp(1.5)}
+                borderwidth={wp(0.6)}
+                bordercolor={color.border}
+                bgcolor={color.white}
+                paddinghorizontal={hp(2)}
+                flexdirection="row"
+                alignitems={'center'}
+                // multiline={true}
+                // numberOfLines={6}
+                justifycontent="space-between"
+                marginTop={hp(5)}
+                onchangetext={val => setComment(val)}
+                paddingverti={Platform.OS === 'android' ? hp(0.2) : hp(3)}
+                isButton={true}
+                fontfamily={familyFont.semiBold}
+                fontsize={Size(1.8)}
+                fontsize2={Size(1.4)}
+                width2={wp(70)}
+                oneyepress={() =>
+                  dispatch(
+                    commentsStory({
+                      token: token,
+                      user_id: userId,
+                      story_id: likeStoryStatus[0]?.id,
+                      comment: comment,
+                    }),
+                  )
+                }
+              />
+            </View>
+          </View>
+        </RBSheet>
+      );
+    }
+  };
   const renderItems = ({item, index}) => {
     // createThumbnails(item?.url);
     return (
@@ -80,7 +208,7 @@ const StoryPlay = () => {
           videoHeight={hp(100)}
           // autoplay={true}
           thumbnail={{
-            uri: 'https://i.pinimg.com/originals/5f/c4/c1/5fc4c1667a0e69106841f1e9036137e5.jpg',
+            uri: item?.url,
           }}
         />
         <View
@@ -148,7 +276,9 @@ const StoryPlay = () => {
                     top: 4,
                   });
                   setLikeStoryStatus(item);
-                  handleOpenPress();
+                  refRBSheet.current.open();
+
+                  // handleOpenPress();
                 }}>
                 <AntDesign name="up" size={25} color={color.white} />
               </TouchableOpacity>
@@ -164,7 +294,9 @@ const StoryPlay = () => {
                     show: 0,
                     top: 70,
                   });
-                  handleClosePress();
+                  refRBSheet.current.close();
+
+                  // handleClosePress();
                 }}>
                 <AntDesign name="down" size={25} color={color.white} />
               </TouchableOpacity>
@@ -186,7 +318,7 @@ const StoryPlay = () => {
                 }}
               />
               <CustomText
-                title={`${item?.user_details?.first_name} ${item?.user_details?.last_name}`}
+                title={`${item?.user_details?.first_name} ${likeStoryStatus?.user_details?.last_name}`}
                 fontsize={Size(1.7)}
                 textcolor={color.white}
                 fontfamily={familyFont.reg}
@@ -195,20 +327,37 @@ const StoryPlay = () => {
             </View>
           </View>
         </View>
-
-        <RBSheet
-          height={hp(76)}
-          ref={refRBSheet}
-          onClose={() => setPosition({show: 0, top: 70})}
-          customStyles={{
-            wrapper: {
-              backgroundColor: 'transparent',
-            },
-            container: {
-              borderTopRightRadius: wp(5),
-              borderTopLeftRadius: wp(5),
-            },
-          }}>
+      </View>
+    );
+  };
+  return (
+    <View style={styles.container}>
+      <StatusBar
+        translucent
+        barStyle="dark-content"
+        backgroundColor="transparent"
+      />
+      <FlatList
+        showsVerticalScrollIndicator={false}
+        data={allStoriesData}
+        keyExtractor={item => item?.id}
+        renderItem={renderItems}
+      />
+      <RBSheet
+        height={hp(76)}
+        key={likeStoryStatus.story_id}
+        ref={refRBSheet}
+        onClose={() => setPosition({show: 0, top: 70})}
+        customStyles={{
+          wrapper: {
+            backgroundColor: 'transparent',
+          },
+          container: {
+            borderTopRightRadius: wp(5),
+            borderTopLeftRadius: wp(5),
+          },
+        }}>
+        {!isComment ? (
           <View style={{backgroundColor: '#0F0F0F', padding: wp(4)}}>
             <View
               style={{
@@ -223,7 +372,7 @@ const StoryPlay = () => {
                 />
               </TouchableOpacity>
               <CustomButton
-                title={item?.likes}
+                title={likeStoryStatus?.likes}
                 fontsize={Size(1.7)}
                 backgroundcolor={color.primary}
                 borderradius={hp(1)}
@@ -239,13 +388,13 @@ const StoryPlay = () => {
                     likeStory({
                       token: token,
                       user_id: userId,
-                      story_id: item?.id,
-                      liked: item?.liked_story,
+                      story_id: likeStoryStatus?.id,
+                      liked: likeStoryStatus?.liked_story,
                     }),
                   );
                 }}
                 Icon={
-                  item?.liked_story == 0 ? (
+                  likeStoryStatus?.liked_story == 0 ? (
                     <AntDesign
                       name="hearto"
                       size={22}
@@ -275,7 +424,8 @@ const StoryPlay = () => {
                 alignitems="center"
                 fontfamily={familyFont.bold}
                 onpress={() => {
-                  '';
+                  setIsComment(true);
+                  // refRBSheetComment?.current?.open();
                 }}
                 Icon={
                   <Image
@@ -303,13 +453,13 @@ const StoryPlay = () => {
               marginvertical={hp(2)}
             />
             <CustomText
-              title={item?.about}
+              title={likeStoryStatus?.about}
               fontsize={Size(1.6)}
               textcolor={color.white}
               fontfamily={familyFont.reg}
             />
             <View style={{flexDirection: 'row', marginVertical: hp(3)}}>
-              {item?.get_story_tags?.map(item => (
+              {likeStoryStatus?.get_story_tags?.map(item => (
                 <CustomButton
                   title={item?.tag}
                   fontsize={Size(1.2)}
@@ -383,7 +533,7 @@ const StoryPlay = () => {
               // alignitems="center"
               fontfamily={familyFont.reg}
               onpress={() => {
-                onRegister();
+                // onRegister();
               }}
               Icon={
                 <Image
@@ -406,30 +556,117 @@ const StoryPlay = () => {
               textalign="center"
               marginvertical={hp(3)}
               onpress={() => {
-                onRegister();
+                refRBSheet?.current?.close();
+                nav.navigate('PlayFullStory', {url: likeStoryStatus?.url});
               }}
               Icon={
                 <Feather name="play-circle" size={30} color={color.primary} />
               }
             />
           </View>
-        </RBSheet>
-      </View>
-    );
-  };
-  return (
-    <View style={styles.container}>
-      <StatusBar
-        translucent
-        barStyle="dark-content"
-        backgroundColor="transparent"
-      />
-      <FlatList
-        showsVerticalScrollIndicator={false}
-        data={allStoriesData}
-        keyExtractor={item => item?.id}
-        renderItem={renderItems}
-      />
+        ) : (
+          <View style={styles.container}>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                marginBottom: hp(2),
+                paddingHorizontal: wp(7),
+              }}>
+              <View />
+              <CustomText
+                title={'922K Comments'}
+                fontsize={Size(1.8)}
+                textcolor={color.white}
+                fontfamily={familyFont.bold}
+                flexdirection="row"
+                justifycontent="center"
+                Icon={
+                  <Image
+                    style={styles.chat2}
+                    source={Images.chat}
+                    resizeMode="contain"
+                  />
+                }
+              />
+              <TouchableOpacity style={styles.bookmark}>
+                <AntDesign name="close" size={25} color={color.white} />
+              </TouchableOpacity>
+            </View>
+            <View
+              style={{
+                borderTopWidth: hp(0.15),
+                borderColor: color.btnColor,
+                marginBottom: hp(1.8),
+              }}
+            />
+            <View style={styles.header5}>
+              <View style={styles.header6}>
+                <Image
+                  style={styles.profile}
+                  source={{
+                    uri: likeStoryStatus[0]?.user_details?.profile_image,
+                  }}
+                />
+                {likeStoryStatus[0]?.get_story_comment.map(item => {
+                  <CustomText
+                    title={item?.comment}
+                    fontsize={Size(1.7)}
+                    width={wp(78)}
+                    textcolor={color.white}
+                    fontfamily={familyFont.reg}
+                    title2={`${item?.user_details?.first_name} ${item?.user_details?.last_name} `}
+                    fontsize2={Size(1.8)}
+                    fontfamily2={familyFont.bold}
+                  />;
+                })}
+              </View>
+              <CustomText
+                title={moment(
+                  likeStoryStatus[0]?.get_story_comment?.created_at,
+                ).fromNow()}
+                fontsize={Size(1.4)}
+                textcolor={color.white}
+                marginleft={wp(13)}
+                fontfamily={familyFont.bold}
+              />
+
+              <CustomTextInput
+                placeholder={'Add your comment here...'}
+                borderradius={hp(1.5)}
+                borderwidth={wp(0.6)}
+                bordercolor={color.border}
+                bgcolor={color.white}
+                paddinghorizontal={hp(2)}
+                flexdirection="row"
+                alignitems={'center'}
+                // multiline={true}
+                // numberOfLines={6}
+                justifycontent="space-between"
+                marginTop={hp(5)}
+                onchangetext={val => setComment(val)}
+                paddingverti={Platform.OS === 'android' ? hp(0.2) : hp(3)}
+                isButton={true}
+                fontfamily={familyFont.semiBold}
+                fontsize={Size(1.8)}
+                fontsize2={Size(1.4)}
+                width2={wp(70)}
+                oneyepress={() =>
+                  dispatch(
+                    commentsStory({
+                      token: token,
+                      user_id: userId,
+                      story_id: likeStoryStatus[0]?.id,
+                      comment: comment,
+                    }),
+                  )
+                }
+              />
+            </View>
+          </View>
+        )}
+      </RBSheet>
       {isLoading && (
         <View
           style={{

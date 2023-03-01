@@ -129,7 +129,12 @@ const CreateStory = () => {
           />
         </View>
         <View style={styles.header}>
-          <AntDesign name="close" size={22} color={color.primary} />
+          <TouchableOpacity
+            onPress={() => {
+              nav.goBack();
+            }}>
+            <AntDesign name="close" size={22} color={color.primary} />
+          </TouchableOpacity>
         </View>
       </View>
       <ScrollView>

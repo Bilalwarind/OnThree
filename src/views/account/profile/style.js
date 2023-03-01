@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
   },
   storyImg: {
     height: hp(22),
-    width: wp(20),
+    width: wp(35),
     resizeMode: 'contain',
     borderRadius: wp(4),
   },
@@ -53,6 +53,7 @@ const styles = StyleSheet.create({
   storyDetail: {
     flex: 0.7,
     alignItems: 'flex-start',
+    paddingLeft: wp(15),
   },
   ViewStyle: {
     backgroundColor: '#fff',

@@ -99,6 +99,7 @@ export const userAllStories = data => {
     baseUrl
       .post('get-user-all-stories', data)
       .then(async res => {
+        console.log('res', res.data.data.stories);
         // alert(JSON.stringify(res.data.data.stories));
         if (res.data.success !== 0) {
           dispatch({
@@ -143,6 +144,7 @@ export const getAllStories = data => {
     baseUrl
       .post('get-all-stories', data)
       .then(async res => {
+        console.log('first', res.data.data.user);
         // alert(JSON.stringify(res.data.data.user[1].liked_story));
         if (res.data.success !== 0) {
           dispatch({
@@ -188,10 +190,10 @@ export const likeStory = data => {
     baseUrl
       .post('add-likes', data)
       .then(async res => {
-        alert(JSON.stringify(res.data));
+        alert(res?.data?.message);
       })
       .catch(err => {
-        alert(JSON.stringify(err));
+        alert(err?.message);
         dispatch({
           type: DATA_FAILED,
         });
