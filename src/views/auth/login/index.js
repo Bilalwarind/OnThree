@@ -22,17 +22,28 @@ import {useDispatch, useSelector} from 'react-redux';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import styles from './style';
 import {ActivityIndicator, MD2Colors} from 'react-native-paper';
+import {DATA_FAILED, LOGOUT_SUCCESS} from '../../../redux/actions/types';
 
 const Login = () => {
   const dispatch = useDispatch();
   const nav = useNavigation();
   const {token, userId, isLoading} = useSelector(state => state.auth);
+
   const [secureTextEntry, setSecureTextEntry] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isError, setIsError] = useState(false);
   const [isError2, setIsError2] = useState(false);
-
+  useEffect(() => {
+    dispatch({
+      type: DATA_FAILED,
+    });
+    dispatch({
+      type: LOGOUT_SUCCESS,
+      isLoading: false,
+      payload: null,
+    });
+  }, []);
   const onRegister = async () => {
     Keyboard.dismiss();
     if (email.length <= 0) {

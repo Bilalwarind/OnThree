@@ -184,9 +184,9 @@ export const getAllUserList = data => {
 };
 export const likeStory = data => {
   return dispatch => {
-    dispatch({
-      type: DATA_LOADING,
-    });
+    // dispatch({
+    //   type: DATA_LOADING,
+    // });
     baseUrl
       .post('add-likes', data)
       .then(async res => {
@@ -194,9 +194,9 @@ export const likeStory = data => {
       })
       .catch(err => {
         alert(err?.message);
-        dispatch({
-          type: DATA_FAILED,
-        });
+        // dispatch({
+        //   type: DATA_FAILED,
+        // });
       });
   };
 };

@@ -8,9 +8,12 @@ import {
   Image,
   StatusBar,
 } from 'react-native';
+import {useSelector} from 'react-redux';
 import {wp, hp, Size, color, Images, IOS} from '../../utils/';
 const Splash = ({params}) => {
   const navigation = useNavigation();
+  const {token} = useSelector(state => state.auth);
+
   setTimeout(async () => {
     navigation.navigate('Login');
   }, 2000);

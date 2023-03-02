@@ -27,6 +27,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import Entypo from 'react-native-vector-icons/Entypo';
 import CustomTextInput from '../../components/CutomTextInput';
 import moment from 'moment/moment';
+import {LOGIN_SUCCESS} from '../../redux/actions/types';
 
 const StoryPlay = () => {
   const dispatch = useDispatch();
@@ -104,7 +105,10 @@ const StoryPlay = () => {
                       {
                         text: 'YES',
                         onPress: () => {
-                          dispatch(logoutUser());
+                          dispatch({
+                            type: LOGIN_SUCCESS,
+                            payload: null,
+                          });
                         },
                       },
                     ],

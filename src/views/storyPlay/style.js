@@ -4,7 +4,6 @@ import {wp, hp, Size, color, Images, IOS} from '../../utils/';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
     backgroundColor: color.bg2,
   },
   row1: {
@@ -69,6 +68,7 @@ const styles = StyleSheet.create({
 
   header5: {
     paddingHorizontal: wp(5),
+    flex: 1,
   },
   header6: {
     flexDirection: 'row',

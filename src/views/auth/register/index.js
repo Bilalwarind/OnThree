@@ -22,6 +22,7 @@ import {Paragraph, Dialog, Portal} from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import styles from './style';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 const Register = () => {
   const dispatch = useDispatch();
@@ -54,21 +55,28 @@ const Register = () => {
       email: email,
       password: password,
       confirm_password: passwordConfirm,
-      first_name: 'saeed',
-      last_name: 'ahmad',
-      phone: '03032334323',
+      first_name: '',
+      last_name: '',
+      phone: '',
     };
     dispatch(registerUser(data, nav));
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <StatusBar
         translucent
         barStyle="dark-content"
         backgroundColor="transparent"
       />
-
+      <AntDesign
+        name="back"
+        size={22}
+        color={color.primary}
+        onPress={() => {
+          nav.goBack();
+        }}
+      />
       <Image style={styles.logo} source={Images.logo} resizeMode="contain" />
       <CustomText
         title={'Create Account'}
@@ -232,7 +240,7 @@ const Register = () => {
           />
         </View>
       )}
-    </View>
+    </SafeAreaView>
   );
 };
 

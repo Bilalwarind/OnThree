@@ -274,6 +274,8 @@ const Profile = () => {
                     <VideoPlayer
                       style={styles.storyImg}
                       source={Images.story}
+                      defaultMuted={true}
+                      loop={true}
                       video={{
                         uri: item?.url,
                       }}
@@ -281,6 +283,7 @@ const Profile = () => {
                       thumbnail={{
                         uri: item?.url,
                       }}
+                      customStyles={{seekBarBackground: 'white'}}
                     />
                   </View>
                   <View style={styles.storyDetail}>

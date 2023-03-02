@@ -27,6 +27,8 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import VideoPlayer from 'react-native-video-player';
 import styles from './style';
 import {BackHandler} from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import KeyboardAvoidingView from 'react-native/Libraries/Components/Keyboard/KeyboardAvoidingView';
 
 const PublishStory = ({route}) => {
   const {videoData} = route.params;
@@ -39,6 +41,8 @@ const PublishStory = ({route}) => {
   const [about, setAbout] = useState('');
   const [tag, setTag] = useState('');
   const [Partners, setPartners] = useState('');
+  const [url, setUrl] = useState('');
+
   const [show, setShow] = useState(false);
   const [filteredDataSource, setFilteredDataSource] = useState('');
   function handleBackButtonClick() {
@@ -77,10 +81,10 @@ const PublishStory = ({route}) => {
     // data.append('uservideo', videoData.uri);
     data.append('uservideo', {
       uri: videoData.uri,
-      type: videoData.type,
+      type: 'video/mp4',
       name: Math.floor(Math.random() * 100) + 1 + 'story.mp4',
     });
-    data.append('external_link', videoData.uri);
+    data.append('external_link', url);
     data.append('story_tag[0]', tag);
     console.log('data', data);
     const res = await dispatch(addStory(data, token, nav));
@@ -132,7 +136,7 @@ const PublishStory = ({route}) => {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <StatusBar
         translucent
         barStyle="dark-content"
@@ -166,7 +170,10 @@ const PublishStory = ({route}) => {
           />
         </View>
       </View>
-      <ScrollView showsVerticalScrollIndicator={false}>
+
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="always">
         <View style={styles.story}>
           <VideoPlayer
             video={{
@@ -265,14 +272,16 @@ const PublishStory = ({route}) => {
           />
           <CustomTextInput
             placeholder={'Add a URL here'}
-            value={videoData.uri}
+            value={url}
             placeholderStyle={{fontWeight: 'bold'}}
             borderradius={hp(1.5)}
             borderwidth={wp(0.6)}
             bordercolor={color.border}
             bgcolor={color.white}
             paddinghorizontal={hp(2)}
-            onchangetext={text => {}}
+            onchangetext={text => {
+              setUrl(text);
+            }}
             paddingverti={Platform.OS === 'android' ? hp(0.2) : hp(3)}
           />
         </View>
@@ -342,7 +351,7 @@ const PublishStory = ({route}) => {
           />
         </View>
       )}
-    </View>
+    </SafeAreaView>
   );
 };
 

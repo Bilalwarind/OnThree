@@ -6,6 +6,7 @@ const styles = StyleSheet.create({
     height: hp(100),
     paddingHorizontal: wp(5),
     backgroundColor: color.bg,
+    flex: 1,
   },
   row1: {
     flexDirection: 'row',

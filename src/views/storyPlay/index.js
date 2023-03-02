@@ -41,6 +41,8 @@ const StoryPlay = () => {
   const [secureTextEntry, setSecureTextEntry] = useState(true);
   const [likeStoryStatus, setLikeStoryStatus] = useState({});
   const [comment, setComment] = useState('');
+  const [joinChat, setJoinChat] = useState(false);
+
   const [position, setPosition] = useState({
     show: 0,
     top: 70,
@@ -48,6 +50,19 @@ const StoryPlay = () => {
   const data = {
     token: token,
     user_id: userId,
+  };
+  const [opacity, setOpacity] = useState(0);
+
+  const onLoadStart = () => {
+    setOpacity(1);
+  };
+
+  const onLoad = () => {
+    setOpacity(0);
+  };
+
+  const onBuffer = ({isBuffering}) => {
+    setOpacity(isBuffering ? 1 : 0);
   };
   const handleClosePress = useCallback(() => {
     refRBSheet.current?.close();
@@ -197,20 +212,48 @@ const StoryPlay = () => {
     }
   };
   const renderItems = ({item, index}) => {
+    setOpacity(0);
     // createThumbnails(item?.url);
     return (
       <View>
         <VideoPlayer
+          key={index}
+          onVideoProgress={() => {
+            console.log('loadin', loadin);
+          }}
+          seekBar="white"
+          customStyles={{
+            seekBarBackground: color.white,
+            seekBarKnobSeeking: color.white,
+            seekBarProgress: color.white,
+            seekBar: color.white,
+          }}
           video={{
             uri: item?.url,
           }}
           videoWidth={wp(100)}
           videoHeight={hp(100)}
+          // onBuffer={onBuffer}
+          // onLoadStart={onLoadStart}
+          // onLoad={onLoad}
           // autoplay={true}
           thumbnail={{
             uri: item?.url,
           }}
         />
+        {/* <ActivityIndicator
+          animating
+          size="large"
+          color={color.white}
+          style={{
+            opacity: opacity,
+            position: 'absolute',
+            top: hp(50),
+            left: 70,
+            right: 70,
+            // height: 50,
+          }}
+        /> */}
         <View
           style={{
             position: 'absolute',
@@ -234,7 +277,7 @@ const StoryPlay = () => {
                       {
                         text: 'YES',
                         onPress: () => {
-                          dispatch(logoutUser());
+                          dispatch(logoutUser(nav));
                         },
                       },
                     ],
@@ -277,7 +320,7 @@ const StoryPlay = () => {
                   });
                   setLikeStoryStatus(item);
                   refRBSheet.current.open();
-
+                  console.log('item.liked_story', item.liked_story);
                   // handleOpenPress();
                 }}>
                 <AntDesign name="up" size={25} color={color.white} />
@@ -318,7 +361,7 @@ const StoryPlay = () => {
                 }}
               />
               <CustomText
-                title={`${item?.user_details?.first_name} ${likeStoryStatus?.user_details?.last_name}`}
+                title={`${item?.user_details?.first_name} ${item?.user_details?.last_name}`}
                 fontsize={Size(1.7)}
                 textcolor={color.white}
                 fontfamily={familyFont.reg}
@@ -384,17 +427,19 @@ const StoryPlay = () => {
                 alignitems="center"
                 fontfamily={familyFont.bold}
                 onpress={() => {
-                  dispatch(
-                    likeStory({
-                      token: token,
-                      user_id: userId,
-                      story_id: likeStoryStatus?.id,
-                      liked: likeStoryStatus?.liked_story,
-                    }),
+                  const params = new FormData();
+                  params.append('token', token);
+                  params.append('user_id', userId);
+                  params.append('story_id', likeStoryStatus?.id);
+                  params.append(
+                    'liked',
+                    likeStoryStatus?.liked_story === 0 ? 1 : 0,
                   );
+
+                  dispatch(likeStory(params));
                 }}
                 Icon={
-                  likeStoryStatus?.liked_story == 0 ? (
+                  likeStoryStatus?.liked_story === 0 ? (
                     <AntDesign
                       name="hearto"
                       size={22}
@@ -412,7 +457,11 @@ const StoryPlay = () => {
                 }
               />
               <CustomButton
-                title="992K"
+                title={
+                  likeStoryStatus?.get_story_comment?.length
+                    ? likeStoryStatus?.get_story_comment?.length
+                    : 0
+                }
                 fontsize={Size(1.7)}
                 backgroundcolor={color.primary}
                 borderradius={hp(1)}
@@ -575,8 +624,13 @@ const StoryPlay = () => {
                 paddingHorizontal: wp(7),
               }}>
               <View />
+
               <CustomText
-                title={'922K Comments'}
+                title={
+                  likeStoryStatus?.get_story_comment?.length
+                    ? likeStoryStatus?.get_story_comment?.length
+                    : 0 + 'Comments'
+                }
                 fontsize={Size(1.8)}
                 textcolor={color.white}
                 fontfamily={familyFont.bold}
@@ -591,9 +645,17 @@ const StoryPlay = () => {
                 }
               />
               <TouchableOpacity style={styles.bookmark}>
-                <AntDesign name="close" size={25} color={color.white} />
+                <AntDesign
+                  name="close"
+                  size={25}
+                  color={color.white}
+                  onPress={() => {
+                    setIsComment(false);
+                  }}
+                />
               </TouchableOpacity>
             </View>
+
             <View
               style={{
                 borderTopWidth: hp(0.15),
@@ -611,12 +673,12 @@ const StoryPlay = () => {
                 />
                 {likeStoryStatus[0]?.get_story_comment.map(item => {
                   <CustomText
-                    title={item?.comment}
+                    title={likeStoryStatus[0]?.get_story_comment?.comment}
                     fontsize={Size(1.7)}
                     width={wp(78)}
                     textcolor={color.white}
                     fontfamily={familyFont.reg}
-                    title2={`${item?.user_details?.first_name} ${item?.user_details?.last_name} `}
+                    title2={`${likeStoryStatus[0]?.get_story_comment?.user_details?.first_name} ${likeStoryStatus[0]?.get_story_commentlikeStoryStatus[0]?.get_story_commentlikeStoryStatus[0]?.get_story_comment?.user_details?.last_name} `}
                     fontsize2={Size(1.8)}
                     fontfamily2={familyFont.bold}
                   />;
@@ -631,38 +693,69 @@ const StoryPlay = () => {
                 marginleft={wp(13)}
                 fontfamily={familyFont.bold}
               />
-
-              <CustomTextInput
-                placeholder={'Add your comment here...'}
-                borderradius={hp(1.5)}
-                borderwidth={wp(0.6)}
-                bordercolor={color.border}
-                bgcolor={color.white}
-                paddinghorizontal={hp(2)}
-                flexdirection="row"
-                alignitems={'center'}
-                // multiline={true}
-                // numberOfLines={6}
-                justifycontent="space-between"
-                marginTop={hp(5)}
-                onchangetext={val => setComment(val)}
-                paddingverti={Platform.OS === 'android' ? hp(0.2) : hp(3)}
-                isButton={true}
+            </View>
+            <View
+              style={{
+                alignContent: 'flex-end',
+                flexDirection: 'column-reverse',
+                paddingHorizontal: wp(3),
+              }}>
+              <CustomButton
+                title="Join the Discussion"
+                fontsize={Size(2.1)}
+                textcolor={color.primary}
                 fontfamily={familyFont.semiBold}
-                fontsize={Size(1.8)}
-                fontsize2={Size(1.4)}
-                width2={wp(70)}
-                oneyepress={() =>
-                  dispatch(
-                    commentsStory({
-                      token: token,
-                      user_id: userId,
-                      story_id: likeStoryStatus[0]?.id,
-                      comment: comment,
-                    }),
-                  )
+                backgroundcolor={color.white}
+                borderradius={hp(1)}
+                padding={hp(2.2)}
+                flexdirection="row"
+                alignitems="center"
+                textalign="center"
+                marginvertical={hp(3)}
+                onpress={() => {
+                  setJoinChat(true);
+                }}
+                Icon={
+                  <Image
+                    style={styles.chat}
+                    source={Images.chat}
+                    resizeMode="contain"
+                  />
                 }
               />
+              {joinChat && (
+                <CustomTextInput
+                  placeholder={'Add your comment here...'}
+                  borderradius={hp(1.5)}
+                  borderwidth={wp(0.6)}
+                  bordercolor={color.border}
+                  bgcolor={color.white}
+                  paddinghorizontal={hp(2)}
+                  flexdirection="row"
+                  alignitems={'center'}
+                  // multiline={true}
+                  // numberOfLines={6}
+                  justifycontent="space-between"
+                  marginTop={hp(5)}
+                  onchangetext={val => setComment(val)}
+                  paddingverti={Platform.OS === 'android' ? hp(0.2) : hp(3)}
+                  isButton={true}
+                  fontfamily={familyFont.semiBold}
+                  fontsize={Size(1.8)}
+                  fontsize2={Size(1.4)}
+                  width2={wp(70)}
+                  oneyepress={() =>
+                    dispatch(
+                      commentsStory({
+                        token: token,
+                        user_id: userId,
+                        story_id: likeStoryStatus[0]?.id,
+                        comment: comment,
+                      }),
+                    )
+                  }
+                />
+              )}
             </View>
           </View>
         )}
