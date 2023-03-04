@@ -201,9 +201,9 @@ const CreateStory = () => {
           justifycontent="center"
           alignitems="center"
           onpress={() => {
-            nav.navigate('RecordStory', {camType: camMode});
+            nav.navigate('RecordStory', { camType: camMode });
           }}
-          Icon=<Feather name="video" size={19} color={color.white} />
+          Icon={<Feather name="video" size={19} color={color.white} />}
         />
         <CustomButton
           title="Upload Video"

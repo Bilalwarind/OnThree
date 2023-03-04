@@ -59,7 +59,7 @@ const Login = () => {
       email: email,
       password: password,
     };
-    dispatch(loginUser(data));
+    dispatch(loginUser(data, nav));
   };
 
   return (

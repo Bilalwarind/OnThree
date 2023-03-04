@@ -80,7 +80,10 @@ const PublishStory = ({route}) => {
     data.append('other_story_id', '1');
     // data.append('uservideo', videoData.uri);
     data.append('uservideo', {
-      uri: videoData.uri,
+      uri:
+        Platform.OS === 'ios'
+          ? videoData.uri?.replace('file://', '/')
+          : videoData.uri,
       type: 'video/mp4',
       name: Math.floor(Math.random() * 100) + 1 + 'story.mp4',
     });
@@ -333,7 +336,7 @@ const PublishStory = ({route}) => {
         onpress={() => {
           onUpload();
         }}
-        Icon=<Feather name="video" size={19} color={color.white} />
+        Icon={<Feather name="video" size={19} color={color.white} />}
       />
       {loader && (
         <View

@@ -1,5 +1,5 @@
 import {useNavigation} from '@react-navigation/native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   ImageBackground,
   Text,
@@ -15,7 +15,11 @@ const Splash = ({params}) => {
   const {token} = useSelector(state => state.auth);
 
   setTimeout(async () => {
-    navigation.navigate('Login');
+    if (token !== null || token !== undefined) {
+      navigation.navigate('Login');
+    } else {
+      navigation.navigate('StoryPlay');
+    }
   }, 2000);
   return (
     <View style={styles.container}>

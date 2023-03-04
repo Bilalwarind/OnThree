@@ -40,9 +40,6 @@ export const registerUser = (data, nav) => {
 };
 export const loginUser = (data, nav) => {
   return dispatch => {
-    dispatch({
-      type: DATA_LOADING,
-    });
     baseUrl
       .post('mobilelogin', data)
       .then(async res => {
@@ -51,6 +48,7 @@ export const loginUser = (data, nav) => {
             type: LOGIN_SUCCESS,
             payload: res.data.data.user,
           });
+          nav.navigate('StoryPlay');
         } else {
           Alert.alert('There is a problem with your email or password!');
           dispatch({
