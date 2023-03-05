@@ -23,7 +23,11 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import styles from './style';
 import {ActivityIndicator, MD2Colors} from 'react-native-paper';
 import {DATA_FAILED, LOGOUT_SUCCESS} from '../../../redux/actions/types';
-
+import appleAuth from '@invertase/react-native-apple-authentication';
+import {
+  GoogleSignin,
+  statusCodes,
+} from '@react-native-google-signin/google-signin';
 const Login = () => {
   const dispatch = useDispatch();
   const nav = useNavigation();

@@ -15,11 +15,7 @@ const Splash = ({params}) => {
   const {token} = useSelector(state => state.auth);
 
   setTimeout(async () => {
-    if (token !== null || token !== undefined) {
-      navigation.navigate('Login');
-    } else {
-      navigation.navigate('StoryPlay');
-    }
+    navigation.navigate('Login');
   }, 2000);
   return (
     <View style={styles.container}>

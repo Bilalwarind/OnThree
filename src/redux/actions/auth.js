@@ -40,6 +40,9 @@ export const registerUser = (data, nav) => {
 };
 export const loginUser = (data, nav) => {
   return dispatch => {
+    dispatch({
+      type: DATA_LOADING,
+    });
     baseUrl
       .post('mobilelogin', data)
       .then(async res => {

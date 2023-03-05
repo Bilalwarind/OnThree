@@ -36,7 +36,9 @@ import moment from 'moment/moment';
 import axios from 'axios';
 import baseUrl from '../../redux/baseUrl';
 import Share from 'react-native-share';
-
+import {param} from 'express/lib/request';
+import BookMarkedIcon from 'react-native-vector-icons/Ionicons';
+import ChatIcon from 'react-native-vector-icons/Entypo';
 const StoryPlay = () => {
   const dispatch = useDispatch();
   const nav = useNavigation();
@@ -53,6 +55,12 @@ const StoryPlay = () => {
   const [joinChat, setJoinChat] = useState(false);
   const [loading, setloading] = useState(false);
   const [comments, setComments] = useState('');
+  const [isLiked, setIsLiked] = useState(-1);
+  const [likesData, setLikesData] = useState();
+  const [totlaLikes, setTotalLikes] = useState(0);
+  const [isBookMarked, setIsBookMarked] = useState(false);
+  const [commentlength, setCommentLength] = useState();
+  const [page, setPage] = useState(1);
   const [position, setPosition] = useState({
     show: 0,
     top: 70,
@@ -61,13 +69,13 @@ const StoryPlay = () => {
   const data = {
     token: token,
     user_id: userId,
+    page: page,
   };
   const [opacity, setOpacity] = useState(0);
 
   const onLoadStart = () => {
     setOpacity(1);
   };
-
   const onLoad = () => {
     setOpacity(0);
   };
@@ -77,8 +85,19 @@ const StoryPlay = () => {
   };
 
   useEffect(() => {
+    setIsLiked(likeStoryStatus?.liked_story);
     fetcAllComments(likeStoryStatus.id);
+    setTotalLikes(likeStoryStatus?.get_story_likes?.length);
+    setCommentLength(likeStoryStatus?.get_story_comment?.length);
+    setIsBookMarked(likeStoryStatus?.bookmark_story);
+    console.log('likeStoryStatus.links', likeStoryStatus);
   }, [likeStoryStatus]);
+  const loadMore = () => {
+    if (allStoriesData?.data?.length > 0) {
+      setPage(page + 1);
+      dispatch(getAllStories(data));
+    }
+  };
   const fetcAllComments = async storyId => {
     setloading(true);
     const params = new FormData();
@@ -117,8 +136,118 @@ const StoryPlay = () => {
         return err;
       });
   };
+  const postComment = async (token, userId, storyId, commentsTxt) => {
+    setloading(true);
+    const params = new FormData();
+    params.append('token', token);
+    params.append('user_id', userId);
+    params.append('story_id', storyId);
+    params.append('comment', commentsTxt);
+    await axios
+      .post(`https://theonlinetest.info/onethree/api/add-comment`, params, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      })
+      .then(res => {
+        // alert(JSON.stringify(res.data.data.user[1].liked_story));
+        if (res?.data?.success !== 0) {
+          setComment('');
+          setloading(false);
+          console.log('comment', res?.data?.data);
+          setComments(res?.data?.data);
+          // setCommentLength(total_comments);
+        } else {
+          console.log('comment', res?.data?.data);
+
+          setloading(false);
+          setComments([]);
+        }
+      })
+      .catch(err => {
+        setloading(false);
+
+        setComments([]);
+        return err;
+      });
+  };
+  const likeStoris = async isLiked => {
+    const params = new FormData();
+    params.append('token', token);
+    params.append('user_id', userId);
+    params.append('story_id', likeStoryStatus?.id);
+    params.append('liked', isLiked === 1 ? 0 : 1);
+    await axios
+      .post(`https://theonlinetest.info/onethree/api/add-likes`, params, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      })
+      .then(res => {
+        if (res?.data?.success !== 0) {
+          setloading(false);
+          setLikesData(res?.data?.data?.story);
+          console.log('liked', res?.data?.data?.story?.liked);
+          console.log('likesdata', res?.data?.data?.story);
+          console.log('res?.data?.story?.likes', res?.data?.data?.story);
+          setTotalLikes(res?.data?.data?.story.likes);
+          return setIsLiked(res?.data?.data?.story.liked);
+        } else {
+          console.log('comment', res?.data?.data);
+          setLikesData(0);
+          setloading(false);
+        }
+      })
+      .catch(err => {
+        setloading(false);
+        return err;
+      });
+  };
+  const storyBookMakr = async () => {
+    setloading(true);
+    const params = new FormData();
+    params.append('token', token);
+    params.append('user_id', userId);
+    params.append('story_id', likeStoryStatus?.id);
+    params.append('status', isBookMarked ? 0 : 1);
+
+    await axios
+      .post(
+        `https://theonlinetest.info/onethree/api/add-story-bookmark`,
+        params,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        },
+      )
+      .then(res => {
+        setloading(false);
+        if (res?.data?.success !== 0) {
+          setloading(false);
+          console.log('res?.data?.message', res?.data?.message);
+          alert(res?.data?.message);
+          if (res?.data?.message === 'Bookmark removed successfully!') {
+            setIsBookMarked(false);
+          } else {
+            setIsBookMarked(true);
+          }
+        } else {
+          setIsBookMarked(false);
+          setloading(false);
+        }
+      })
+      .catch(err => {
+        setloading(false);
+        return err;
+      });
+  };
   useEffect(() => {
     dispatch(getAllStories(data));
+    setPage(allStoriesData?.current_page);
   }, []);
   const renderComments = ({item, index}) => {
     return (
@@ -153,6 +282,68 @@ const StoryPlay = () => {
       </View>
     );
   };
+  const renderPartners = ({item, index}) => {
+    return (
+      <View style={{flex: 1, flexDirection: 'row', marginVertical: 32}}>
+        <CustomButton
+          title={item?.get_user?.username}
+          fontsize={Size(1.7)}
+          borderradius={hp(1)}
+          textcolor={color.white}
+          marginvertical={hp(2)}
+          flexdirection="row"
+          marginhori={wp(2)}
+          // alignitems="center"
+          fontfamily={familyFont.reg}
+          onpress={() => {
+            // onRegister();
+          }}
+          Icon={
+            <Image
+              style={styles.partners}
+              source={Images.partners}
+              resizeMode="contain"
+            />
+          }
+        />
+      </View>
+    );
+  };
+  const renderLinks = ({item, index}) => {
+    console.log('item', item);
+    return (
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}>
+        <CustomButton
+          title={item?.url}
+          fontsize={Size(1.4)}
+          // backgroundcolor={color.white}
+          borderradius={hp(1)}
+          textcolor={color.white}
+          padding={hp(1)}
+          marginvertical={hp(3)}
+          flexdirection="row"
+          fontfamily={familyFont.semiBold}
+          onpress={() => {
+            onRegister();
+          }}
+          Icon={<Entypo name="link" size={25} color={color.white} />}
+          // {<Feather name="external-link" size={25} color={color.white} />}
+        />
+
+        <View
+          style={{
+            borderTopWidth: hp(0.15),
+            borderColor: color.btnColor,
+          }}
+        />
+      </View>
+    );
+  };
   const renderItems = ({item, index}) => {
     // createThumbnails(item?.url);
     return (
@@ -167,6 +358,9 @@ const StoryPlay = () => {
           }}
           isBuffering={() => {
             console.log('isBuuber', 'isBuffer');
+          }}
+          onBuffer={() => {
+            console.log('buffer', 'buffer');
           }}
           seekBar="white"
           customStyles={{
@@ -184,7 +378,7 @@ const StoryPlay = () => {
           onLoadStart={() => {
             console.log('onLoad', 'onLoad');
           }}
-          onLoad={console.log('onLoad', 'onsgtart')}
+          onLoad={console.log('onLoad', 'onstart')}
           onVideoLoadStart={() => {
             console.log('ONVidoeload', 'ONVidoeload');
           }}
@@ -334,9 +528,13 @@ const StoryPlay = () => {
       />
       <FlatList
         showsVerticalScrollIndicator={false}
-        data={allStoriesData}
+        data={allStoriesData?.data}
         keyExtractor={item => item?.id}
         renderItem={renderItems}
+        onEndReached={() => {
+          loadMore();
+        }}
+        onEndReachedThreshold={0.5}
       />
       <RBSheet
         height={hp(76)}
@@ -353,7 +551,12 @@ const StoryPlay = () => {
           },
         }}>
         {!isComment ? (
-          <View style={{backgroundColor: '#0F0F0F', padding: wp(4)}}>
+          <View
+            style={{
+              backgroundColor: '#0F0F0F',
+              padding: wp(4),
+              flex: 1,
+            }}>
             <View
               style={{
                 flexDirection: 'row',
@@ -381,7 +584,7 @@ const StoryPlay = () => {
                 />
               </TouchableOpacity>
               <CustomButton
-                title={likeStoryStatus?.likes}
+                title={totlaLikes}
                 fontsize={Size(1.7)}
                 backgroundcolor={color.primary}
                 borderradius={hp(1)}
@@ -393,19 +596,10 @@ const StoryPlay = () => {
                 alignitems="center"
                 fontfamily={familyFont.bold}
                 onpress={() => {
-                  const params = new FormData();
-                  params.append('token', token);
-                  params.append('user_id', userId);
-                  params.append('story_id', likeStoryStatus?.id);
-                  params.append(
-                    'liked',
-                    likeStoryStatus?.liked_story === 0 ? 1 : 0,
-                  );
-
-                  dispatch(likeStory(params));
+                  likeStoris(isLiked);
                 }}
                 Icon={
-                  likeStoryStatus?.liked_story === 0 ? (
+                  isLiked === 0 ? (
                     <AntDesign
                       name="hearto"
                       size={22}
@@ -423,11 +617,7 @@ const StoryPlay = () => {
                 }
               />
               <CustomButton
-                title={
-                  likeStoryStatus?.get_story_comment?.length
-                    ? likeStoryStatus?.get_story_comment?.length
-                    : 0
-                }
+                title={commentlength ? commentlength : 0}
                 fontsize={Size(1.7)}
                 backgroundcolor={color.primary}
                 borderradius={hp(1)}
@@ -451,13 +641,25 @@ const StoryPlay = () => {
                 }
               />
 
-              <TouchableOpacity>
-                <Feather
-                  name="bookmark"
-                  size={30}
-                  color={color.white}
-                  style={styles.bookmark}
-                />
+              <TouchableOpacity
+                onPress={() => {
+                  !isLoading && storyBookMakr();
+                }}>
+                {!isBookMarked ? (
+                  <Feather
+                    name="bookmark"
+                    size={30}
+                    color={color.white}
+                    style={styles.bookmark}
+                  />
+                ) : (
+                  <BookMarkedIcon
+                    name="bookmark"
+                    size={30}
+                    color={color.white}
+                    style={styles.bookmark}
+                  />
+                )}
               </TouchableOpacity>
             </View>
             <CustomText
@@ -496,88 +698,119 @@ const StoryPlay = () => {
                 marginVertical: hp(2),
               }}
             />
-            <CustomText
-              title={'LINKS'}
-              fontsize={Size(1.4)}
-              textcolor={color.white}
-              fontfamily={familyFont.reg}
-            />
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}>
-              <CustomButton
-                title="Super Boost Yoga Pant"
+            <View>
+              <CustomText
+                title={'LINKS'}
                 fontsize={Size(1.4)}
-                // backgroundcolor={color.white}
+                textcolor={color.white}
+                fontfamily={familyFont.reg}
+              />
+              <FlatList
+                data={likeStoryStatus?.links}
+                style={{flex: 1}}
+                renderItem={renderLinks}
+                keyExtractor={item => item?.id}
+              />
+              {/* {likeStoryStatus?.links?.map(item => {
+                console.log('item', item);
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                  }}>
+                  <CustomButton
+                    title={item?.url}
+                    fontsize={Size(1.4)}
+                    // backgroundcolor={color.white}
+                    borderradius={hp(1)}
+                    textcolor={color.white}
+                    padding={hp(1)}
+                    marginvertical={hp(3)}
+                    flexdirection="row"
+                    fontfamily={familyFont.semiBold}
+                    onpress={() => {
+                      onRegister();
+                    }}
+                    Icon={<Entypo name="link" size={25} color={color.white} />}
+                    // {<Feather name="external-link" size={25} color={color.white} />}
+                  />
+
+                  <View
+                    style={{
+                      borderTopWidth: hp(0.15),
+                      borderColor: color.btnColor,
+                    }}
+                  />
+                </View>;
+              })} */}
+            </View>
+
+            {likeStoryStatus?.get_story_partners?.length > 0 && (
+              <CustomText
+                title={'PARTNERS'}
+                fontsize={Size(1.4)}
+                textcolor={color.white}
+                fontfamily={familyFont.reg}
+                marginTop={hp(2)}
+              />
+            )}
+            <FlatList
+              data={comments?.story?.get_story_comment}
+              style={{flex: 1}}
+              horizontal
+              renderItem={renderPartners}
+              keyExtractor={item => item?.id}
+            />
+            {/* {likeStoryStatus?.get_story_partners?.map(item => {
+              console.log('item?.user?.username', item?.user?.username);
+              <CustomButton
+                title={item?.user?.username}
+                fontsize={Size(1.7)}
                 borderradius={hp(1)}
                 textcolor={color.white}
-                padding={hp(1)}
-                marginvertical={hp(3)}
+                marginvertical={hp(2)}
                 flexdirection="row"
-                fontfamily={familyFont.semiBold}
+                // alignitems="center"
+                fontfamily={familyFont.reg}
                 onpress={() => {
-                  onRegister();
+                  // onRegister();
                 }}
-                Icon={<Entypo name="link" size={25} color={color.white} />}
-                // {<Feather name="external-link" size={25} color={color.white} />}
-              />
-            </View>
+                Icon={
+                  <Image
+                    style={styles.partners}
+                    source={Images.partners}
+                    resizeMode="contain"
+                  />
+                }
+              />;
+            })} */}
             <View
               style={{
-                borderTopWidth: hp(0.15),
-                borderColor: color.btnColor,
-              }}
-            />
-            <CustomText
-              title={'PARTNERS'}
-              fontsize={Size(1.4)}
-              textcolor={color.white}
-              fontfamily={familyFont.reg}
-              marginTop={hp(2)}
-            />
-            <CustomButton
-              title="Lululemon Athletica"
-              fontsize={Size(1.7)}
-              borderradius={hp(1)}
-              textcolor={color.white}
-              marginvertical={hp(2)}
-              flexdirection="row"
-              // alignitems="center"
-              fontfamily={familyFont.reg}
-              onpress={() => {
-                // onRegister();
-              }}
-              Icon={
-                <Image
-                  style={styles.partners}
-                  source={Images.partners}
-                  resizeMode="contain"
-                />
-              }
-            />
-            <CustomButton
-              title="Play Full Story"
-              fontsize={Size(2.1)}
-              textcolor={color.primary}
-              fontfamily={familyFont.semiBold}
-              backgroundcolor={color.white}
-              borderradius={hp(1)}
-              padding={hp(2.2)}
-              flexdirection="row"
-              alignitems="center"
-              textalign="center"
-              marginvertical={hp(3)}
-              onpress={() => {
-                refRBSheet?.current?.close();
-                nav.navigate('PlayFullStory', {url: likeStoryStatus?.url});
-              }}
-              Icon={
-                <Feather name="play-circle" size={30} color={color.primary} />
-              }
-            />
+                flexDirection: 'column-reverse',
+                flex: 1,
+              }}>
+              <CustomButton
+                title="Play Full Story"
+                fontsize={Size(2.1)}
+                textcolor={color.primary}
+                fontfamily={familyFont.semiBold}
+                backgroundcolor={color.white}
+                borderradius={hp(1)}
+                padding={hp(2)}
+                flexdirection="row"
+                alignitems="center"
+                textalign="center"
+                marginvertical={hp(3)}
+                onpress={() => {
+                  refRBSheet?.current?.close();
+                  nav.navigate('PlayFullStory', {url: likeStoryStatus?.url});
+                }}
+                Icon={
+                  <Feather name="play-circle" size={30} color={color.primary} />
+                }
+              />
+            </View>
           </View>
         ) : (
           <View style={styles.container}>
@@ -593,8 +826,8 @@ const StoryPlay = () => {
 
               <CustomText
                 title={
-                  comments?.story?.total_comments
-                    ? comments?.story?.total_comments + ' Comments'
+                  comments?.story?.get_story_comment?.length
+                    ? comments?.story?.get_story_comment?.length + ' Comments'
                     : 0 + ' Comments'
                 }
                 fontsize={Size(1.8)}
@@ -660,29 +893,27 @@ const StoryPlay = () => {
                 flexDirection: 'column-reverse',
                 paddingHorizontal: wp(3),
               }}>
-              <CustomButton
-                title="Join the Discussion"
-                fontsize={Size(2.1)}
-                textcolor={color.primary}
-                fontfamily={familyFont.semiBold}
-                backgroundcolor={color.white}
-                borderradius={hp(1)}
-                padding={hp(2.2)}
-                flexdirection="row"
-                alignitems="center"
-                textalign="center"
-                marginvertical={hp(3)}
-                onpress={() => {
-                  setJoinChat(true);
-                }}
-                Icon={
-                  <Image
-                    style={styles.chat}
-                    source={Images.chat}
-                    resizeMode="contain"
-                  />
-                }
-              />
+              {!joinChat && (
+                <CustomButton
+                  title="Join the Discussion"
+                  fontsize={Size(2.1)}
+                  textcolor={color.primary}
+                  fontfamily={familyFont.semiBold}
+                  backgroundcolor={color.white}
+                  borderradius={hp(1)}
+                  padding={hp(2)}
+                  flexdirection="row"
+                  alignitems="center"
+                  textalign="center"
+                  marginvertical={hp(3)}
+                  onpress={() => {
+                    setJoinChat(true);
+                  }}
+                  Icon={
+                    <ChatIcon name="chat" size={30} color={color.primary} />
+                  }
+                />
+              )}
               {joinChat && (
                 <CustomTextInput
                   placeholder={'Add your comment here...'}
@@ -693,26 +924,32 @@ const StoryPlay = () => {
                   paddinghorizontal={hp(2)}
                   flexdirection="row"
                   alignitems={'center'}
+                  value={comment}
                   // multiline={true}
                   // numberOfLines={6}
                   justifycontent="space-between"
-                  marginTop={hp(5)}
+                  marginTop={Platform.OS === 'android' ? hp(2) : hp(5)}
+                  marginbottom={hp(5)}
                   onchangetext={val => setComment(val)}
-                  paddingverti={Platform.OS === 'android' ? hp(0.2) : hp(3)}
+                  paddingverti={Platform.OS === 'android' ? hp(0.2) : hp(2)}
                   isButton={true}
                   fontfamily={familyFont.semiBold}
                   fontsize={Size(1.8)}
                   fontsize2={Size(1.4)}
                   width2={wp(70)}
-                  oneyepress={() =>
-                    dispatch(
-                      commentsStory({
-                        token: token,
-                        user_id: userId,
-                        story_id: likeStoryStatus[0]?.id,
-                        comment: comment,
-                      }),
-                    )
+                  oneyepress={
+                    () => {
+                      postComment(token, userId, likeStoryStatus?.id, comment);
+                    }
+                    // dispatch(
+
+                    // commentsStory({
+                    //   token: token,
+                    //   user_id: userId,
+                    //   story_id: likeStoryStatus[0]?.id,
+                    //   comment: comment,
+                    // }),
+                    // )
                   }
                 />
               )}

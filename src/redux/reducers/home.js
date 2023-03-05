@@ -5,6 +5,7 @@ import {
   DATA_LOADING,
   ALL_STORIES_SUCCESS,
   USER_STORIES_SUCCESS,
+  USER_BOOKMARKED_SUCCESS,
 } from '../actions/types';
 const initialState = {
   userProfile: '',
@@ -37,6 +38,12 @@ export const homeReducer = (state = initialState, action) => {
         ...state,
         isLoading: false,
         userStoriesData: action?.payload,
+      };
+    case USER_BOOKMARKED_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        bookMarkedStoriesData: action?.payload,
       };
     case PROFILE_SUCCESS:
       return {

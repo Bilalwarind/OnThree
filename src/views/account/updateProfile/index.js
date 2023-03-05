@@ -131,16 +131,21 @@ const UpdateProfile = () => {
         backgroundColor="transparent"
       />
       <View style={styles.row1}>
-        <View style={styles.header}>
-          <CustomText
-            title={'Cancel'}
-            textcolor={color.primary}
-            fontsize={Size(1.7)}
-            fontfamily={familyFont.reg}
-            aligntext={'center'}
-            marginvertical={hp(3)}
-          />
-        </View>
+        <TouchableOpacity
+          onPress={() => {
+            nav.goBack();
+          }}>
+          <View style={styles.header}>
+            <CustomText
+              title={'Cancel'}
+              textcolor={color.primary}
+              fontsize={Size(1.7)}
+              fontfamily={familyFont.reg}
+              aligntext={'center'}
+              marginvertical={hp(3)}
+            />
+          </View>
+        </TouchableOpacity>
         <TouchableOpacity onPress={onRegister} style={styles.header1}>
           <CustomText
             title={'Save'}
