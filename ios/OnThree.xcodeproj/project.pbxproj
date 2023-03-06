@@ -46,6 +46,7 @@
 		18320CDA299CAE2F00C35101 /* Poppins-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-Regular.ttf"; sourceTree = "<group>"; };
 		18320CDB299CAE2F00C35101 /* Poppins-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-Medium.ttf"; sourceTree = "<group>"; };
 		18537E2D29B51BBB00A00A4A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		187758A129B60B54005D390F /* OnThree.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = OnThree.entitlements; path = OnThree/OnThree.entitlements; sourceTree = "<group>"; };
 		39FA933402C3E4AF7AFF4349 /* Pods-OnThree-OnThreeTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OnThree-OnThreeTests.debug.xcconfig"; path = "Target Support Files/Pods-OnThree-OnThreeTests/Pods-OnThree-OnThreeTests.debug.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = OnThree/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8AEBE4184FCA60A4FD27CC2B /* Pods-OnThree.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OnThree.debug.xcconfig"; path = "Target Support Files/Pods-OnThree/Pods-OnThree.debug.xcconfig"; sourceTree = "<group>"; };
@@ -96,6 +97,7 @@
 		13B07FAE1A68108700A75B9A /* OnThree */ = {
 			isa = PBXGroup;
 			children = (
+				187758A129B60B54005D390F /* OnThree.entitlements */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
@@ -525,6 +527,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = OnThree/OnThree.entitlements;
 				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = WST7GKG4KB;
 				ENABLE_BITCODE = NO;
@@ -554,6 +557,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = OnThree/OnThree.entitlements;
 				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = WST7GKG4KB;
 				INFOPLIST_FILE = OnThree/Info.plist;

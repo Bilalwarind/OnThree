@@ -28,6 +28,7 @@ import {
   GoogleSignin,
   statusCodes,
 } from '@react-native-google-signin/google-signin';
+import auth from '@react-native-firebase/auth';
 const Login = () => {
   const dispatch = useDispatch();
   const nav = useNavigation();
@@ -39,6 +40,10 @@ const Login = () => {
   const [isError, setIsError] = useState(false);
   const [isError2, setIsError2] = useState(false);
   useEffect(() => {
+    GoogleSignin.configure({
+      webClientId:
+        '787743984476-mvfiqqhoi8sit56dgc9agekskuve0iro.apps.googleusercontent.com',
+    });
     dispatch({
       type: DATA_FAILED,
     });
@@ -65,7 +70,95 @@ const Login = () => {
     };
     dispatch(loginUser(data, nav));
   };
+  const googlelogin = async () => {
+    try {
+      const {idToken, user} = await GoogleSignin.signIn();
 
+      // Create a Google credential with the token
+      const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+
+      // Sign-in the user with the credential
+      auth().signInWithCredential(googleCredential);
+      console.log('user', user);
+      const data = {
+        email: user?.email,
+        password: '',
+        login_type: 'google',
+      };
+      dispatch(loginUser(data, nav));
+      // return this.props.navigation.navigate('RegisterChangeProfile', {
+      //   // email: responseJson.email,
+      //   // mode: responseJson.mode,
+      //   // mobile: responseJson.mobile,
+      //   mode: 'google',
+      //   level: 0,
+      //   latitude: 0.0,
+      //   longitude: 0.0,
+      //   mobile: 0,
+      //   customerName: user?.name,
+      //   building: null,
+      //   unit: 0,
+      //   postal: 0,
+      //   email: user?.email,
+      //   type: 'google',
+      // });
+    } catch (error) {
+      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        // user cancelled the login flow
+        alert(error);
+      } else if (error.code === statusCodes.IN_PROGRESS) {
+        alert(error);
+
+        // operation (e.g. sign in) is in progress already
+      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        // play services not available or outdated
+        alert(error);
+      } else {
+        // some other error happened
+        alert(error);
+      }
+    }
+  };
+  const applelogin = async () => {
+    const appleAuthRequestResponse = await appleAuth.performRequest({
+      requestedOperation: appleAuth.Operation.LOGIN,
+      requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
+    });
+    console.log('signed in', appleAuthRequestResponse);
+    console.log(appleAuthRequestResponse.email);
+    var user_email = appleAuthRequestResponse.email;
+    const data = {
+      email: user_email,
+      password: '',
+      login_type: 'apple',
+    };
+    dispatch(loginUser(data, nav));
+
+    // this.props.navigation.navigate('RegisterChangeProfile', {
+    //   // email: responseJson.email,
+    //   // mode: responseJson.mode,
+    //   // mobile: responseJson.mobile,
+    //   mode: 'apple',
+    //   level: 0,
+    //   latitude: 0.0,
+    //   longitude: 0.0,
+    //   mobile: 0,
+    //   customerName: appleAuthRequestResponse.fullName.givenName,
+    //   building: null,
+    //   unit: 0,
+    //   postal: 0,
+    //   email: appleAuthRequestResponse.email,
+    //   type: 'apple',
+    // });
+    const credentialState = await appleAuth.getCredentialStateForUser(
+      appleAuthRequestResponse.user,
+    );
+    // use credentialState response to ensure the user is authenticated
+    if (credentialState === appleAuth.State.AUTHORIZED) {
+      // user is authenticated
+      //alert(JSON.stringify(appleAuthRequestResponse));
+    }
+  };
   return (
     <View style={styles.container}>
       <StatusBar
@@ -198,10 +291,20 @@ const Login = () => {
           marginTop: hp(5),
         }}>
         <View style={styles.socialIcon}>
-          <AntDesign name="apple1" size={25} color={color.white} />
+          <TouchableOpacity
+            onPress={() => {
+              applelogin();
+            }}>
+            <AntDesign name="apple1" size={25} color={color.white} />
+          </TouchableOpacity>
         </View>
         <View style={styles.socialIcon}>
-          <AntDesign name="google" size={25} color={color.white} />
+          <TouchableOpacity
+            onPress={() => {
+              googlelogin();
+            }}>
+            <AntDesign name="google" size={25} color={color.white} />
+          </TouchableOpacity>
         </View>
       </View>
       {isLoading && (
