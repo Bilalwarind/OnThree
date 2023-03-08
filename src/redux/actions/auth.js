@@ -46,14 +46,15 @@ export const loginUser = (data, nav) => {
     baseUrl
       .post('mobilelogin', data)
       .then(async res => {
-        if (res.data.success !== 0) {
+        if (res?.data?.success !== 0) {
           dispatch({
             type: LOGIN_SUCCESS,
-            payload: res.data.data.user,
+            payload: res?.data?.data?.user,
           });
           nav.navigate('StoryPlay');
         } else {
-          Alert.alert('There is a problem with your email or password!');
+          alert(res?.data?.message);
+          // Alert.alert('There is a problem with your email or password!');
           dispatch({
             type: DATA_FAILED,
           });
