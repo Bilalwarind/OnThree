@@ -46,6 +46,10 @@
 			</dict>
 		</dict>
 	</dict>
+  <key>BGTaskSchedulerPermittedIdentifiers</key>
+  <array>
+      <string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+  </array>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>user location</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>

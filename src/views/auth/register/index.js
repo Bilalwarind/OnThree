@@ -77,7 +77,7 @@ const Register = () => {
       auth().signInWithCredential(googleCredential);
       const data = {
         email: user?.email,
-        password: '',
+        password: 'onthree',
         login_type: 'google',
         first_name: user?.name,
         last_name: '',
@@ -127,7 +127,7 @@ const Register = () => {
     var user_email = appleAuthRequestResponse.email;
     const data = {
       email: user_email,
-      password: '',
+      password: 'onthree',
       login_type: 'apple',
       first_name: appleAuthRequestResponse.fullName.givenName,
       last_name: '',
@@ -387,14 +387,16 @@ const Register = () => {
             flexDirection: 'row',
             justifyContent: 'center',
           }}>
-          <View style={styles.socialIcon}>
-            <TouchableOpacity
-              onPress={() => {
-                applelogin();
-              }}>
-              <AntDesign name="apple1" size={25} color={color.white} />
-            </TouchableOpacity>
-          </View>
+          {Platform.OS === 'ios' && (
+            <View style={styles.socialIcon}>
+              <TouchableOpacity
+                onPress={() => {
+                  applelogin();
+                }}>
+                <AntDesign name="apple1" size={25} color={color.white} />
+              </TouchableOpacity>
+            </View>
+          )}
           <View style={styles.socialIcon}>
             <TouchableOpacity
               onPress={() => {

@@ -82,7 +82,7 @@ const Login = () => {
       console.log('user', user);
       const data = {
         email: user?.email,
-        password: '',
+        password: 'onthree',
         login_type: 'google',
       };
       dispatch(loginUser(data, nav));
@@ -129,7 +129,7 @@ const Login = () => {
     var user_email = appleAuthRequestResponse.email;
     const data = {
       email: user_email,
-      password: '',
+      password: 'onthree',
       login_type: 'apple',
     };
     dispatch(loginUser(data, nav));
@@ -290,14 +290,16 @@ const Login = () => {
           justifyContent: 'center',
           marginTop: hp(5),
         }}>
-        <View style={styles.socialIcon}>
-          <TouchableOpacity
-            onPress={() => {
-              applelogin();
-            }}>
-            <AntDesign name="apple1" size={25} color={color.white} />
-          </TouchableOpacity>
-        </View>
+        {Platform.OS === 'ios' && (
+          <View style={styles.socialIcon}>
+            <TouchableOpacity
+              onPress={() => {
+                applelogin();
+              }}>
+              <AntDesign name="apple1" size={25} color={color.white} />
+            </TouchableOpacity>
+          </View>
+        )}
         <View style={styles.socialIcon}>
           <TouchableOpacity
             onPress={() => {
