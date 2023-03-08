@@ -80,7 +80,7 @@ export const userProfileInfo = data => {
         if (res.data.success !== 0) {
           dispatch({
             type: PROFILE_SUCCESS,
-            payload: res.data.data.user,
+            payload: res?.data?.data?.user,
           });
         }
       })
@@ -99,11 +99,36 @@ export const userAllStories = data => {
     baseUrl
       .post('get-user-all-stories', data)
       .then(async res => {
+        console.log('res', res?.data?.data?.stories);
         // alert(JSON.stringify(res.data.data.stories));
         if (res.data.success !== 0) {
           dispatch({
             type: USER_STORIES_SUCCESS,
-            payload: res.data.data.stories,
+            payload: res?.data?.data?.stories,
+          });
+        }
+      })
+      .catch(err => {
+        console.log('err', err);
+        dispatch({
+          type: DATA_FAILED,
+        });
+      });
+  };
+};
+export const userBookMarkedStories = data => {
+  console.log('data', data);
+  return dispatch => {
+    dispatch({
+      type: DATA_LOADING,
+    });
+    baseUrl
+      .post('get-user-bookmark-stories', data)
+      .then(async res => {
+        if (res?.data?.success !== 0) {
+          dispatch({
+            type: USER_STORIES_SUCCESS,
+            payload: res?.data?.data?.stories,
           });
         }
       })
@@ -143,11 +168,12 @@ export const getAllStories = data => {
     baseUrl
       .post('get-all-stories', data)
       .then(async res => {
+        console.log('first', res.data.data.user);
         // alert(JSON.stringify(res.data.data.user[1].liked_story));
         if (res.data.success !== 0) {
           dispatch({
             type: ALL_STORIES_SUCCESS,
-            payload: res.data.data.user,
+            payload: res?.data?.data?.user,
           });
         }
       })
@@ -158,6 +184,7 @@ export const getAllStories = data => {
       });
   };
 };
+
 export const getAllUserList = data => {
   return dispatch => {
     dispatch({
@@ -182,19 +209,19 @@ export const getAllUserList = data => {
 };
 export const likeStory = data => {
   return dispatch => {
-    dispatch({
-      type: DATA_LOADING,
-    });
+    // dispatch({
+    //   type: DATA_LOADING,
+    // });
     baseUrl
       .post('add-likes', data)
       .then(async res => {
-        alert(JSON.stringify(res.data));
+        alert(res?.data?.message);
       })
       .catch(err => {
-        alert(JSON.stringify(err));
-        dispatch({
-          type: DATA_FAILED,
-        });
+        alert(err?.message);
+        // dispatch({
+        //   type: DATA_FAILED,
+        // });
       });
   };
 };

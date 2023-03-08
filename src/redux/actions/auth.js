@@ -19,8 +19,8 @@ export const registerUser = (data, nav) => {
         if (res?.data?.success !== 0) {
           Alert.alert(res?.data?.message);
           dispatch({
-            type: REGISTER_SUCCESS,
-            payload: res?.data?.data,
+            type: LOGIN_SUCCESS,
+            payload: res?.data?.data?.user,
           });
           nav.navigate('StoryPlay');
         } else {
@@ -51,6 +51,7 @@ export const loginUser = (data, nav) => {
             type: LOGIN_SUCCESS,
             payload: res.data.data.user,
           });
+          nav.navigate('StoryPlay');
         } else {
           Alert.alert('There is a problem with your email or password!');
           dispatch({
@@ -83,13 +84,15 @@ export const forgetPassword = data => {
     return res;
   };
 };
-export const logoutUser = () => {
+export const logoutUser = nav => {
   return dispatch => {
     dispatch({
-      type: DATA_LOADING,
+      type: DATA_FAILED,
     });
     dispatch({
       type: LOGOUT_SUCCESS,
+      isLoading: false,
+      payload: null,
     });
   };
 };

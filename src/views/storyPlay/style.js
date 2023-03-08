@@ -4,7 +4,6 @@ import {wp, hp, Size, color, Images, IOS} from '../../utils/';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
     backgroundColor: color.bg2,
   },
   row1: {
@@ -23,11 +22,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   profile: {
-    width: wp(10),
-    height: wp(10),
+    width: wp(15),
+    height: wp(15),
     borderRadius: wp(5),
     marginRight: wp(2),
-    borderRadius: wp(10),
+    borderRadius: wp(15),
     overflow: 'hidden',
   },
   profile3: {
@@ -69,6 +68,7 @@ const styles = StyleSheet.create({
 
   header5: {
     paddingHorizontal: wp(5),
+    flex: 1,
   },
   header6: {
     flexDirection: 'row',

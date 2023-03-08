@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
     backgroundColor: color.white,
   },
   input: {
-    height: hp(12),
+    height: hp(14),
     justifyContent: 'center',
   },
   logo: {

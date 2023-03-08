@@ -25,6 +25,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import styles from './style';
+import baseUrl from '../../../redux/baseUrl';
 
 const UpdateProfile = () => {
   const dispatch = useDispatch();
@@ -33,9 +34,14 @@ const UpdateProfile = () => {
   const [fname, setFname] = useState('');
   const [lname, setLname] = useState('');
   const [about, setAbout] = useState('');
-  const {token, userId} = useSelector(state => state.auth);
+  const {token, userId, userData} = useSelector(state => state.auth);
   const {isLoading} = useSelector(state => state.home);
-
+  useEffect(() => {
+    setFname(userData?.first_name);
+    setLname(userData?.last_name);
+    setImg(userData?.image);
+    setAbout(userData?.about);
+  }, []);
   const onRegister = async () => {
     const formdata = new FormData();
     formdata.append('token', token);
@@ -131,16 +137,21 @@ const UpdateProfile = () => {
         backgroundColor="transparent"
       />
       <View style={styles.row1}>
-        <View style={styles.header}>
-          <CustomText
-            title={'Cancel'}
-            textcolor={color.primary}
-            fontsize={Size(1.7)}
-            fontfamily={familyFont.reg}
-            aligntext={'center'}
-            marginvertical={hp(3)}
-          />
-        </View>
+        <TouchableOpacity
+          onPress={() => {
+            nav.goBack();
+          }}>
+          <View style={styles.header}>
+            <CustomText
+              title={'Cancel'}
+              textcolor={color.primary}
+              fontsize={Size(1.7)}
+              fontfamily={familyFont.reg}
+              aligntext={'center'}
+              marginvertical={hp(3)}
+            />
+          </View>
+        </TouchableOpacity>
         <TouchableOpacity onPress={onRegister} style={styles.header1}>
           <CustomText
             title={'Save'}
@@ -191,6 +202,7 @@ const UpdateProfile = () => {
           bordercolor={color.border}
           bgcolor={color.white}
           paddinghorizontal={hp(2)}
+          value={fname}
           onchangetext={val => setFname(val)}
           paddingverti={Platform.OS === 'android' ? hp(0.2) : hp(3)}
         />
@@ -213,6 +225,7 @@ const UpdateProfile = () => {
           bordercolor={color.border}
           bgcolor={color.white}
           paddinghorizontal={hp(2)}
+          value={lname}
           onchangetext={val => setLname(val)}
           paddingverti={Platform.OS === 'android' ? hp(0.2) : hp(3)}
         />
@@ -237,6 +250,7 @@ const UpdateProfile = () => {
           paddinghorizontal={hp(2)}
           numberOfLines={3}
           multiline={true}
+          value={about}
           onchangetext={val => setAbout(val)}
           paddingverti={Platform.OS === 'android' ? hp(0.2) : hp(3)}
         />

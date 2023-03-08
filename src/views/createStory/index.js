@@ -129,7 +129,12 @@ const CreateStory = () => {
           />
         </View>
         <View style={styles.header}>
-          <AntDesign name="close" size={22} color={color.primary} />
+          <TouchableOpacity
+            onPress={() => {
+              nav.goBack();
+            }}>
+            <AntDesign name="close" size={22} color={color.primary} />
+          </TouchableOpacity>
         </View>
       </View>
       <ScrollView>
@@ -196,9 +201,9 @@ const CreateStory = () => {
           justifycontent="center"
           alignitems="center"
           onpress={() => {
-            nav.navigate('RecordStory', {camType: camMode});
+            nav.navigate('RecordStory', { camType: camMode });
           }}
-          Icon=<Feather name="video" size={19} color={color.white} />
+          Icon={<Feather name="video" size={19} color={color.white} />}
         />
         <CustomButton
           title="Upload Video"

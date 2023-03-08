@@ -14,6 +14,7 @@ import PublishStory from '../views/createStory/publishStory';
 import ForgetPassword from '../views/auth/forgetPassword';
 
 import {useDispatch, useSelector} from 'react-redux';
+import PlayFullStory from '../views/storyPlay/playfullstory';
 
 const Stack = createNativeStackNavigator();
 
@@ -37,6 +38,8 @@ function AuthStack() {
       <Stack.Screen name="Register" component={Register} />
       <Stack.Screen name="ForgetPassword" component={ForgetPassword} />
       <Stack.Screen name="StoryPlay" component={StoryPlay} />
+      <Stack.Screen name="PlayFullStory" component={PlayFullStory} />
+
       <Stack.Screen name="Profile" component={Profile} />
     </Stack.Navigator>
   );
@@ -48,6 +51,8 @@ function AppStack() {
         headerShown: false,
       }}>
       <Stack.Screen name="StoryPlay" component={StoryPlay} />
+      <Stack.Screen name="PlayFullStory" component={PlayFullStory} />
+
       <Stack.Screen name="PublishStory" component={PublishStory} />
       <Stack.Screen name="RecordStory" component={RecordStory} />
       <Stack.Screen name="CreateStory" component={CreateStory} />

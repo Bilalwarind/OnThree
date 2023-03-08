@@ -27,6 +27,9 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import VideoPlayer from 'react-native-video-player';
 import styles from './style';
 import {BackHandler} from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import KeyboardAvoidingView from 'react-native/Libraries/Components/Keyboard/KeyboardAvoidingView';
+import {createThumbnail} from 'react-native-create-thumbnail';
 
 const PublishStory = ({route}) => {
   const {videoData} = route.params;
@@ -39,8 +42,10 @@ const PublishStory = ({route}) => {
   const [about, setAbout] = useState('');
   const [tag, setTag] = useState('');
   const [Partners, setPartners] = useState('');
+  const [url, setUrl] = useState('');
   const [show, setShow] = useState(false);
   const [filteredDataSource, setFilteredDataSource] = useState('');
+  const [thumbnail, setThumbnail] = useState('');
   function handleBackButtonClick() {
     Alert.alert('Exit', 'Do you want to go back?', [
       {
@@ -74,13 +79,18 @@ const PublishStory = ({route}) => {
     data.append('title', title);
     data.append('about', about);
     data.append('other_story_id', '1');
+
     // data.append('uservideo', videoData.uri);
     data.append('uservideo', {
-      uri: videoData.uri,
-      type: videoData.type,
+      uri:
+        Platform.OS === 'ios'
+          ? videoData.uri?.replace('file://', '/')
+          : videoData.uri,
+      type: 'video/mp4',
       name: Math.floor(Math.random() * 100) + 1 + 'story.mp4',
     });
-    data.append('external_link', videoData.uri);
+    data.append('thubmnail', thumbnail);
+    data.append('external_link', url);
     data.append('story_tag[0]', tag);
     console.log('data', data);
     const res = await dispatch(addStory(data, token, nav));
@@ -89,6 +99,14 @@ const PublishStory = ({route}) => {
     } else {
       setloading(false);
     }
+  };
+  const generateThumnail = url => {
+    createThumbnail({
+      url: url,
+      timeStamp: 2000,
+    })
+      .then(response => etThumbnail(response?.path))
+      .catch(err => console.log({err}));
   };
   const searchFilterFunction = text => {
     if (text !== null || '') {
@@ -132,7 +150,7 @@ const PublishStory = ({route}) => {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <StatusBar
         translucent
         barStyle="dark-content"
@@ -166,7 +184,10 @@ const PublishStory = ({route}) => {
           />
         </View>
       </View>
-      <ScrollView showsVerticalScrollIndicator={false}>
+
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="always">
         <View style={styles.story}>
           <VideoPlayer
             video={{
@@ -265,14 +286,16 @@ const PublishStory = ({route}) => {
           />
           <CustomTextInput
             placeholder={'Add a URL here'}
-            value={videoData.uri}
+            value={url}
             placeholderStyle={{fontWeight: 'bold'}}
             borderradius={hp(1.5)}
             borderwidth={wp(0.6)}
             bordercolor={color.border}
             bgcolor={color.white}
             paddinghorizontal={hp(2)}
-            onchangetext={text => {}}
+            onchangetext={text => {
+              setUrl(text);
+            }}
             paddingverti={Platform.OS === 'android' ? hp(0.2) : hp(3)}
           />
         </View>
@@ -322,9 +345,14 @@ const PublishStory = ({route}) => {
         flexdirection="row"
         alignitems="center"
         onpress={() => {
+          generateThumnail(
+            Platform.OS === 'ios'
+              ? videoData.uri?.replace('file://', '/')
+              : videoData.uri,
+          );
           onUpload();
         }}
-        Icon=<Feather name="video" size={19} color={color.white} />
+        Icon={<Feather name="video" size={19} color={color.white} />}
       />
       {loader && (
         <View
@@ -342,7 +370,7 @@ const PublishStory = ({route}) => {
           />
         </View>
       )}
-    </View>
+    </SafeAreaView>
   );
 };
 

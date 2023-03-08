@@ -20,9 +20,6 @@ import Navigation from './src/navigation';
 import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/lib/integration/react';
 import {persister, store} from './src/redux/store';
-
-//  console.disableYellowBox = true;
-
 const App = () => {
   return (
     <>
