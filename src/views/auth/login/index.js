@@ -75,7 +75,6 @@ const Login = () => {
       const {idToken, user} = await GoogleSignin.signIn();
       // Create a Google credential with the token
       const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-
       // Sign-in the user with the credential
       auth().signInWithCredential(googleCredential);
       console.log('user', user);
@@ -289,6 +288,7 @@ const Login = () => {
           justifyContent: 'center',
           marginTop: hp(5),
         }}>
+
         {Platform.OS === 'ios' && (
           <View style={styles.socialIcon}>
             <TouchableOpacity
@@ -306,6 +306,8 @@ const Login = () => {
             }}>
             <AntDesign name="google" size={25} color={color.white} />
           </TouchableOpacity>
+
+
         </View>
       </View>
       {isLoading && (

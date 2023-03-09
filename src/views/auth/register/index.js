@@ -71,7 +71,6 @@ const Register = () => {
       const {idToken, user} = await GoogleSignin.signIn();
       // Create a Google credential with the token
       const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-
       // Sign-in the user with the credential
       auth().signInWithCredential(googleCredential);
       const data = {
