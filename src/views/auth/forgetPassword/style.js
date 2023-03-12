@@ -5,15 +5,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: wp(5),
-    backgroundColor: color.white,
+    backgroundColor: color.bg,
   },
-  input: {
-    height: hp(12),
-    justifyContent: 'center',
+  close:{
+    alignSelf:'flex-end',
+    marginTop:hp(3),
+    marginRight:hp(1)
   },
   logo: {
-    marginTop: hp(15),
-    marginBottom: hp(3),
+    marginTop: hp(3),
     alignSelf: 'center',
     width: wp(45),
     tintColor: '#000',

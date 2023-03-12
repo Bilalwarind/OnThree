@@ -10,8 +10,7 @@ const styles = StyleSheet.create({
   row1: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: hp(5),
-    marginBottom: hp(1),
+    marginTop: hp(1),
   },
   header: {
     flex: 1,

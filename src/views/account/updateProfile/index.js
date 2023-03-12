@@ -184,7 +184,6 @@ const UpdateProfile = () => {
           )}
         </View>
       </View>
-      <View style={{height: hp(15), justifyContent: 'center'}}>
         <CustomText
           title={'First Name'}
           textcolor={color.primary}
@@ -193,6 +192,7 @@ const UpdateProfile = () => {
           aligntext={'left'}
           marginleft={wp(2)}
           marginbottom={wp(1)}
+          marginTop={hp(3)}
         />
         <CustomTextInput
           placeholder={'Enter first name'}
@@ -201,13 +201,11 @@ const UpdateProfile = () => {
           borderwidth={wp(0.6)}
           bordercolor={color.border}
           bgcolor={color.white}
-          paddinghorizontal={hp(2)}
+          paddinghorizontal={hp(1)}
           value={fname}
           onchangetext={val => setFname(val)}
           paddingverti={Platform.OS === 'android' ? hp(0.2) : hp(3)}
         />
-      </View>
-      <View style={{height: hp(13), justifyContent: 'center'}}>
         <CustomText
           title={'Last Name'}
           textcolor={color.primary}
@@ -216,6 +214,7 @@ const UpdateProfile = () => {
           aligntext={'left'}
           marginleft={wp(2)}
           marginbottom={wp(1)}
+          marginTop={hp(2)}
         />
         <CustomTextInput
           placeholder={'Enter last name'}
@@ -224,13 +223,11 @@ const UpdateProfile = () => {
           borderwidth={wp(0.6)}
           bordercolor={color.border}
           bgcolor={color.white}
-          paddinghorizontal={hp(2)}
+          paddinghorizontal={hp(1)}
           value={lname}
           onchangetext={val => setLname(val)}
           paddingverti={Platform.OS === 'android' ? hp(0.2) : hp(3)}
         />
-      </View>
-      <View style={{height: hp(19), justifyContent: 'center'}}>
         <CustomText
           title={'About'}
           textcolor={color.primary}
@@ -239,6 +236,7 @@ const UpdateProfile = () => {
           aligntext={'left'}
           marginleft={wp(2)}
           marginbottom={wp(1)}
+          marginTop={hp(2)}
         />
         <CustomTextInput
           placeholder={'Explain about yourself'}
@@ -247,15 +245,13 @@ const UpdateProfile = () => {
           borderwidth={wp(0.6)}
           bordercolor={color.border}
           bgcolor={color.white}
-          paddinghorizontal={hp(2)}
+          paddinghorizontal={hp(1)}
           numberOfLines={3}
           multiline={true}
           value={about}
           onchangetext={val => setAbout(val)}
           paddingverti={Platform.OS === 'android' ? hp(0.2) : hp(3)}
         />
-      </View>
-      <View style={{height: hp(12), justifyContent: 'center'}}>
         <CustomText
           title={'URL'}
           textcolor={color.primary}
@@ -264,6 +260,7 @@ const UpdateProfile = () => {
           aligntext={'left'}
           marginleft={wp(2)}
           marginbottom={wp(1)}
+          marginTop={hp(2)}
         />
         <CustomTextInput
           placeholder={'Enter URL'}
@@ -272,12 +269,11 @@ const UpdateProfile = () => {
           borderwidth={wp(0.6)}
           bordercolor={color.border}
           bgcolor={color.white}
-          paddinghorizontal={hp(2)}
+          paddinghorizontal={hp(1)}
           onchangetext={text => {}}
           value={img?.uri}
           paddingverti={Platform.OS === 'android' ? hp(0.2) : hp(3)}
         />
-      </View>
       {isLoading && (
         <View
           style={{

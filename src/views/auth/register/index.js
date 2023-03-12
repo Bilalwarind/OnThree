@@ -11,6 +11,7 @@ import {
   StatusBar,
   StyleSheet,
   ActivityIndicator,
+  KeyboardAvoidingView,
 } from 'react-native';
 import {wp, hp, Size, color, Images, IOS, familyFont} from '../../../utils/';
 import CustomText from '../../../components/CustomText';
@@ -41,6 +42,7 @@ const Register = () => {
   const [isError2, setIsError2] = useState(false);
   const [isError3, setIsError3] = useState(false);
   const [userName, setUserName] = useState('');
+
   const onRegister = async () => {
     Keyboard.dismiss();
     if (email.length <= 0) {
@@ -159,21 +161,20 @@ const Register = () => {
     }
   };
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar
-        translucent
-        barStyle="dark-content"
-        backgroundColor="transparent"
-      />
-      <AntDesign
-        name="back"
-        size={22}
-        color={color.primary}
-        onPress={() => {
-          nav.goBack();
-        }}
-      />
-      <ScrollView>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={styles.container}>
+      <SafeAreaView>
+        <StatusBar
+          translucent
+          barStyle="dark-content"
+          backgroundColor="transparent"
+        />
+        <TouchableOpacity
+          onPress={() => nav.navigate('Login')}
+          style={styles.close}>
+          <AntDesign name="close" size={25} color={color.primary} />
+        </TouchableOpacity>
         <Image style={styles.logo} source={Images.logo} resizeMode="contain" />
         <CustomText
           title={'Create Account'}
@@ -182,47 +183,42 @@ const Register = () => {
           fontfamily={familyFont.reg}
           aligntext={'center'}
           marginleft={wp(2)}
-          marginvertical={wp(3)}
+          marginvertical={hp(5)}
         />
 
-        <View style={styles.input}>
+        <CustomText
+          title={'Email'}
+          textcolor={isError ? color.red : color.primary}
+          fontsize={Size(1.4)}
+          fontfamily={familyFont.reg}
+          aligntext={'left'}
+          marginleft={wp(2)}
+          marginbottom={wp(1)}
+        />
+        <CustomTextInput
+          placeholder={'Enter your email'}
+          fontfamily={familyFont.semiBold}
+          borderradius={hp(1.5)}
+          bgcolor={color.white}
+          paddinghorizontal={hp(1)}
+          bordercolor="red"
+          borderwidth={isError ? 1 : 0}
+          onchangetext={val => {
+            setEmail(val);
+            setIsError(false);
+          }}
+          paddingverti={Platform.OS === 'android' ? hp(0.2) : hp(3)}
+        />
+        {isError && (
           <CustomText
-            title={'Email'}
-            textcolor={isError ? color.red : color.primary}
-            fontsize={Size(1.4)}
+            title={'There is a problem with your email or password. Try again.'}
+            textcolor={color.red}
+            fontsize={Size(1.3)}
             fontfamily={familyFont.reg}
-            aligntext={'left'}
             marginleft={wp(2)}
-            marginbottom={wp(1)}
+            marginTop={wp(1)}
           />
-          <CustomTextInput
-            placeholder={'Enter your email'}
-            fontfamily={familyFont.semiBold}
-            borderradius={hp(1.5)}
-            bgcolor={color.gray}
-            paddinghorizontal={hp(2)}
-            bordercolor="red"
-            borderwidth={isError ? 1 : 0}
-            onchangetext={val => {
-              setEmail(val);
-              setIsError(false);
-            }}
-            paddingverti={Platform.OS === 'android' ? hp(0.2) : hp(3)}
-          />
-          {isError && (
-            <CustomText
-              title={
-                'There is a problem with your email or password. Try again.'
-              }
-              textcolor={color.red}
-              fontsize={Size(1.3)}
-              fontfamily={familyFont.reg}
-              marginleft={wp(2)}
-              marginTop={wp(1)}
-            />
-          )}
-        </View>
-        <View style={styles.input}>
+        )}
           <CustomText
             title={'User Name'}
             textcolor={isError ? color.red : color.primary}
@@ -231,13 +227,14 @@ const Register = () => {
             aligntext={'left'}
             marginleft={wp(2)}
             marginbottom={wp(1)}
+          marginTop={hp(3)}
           />
           <CustomTextInput
             placeholder={'Enter your user name'}
             fontfamily={familyFont.semiBold}
             borderradius={hp(1.5)}
-            bgcolor={color.gray}
-            paddinghorizontal={hp(2)}
+            bgcolor={color.white}
+            paddinghorizontal={hp(1)}
             bordercolor="red"
             borderwidth={isError ? 1 : 0}
             onchangetext={val => {
@@ -258,83 +255,76 @@ const Register = () => {
               marginTop={wp(1)}
             />
           )}
-        </View>
-        <View style={styles.input}>
+        <CustomText
+          title={'Password'}
+          textcolor={isError2 ? color.red : color.primary}
+          fontsize={Size(1.4)}
+          fontfamily={familyFont.reg}
+          aligntext={'left'}
+          marginleft={wp(2)}
+          marginbottom={wp(1)}
+          marginTop={hp(3)}
+        />
+        <CustomTextInput
+          placeholder={'Enter your password'}
+          fontfamily={familyFont.semiBold}
+          borderradius={hp(1.5)}
+          bgcolor={color.white}
+          isSecure={true}
+          paddinghorizontal={hp(1)}
+          bordercolor="red"
+          borderwidth={isError2 ? 1 : 0}
+          onchangetext={val => {
+            setPassword(val);
+            setIsError2(false);
+          }}
+          paddingverti={Platform.OS === 'android' ? hp(0.2) : hp(3)}
+        />
+        {isError2 && (
           <CustomText
-            title={'Password'}
-            textcolor={isError2 ? color.red : color.primary}
-            fontsize={Size(1.4)}
+            title={'There is a problem with your email or password. Try again.'}
+            textcolor={color.red}
+            fontsize={Size(1.3)}
             fontfamily={familyFont.reg}
-            aligntext={'left'}
             marginleft={wp(2)}
-            marginbottom={wp(1)}
+            marginTop={wp(1)}
           />
-          <CustomTextInput
-            placeholder={'Enter your password'}
-            fontfamily={familyFont.semiBold}
-            borderradius={hp(1.5)}
-            bgcolor={color.gray}
-            isSecure={true}
-            paddinghorizontal={hp(2)}
-            bordercolor="red"
-            borderwidth={isError2 ? 1 : 0}
-            onchangetext={val => {
-              setPassword(val);
-              setIsError2(false);
-            }}
-            paddingverti={Platform.OS === 'android' ? hp(0.2) : hp(3)}
-          />
-          {isError2 && (
-            <CustomText
-              title={
-                'There is a problem with your email or password. Try again.'
-              }
-              textcolor={color.red}
-              fontsize={Size(1.3)}
-              fontfamily={familyFont.reg}
-              marginleft={wp(2)}
-              marginTop={wp(1)}
-            />
-          )}
-        </View>
-        <View style={styles.input}>
+        )}
+        <CustomText
+          title={'Confirm Password'}
+          textcolor={isError3 ? color.red : color.primary}
+          fontsize={Size(1.4)}
+          fontfamily={familyFont.reg}
+          aligntext={'left'}
+          marginleft={wp(2)}
+          marginbottom={wp(1)}
+          marginTop={hp(3)}
+        />
+        <CustomTextInput
+          placeholder={'Enter your password'}
+          fontfamily={familyFont.semiBold}
+          borderradius={hp(1.5)}
+          bgcolor={color.white}
+          isSecure={true}
+          paddinghorizontal={hp(1)}
+          bordercolor="red"
+          borderwidth={isError3 ? 1 : 0}
+          onchangetext={val => {
+            setPasswordConfirm(val);
+            setIsError3(false);
+          }}
+          paddingverti={Platform.OS === 'android' ? hp(0.2) : hp(3)}
+        />
+        {isError3 && (
           <CustomText
-            title={'Confirm Password'}
-            textcolor={isError3 ? color.red : color.primary}
-            fontsize={Size(1.4)}
+            title={'There is a problem with your email or password. Try again.'}
+            textcolor={color.red}
+            fontsize={Size(1.3)}
             fontfamily={familyFont.reg}
-            aligntext={'left'}
             marginleft={wp(2)}
-            marginbottom={wp(1)}
+            marginTop={wp(1)}
           />
-          <CustomTextInput
-            placeholder={'Enter your password'}
-            fontfamily={familyFont.semiBold}
-            borderradius={hp(1.5)}
-            bgcolor={color.gray}
-            isSecure={true}
-            paddinghorizontal={hp(2)}
-            bordercolor="red"
-            borderwidth={isError3 ? 1 : 0}
-            onchangetext={val => {
-              setPasswordConfirm(val);
-              setIsError3(false);
-            }}
-            paddingverti={Platform.OS === 'android' ? hp(0.2) : hp(3)}
-          />
-          {isError3 && (
-            <CustomText
-              title={
-                'There is a problem with your email or password. Try again.'
-              }
-              textcolor={color.red}
-              fontsize={Size(1.3)}
-              fontfamily={familyFont.reg}
-              marginleft={wp(2)}
-              marginTop={wp(1)}
-            />
-          )}
-        </View>
+        )}
         <CustomButton
           title="Create Account"
           fontsize={Size(2.1)}
@@ -342,7 +332,7 @@ const Register = () => {
           fontfamily={familyFont.semiBold}
           backgroundcolor={color.primary}
           borderradius={hp(1)}
-          padding={hp(2.2)}
+          padding={hp(2)}
           fontweight="bold"
           textalign="center"
           marginvertical={hp(5)}
@@ -380,32 +370,8 @@ const Register = () => {
             />
           </View>
         )}
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'center',
-          }}>
-          {Platform.OS === 'ios' && (
-            <View style={styles.socialIcon}>
-              <TouchableOpacity
-                onPress={() => {
-                  applelogin();
-                }}>
-                <AntDesign name="apple1" size={25} color={color.white} />
-              </TouchableOpacity>
-            </View>
-          )}
-          <View style={styles.socialIcon}>
-            <TouchableOpacity
-              onPress={() => {
-                googlelogin();
-              }}>
-              <AntDesign name="google" size={25} color={color.white} />
-            </TouchableOpacity>
-          </View>
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+      </SafeAreaView>
+    </KeyboardAvoidingView>
   );
 };
 

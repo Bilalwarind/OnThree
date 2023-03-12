@@ -165,7 +165,7 @@ const Login = () => {
         backgroundColor="transparent"
       />
       <Image style={styles.logo} source={Images.logo} resizeMode="contain" />
-      <View style={styles.input}>
+      
         <CustomText
           title={'Email'}
           textcolor={isError ? color.red : color.primary}
@@ -179,8 +179,8 @@ const Login = () => {
           placeholder={'Enter your email'}
           fontfamily={familyFont.semiBold}
           borderradius={hp(1.5)}
-          bgcolor={color.gray}
-          paddinghorizontal={hp(2)}
+          bgcolor={color.white}
+          paddinghorizontal={hp(1)}
           bordercolor="red"
           borderwidth={isError ? 1 : 0}
           onchangetext={text => {
@@ -201,8 +201,6 @@ const Login = () => {
             marginTop={wp(1)}
           />
         )}
-      </View>
-      <View style={styles.input}>
         <CustomText
           title={'Password'}
           textcolor={isError2 ? color.red : color.primary}
@@ -211,14 +209,15 @@ const Login = () => {
           aligntext={'left'}
           marginleft={wp(2)}
           marginbottom={wp(1)}
+          marginTop={hp(3)}
         />
         <CustomTextInput
           placeholder={'Enter your password'}
           fontfamily={familyFont.semiBold}
           borderradius={hp(1.5)}
-          bgcolor={color.gray}
+          bgcolor={color.white}
           secureTextEntry={true}
-          paddinghorizontal={hp(2)}
+          paddinghorizontal={hp(1)}
           bordercolor="red"
           borderwidth={isError2 ? 1 : 0}
           onchangetext={val => {
@@ -239,14 +238,13 @@ const Login = () => {
             marginTop={wp(1)}
           />
         )}
-      </View>
       <CustomButton
         title="Forgot Password?"
         fontsize={Size(1.7)}
         textcolor={color.primary}
         fontfamily={familyFont.reg}
         borderradius={hp(1)}
-        marginvertical={hp(5)}
+        marginvertical={hp(3)}
         marginleft={wp(2)}
         onpress={() => nav.navigate('ForgetPassword')}
       />
@@ -257,9 +255,9 @@ const Login = () => {
         fontfamily={familyFont.semiBold}
         backgroundcolor={color.primary}
         borderradius={hp(1)}
-        padding={hp(2.2)}
+        padding={hp(2)}
         textalign="center"
-        marginbottom={hp(5)}
+        marginbottom={hp(4)}
         onpress={onRegister}
       />
       <CustomButton
@@ -267,9 +265,6 @@ const Login = () => {
         fontsize={Size(1.7)}
         textcolor={color.primary}
         fontfamily={familyFont.semiBold}
-        backgroundcolor={color.white}
-        borderradius={hp(1)}
-        padding={hp(1)}
         textalign="center"
         onpress={() => {
           nav.navigate('Register');
@@ -281,12 +276,13 @@ const Login = () => {
         textcolor={color.primary}
         fontfamily={familyFont.reg}
         aligntext={'center'}
+        marginTop={hp(5)}
       />
       <View
         style={{
           flexDirection: 'row',
           justifyContent: 'center',
-          marginTop: hp(5),
+          marginTop: hp(1),
         }}>
 
         {Platform.OS === 'ios' && (

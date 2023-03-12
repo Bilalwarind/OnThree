@@ -6,14 +6,19 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: wp(5),
     justifyContent: 'center',
-    backgroundColor: color.white,
+    backgroundColor: color.bg,
   },
   input: {
     height: hp(14),
     justifyContent: 'center',
+  }, 
+  close:{
+    alignSelf:'flex-end',
+    marginTop:hp(3),
+    marginRight:hp(1)
   },
   logo: {
-    marginVertical: hp(6),
+    marginTop: hp(3),
     alignSelf: 'center',
     width: wp(45),
     tintColor: '#000',

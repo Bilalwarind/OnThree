@@ -10,8 +10,6 @@ const styles = StyleSheet.create({
   row1: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: hp(5),
-    marginBottom: hp(1),
   },
   header: {
     flex: 1,
@@ -29,17 +27,16 @@ const styles = StyleSheet.create({
     backgroundColor: color.gray,
     padding: wp(0.7),
     borderRadius: wp(2),
-    marginBottom: hp(4),
+    marginBottom: hp(3),
   },
   logo: {
-    width: wp(8),
+    marginRight:wp(1.5),
     tintColor: '#000',
   },
   profile: {
     width: wp(18),
     height: wp(18),
     borderRadius: wp(18),
-    marginRight: wp(5),
   },
   storyImg: {
     height: hp(22),

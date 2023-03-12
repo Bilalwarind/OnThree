@@ -59,20 +59,9 @@ const ForgetPassword = ({navigation}) => {
         barStyle="dark-content"
         backgroundColor="transparent"
       />
-      <AntDesign
-        name="back"
-        size={22}
-        color={color.primary}
-        onPress={() => {
-          Alert.alert('Exit', 'Do you want to go back?', [
-            {
-              text: 'Cancel',
-              onPress: () => console.log('Cancel', 'Cancel'),
-            },
-            {text: 'OK', onPress: () => navigation.goBack()},
-          ]);
-        }}
-      />
+      <TouchableOpacity onPress={()=>nav.navigate('Login')} style={styles.close}>
+      <AntDesign name="close" size={25} color={color.primary} />
+      </TouchableOpacity>
       <Image style={styles.logo} source={Images.logo} resizeMode="contain" />
       <CustomText
         title={'Forgot Password'}
@@ -80,11 +69,10 @@ const ForgetPassword = ({navigation}) => {
         textcolor={color.primary}
         fontfamily={familyFont.reg}
         aligntext="center"
-        marginvertical={hp(2)}
+        marginvertical={hp(5)}
       />
       {!show ? (
         <View>
-          <View style={styles.input}>
             <CustomText
               title={'Email'}
               textcolor={isError ? color.red : color.primary}
@@ -98,8 +86,8 @@ const ForgetPassword = ({navigation}) => {
               placeholder={'Enter your email'}
               fontfamily={familyFont.semiBold}
               borderradius={hp(1.5)}
-              bgcolor={color.gray}
-              paddinghorizontal={hp(2)}
+              bgcolor={color.white}
+              paddinghorizontal={hp(1)}
               bordercolor="red"
               borderwidth={isError ? 1 : 0}
               onchangetext={text => {
@@ -120,7 +108,6 @@ const ForgetPassword = ({navigation}) => {
                 marginTop={wp(1)}
               />
             )}
-          </View>
 
           <CustomButton
             title="Request Reset"
@@ -132,7 +119,7 @@ const ForgetPassword = ({navigation}) => {
             padding={hp(2.2)}
             fontweight="bold"
             textalign="center"
-            marginvertical={hp(5)}
+            marginvertical={hp(4)}
             onpress={onRegister}
           />
         </View>

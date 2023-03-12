@@ -6,11 +6,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: wp(5),
     justifyContent: 'center',
-    backgroundColor: color.white,
-  },
-  input: {
-    height: hp(12),
-    justifyContent: 'center',
+    backgroundColor: color.bg,
   },
   logo: {
     marginTop: hp(5),

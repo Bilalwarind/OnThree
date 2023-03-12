@@ -84,25 +84,25 @@ const Profile = () => {
       });
   };
   const [loading, setloading] = useState(false);
-  useEffect(() => {
-    fetachAllBookmarks();
-  }, [activeBtn]);
-  useEffect(() => {
-    dispatch(userProfileInfo(data));
-    dispatch(userAllStories(data));
-    const unsubscribe = nav.addListener(
-      'focus',
-      () => {
-        dispatch(userProfileInfo(data));
-        dispatch(userAllStories(data));
-        dispatch(userBookMarkedStories(dataBookMarked));
-      },
-      [],
-    );
+  // useEffect(() => {
+  //   fetachAllBookmarks();
+  // }, [activeBtn]);
+  // useEffect(() => {
+  //   dispatch(userProfileInfo(data));
+  //   dispatch(userAllStories(data));
+  //   const unsubscribe = nav.addListener(
+  //     'focus',
+  //     () => {
+  //       dispatch(userProfileInfo(data));
+  //       dispatch(userAllStories(data));
+  //       dispatch(userBookMarkedStories(dataBookMarked));
+  //     },
+  //     [],
+  //   );
 
-    // Return the function to unsubscribe from the event so it gets removed on unmount
-    return unsubscribe;
-  }, []);
+  //   // Return the function to unsubscribe from the event so it gets removed on unmount
+  //   return unsubscribe;
+  // }, []);
   const renderTag = ({item}) => {
     return (
       <View
@@ -235,11 +235,11 @@ const Profile = () => {
         fontsize={Size(1.4)}
         fontfamily={familyFont.reg}
         aligntext={'center'}
-        marginvertical={hp(1.5)}
+        marginvertical={hp(.5)}
       />
       {userProfile?.slug && (
         <CustomButton
-          title={userProfile?.slug}
+          title={userProfile?.email}
           fontsize={Size(1.4)}
           backgroundcolor={color.white}
           borderradius={hp(1)}
