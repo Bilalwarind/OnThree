@@ -26,8 +26,12 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import styles from './style';
 import baseUrl from '../../../redux/baseUrl';
+import KeyboardAvoidingView from 'react-native/Libraries/Components/Keyboard/KeyboardAvoidingView';
+import {useHeaderHeight} from '@react-navigation/elements';
 
 const UpdateProfile = () => {
+  const height = useHeaderHeight();
+
   const dispatch = useDispatch();
   const nav = useNavigation();
   const [img, setImg] = useState('');
@@ -39,9 +43,10 @@ const UpdateProfile = () => {
   useEffect(() => {
     setFname(userData?.first_name);
     setLname(userData?.last_name);
-    setImg(userData?.image);
-    setAbout(userData?.about);
+    setImg({uri: userData?.profile_image});
+    setAbout(userData?.about !== 'null' ? userData?.about : '');
   }, []);
+
   const onRegister = async () => {
     const formdata = new FormData();
     formdata.append('token', token);
@@ -130,60 +135,62 @@ const UpdateProfile = () => {
     );
   };
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <StatusBar
         translucent
         barStyle="dark-content"
         backgroundColor="transparent"
       />
-      <View style={styles.row1}>
-        <TouchableOpacity
-          onPress={() => {
-            nav.goBack();
-          }}>
-          <View style={styles.header}>
+      <KeyboardAvoidingView behavior="padding" style={{flex: 1}} enabled>
+        <View style={styles.row1}>
+          <TouchableOpacity
+            onPress={() => {
+              nav.goBack();
+            }}>
+            <View style={styles.header}>
+              <CustomText
+                title={'Cancel'}
+                textcolor={color.primary}
+                fontsize={Size(1.7)}
+                fontfamily={familyFont.reg}
+                aligntext={'center'}
+                marginvertical={hp(3)}
+              />
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={onRegister} style={styles.header1}>
             <CustomText
-              title={'Cancel'}
+              title={'Save'}
               textcolor={color.primary}
               fontsize={Size(1.7)}
-              fontfamily={familyFont.reg}
+              fontfamily={familyFont.bold}
               aligntext={'center'}
               marginvertical={hp(3)}
             />
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={onRegister} style={styles.header1}>
-          <CustomText
-            title={'Save'}
-            textcolor={color.primary}
-            fontsize={Size(1.7)}
-            fontfamily={familyFont.bold}
-            aligntext={'center'}
-            marginvertical={hp(3)}
-          />
-        </TouchableOpacity>
-      </View>
-      <View style={styles.row1}>
-        <View style={styles.header2}>
-          <Image
-            style={styles.profile}
-            source={{
-              uri:
-                img?.uri ||
-                'https://icon-library.com/images/user-profile-icon/user-profile-icon-24.jpg',
-            }}
-          />
-          {img ? (
-            <TouchableOpacity onPress={deletePhoto}>
-              <AntDesign name="delete" size={20} color={color.primary} />
-            </TouchableOpacity>
-          ) : (
-            <TouchableOpacity onPress={() => chooseFile('photo')}>
-              <AntDesign name="pluscircleo" size={20} color={color.primary} />
-            </TouchableOpacity>
-          )}
+          </TouchableOpacity>
         </View>
-      </View>
+        <View style={styles.row1}>
+          <View style={styles.header2}>
+            <Image
+              style={styles.profile}
+              source={{
+                uri:
+                  img?.uri ||
+                  'https://icon-library.com/images/user-profile-icon/user-profile-icon-24.jpg',
+              }}
+            />
+            {img ? (
+              <TouchableOpacity onPress={deletePhoto}>
+                <AntDesign name="delete" size={20} color={color.primary} />
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity onPress={() => chooseFile('photo')}>
+                <AntDesign name="pluscircleo" size={20} color={color.primary} />
+              </TouchableOpacity>
+            )}
+          </View>
+        </View>
+
         <CustomText
           title={'First Name'}
           textcolor={color.primary}
@@ -274,23 +281,24 @@ const UpdateProfile = () => {
           value={img?.uri}
           paddingverti={Platform.OS === 'android' ? hp(0.2) : hp(3)}
         />
-      {isLoading && (
-        <View
-          style={{
-            position: 'absolute',
-            paddingTop: hp(50),
-            backgroundColor: 'rgba(245, 245, 245, 0.7)',
-            width: wp(100),
-            height: hp(100),
-          }}>
-          <ActivityIndicator
-            animating={true}
-            color={color.primary}
-            size="large"
-          />
-        </View>
-      )}
-    </View>
+        {isLoading && (
+          <View
+            style={{
+              position: 'absolute',
+              paddingTop: hp(50),
+              backgroundColor: 'rgba(245, 245, 245, 0.7)',
+              width: wp(100),
+              height: hp(100),
+            }}>
+            <ActivityIndicator
+              animating={true}
+              color={color.primary}
+              size="large"
+            />
+          </View>
+        )}
+      </KeyboardAvoidingView>
+    </ScrollView>
   );
 };
 

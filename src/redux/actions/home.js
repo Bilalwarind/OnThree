@@ -148,9 +148,7 @@ export const userProfileUpdate = (data, nav) => {
     baseUrl
       .post('profile-update', data)
       .then(async res => {
-        alert(JSON.stringify(res.data));
-        // Alert.alert(res.data.message);
-        nav.navigate('Profile');
+        Alert.alert(res?.data?.message);
       })
       .catch(err => {
         console.log('res.data', err);

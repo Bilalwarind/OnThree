@@ -27,6 +27,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
+    marginLeft: wp(5),
   },
   topTab: {
     flexDirection: 'row',

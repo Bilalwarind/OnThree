@@ -17,7 +17,7 @@ import {
 import {wp, hp, Size, color, Images, IOS, familyFont} from '../../utils/';
 import CustomText from '../../components/CustomText';
 import CustomButton from '../../components/Button';
-import {useNavigation} from '@react-navigation/native';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
 import {
   getAllStories,
@@ -41,17 +41,17 @@ import {param} from 'express/lib/request';
 import BookMarkedIcon from 'react-native-vector-icons/Ionicons';
 import ChatIcon from 'react-native-vector-icons/Entypo';
 import CommentPlaceHolder from 'react-native-vector-icons/MaterialCommunityIcons';
-
 const StoryPlay = () => {
   const dispatch = useDispatch();
   const nav = useNavigation();
   const refRBSheet = useRef();
   const refRBSheetComment = useRef();
   const [isComment, setIsComment] = useState(false);
+  const isFocused = useIsFocused();
   const {allStoriesData, userProfile, isLoading} = useSelector(
     state => state.home,
   );
-  const {token, userId} = useSelector(state => state.auth);
+  const {token, userId, userData} = useSelector(state => state.auth);
   const [secureTextEntry, setSecureTextEntry] = useState(true);
   const [likeStoryStatus, setLikeStoryStatus] = useState({});
   const [comment, setComment] = useState('');
@@ -457,7 +457,7 @@ const StoryPlay = () => {
                   style={styles.profile2}
                   source={{
                     uri:
-                      userProfile?.profile_image ||
+                      userData?.profile_image ||
                       'https://icon-library.com/images/user-profile-icon/user-profile-icon-24.jpg',
                   }}
                 />
@@ -944,7 +944,7 @@ const StoryPlay = () => {
                     flexdirection="row"
                     alignitems={'center'}
                     value={comment}
-                    // multiline={true}
+                    multiline={true}
                     // numberOfLines={6}
                     justifycontent="space-between"
                     marginTop={Platform.OS === 'android' ? hp(2) : hp(5)}

@@ -29,15 +29,16 @@ import styles from './style';
 import moment from 'moment/moment';
 import VideoPlayer from 'react-native-video-player';
 import axios from 'axios';
-
+import CommentPlaceHolder from 'react-native-vector-icons/MaterialCommunityIcons';
 const Profile = () => {
   const nav = useNavigation();
   const dispatch = useDispatch();
   const {userProfile, userStoriesData, bookMarkedStoriesData, isLoading} =
     useSelector(state => state.home);
-  const {token, userId} = useSelector(state => state.auth);
+  const {token, userId, userData} = useSelector(state => state.auth);
   const [activeBtn, setActiveBtn] = useState(1);
   const [bookMarks, setBookMarks] = useState([]);
+
   const data = {
     token: token,
     user_id: userId,
@@ -45,8 +46,27 @@ const Profile = () => {
   };
   const dataBookMarked = {
     token: token,
-    user_id: 2,
+    user_id: userId,
   };
+  useEffect(() => {
+    fetachAllBookmarks();
+  }, [activeBtn]);
+  useEffect(() => {
+    dispatch(userProfileInfo(data));
+    dispatch(userAllStories(data));
+    // const unsubscribe = nav.addListener(
+    //   'focus',
+    //   () => {
+    //     dispatch(userProfileInfo(data));
+    //     dispatch(userAllStories(data));
+    //     dispatch(userBookMarkedStories(dataBookMarked));
+    //   },
+    // [],
+    // );
+
+    // Return the function to unsubscribe from the event so it gets removed on unmount
+    // return unsubscribe;
+  }, []);
   const fetachAllBookmarks = async () => {
     setloading(true);
     const params = new FormData();
@@ -69,7 +89,7 @@ const Profile = () => {
         if (res?.data?.success !== 0) {
           setloading(false);
           console.log('first', res?.data?.data?.stories);
-          return setBookMarks(res?.data?.data?.stories);
+          setBookMarks(res?.data?.data?.stories);
         } else {
           setloading(false);
           setBookMarks([]);
@@ -84,25 +104,7 @@ const Profile = () => {
       });
   };
   const [loading, setloading] = useState(false);
-  // useEffect(() => {
-  //   fetachAllBookmarks();
-  // }, [activeBtn]);
-  // useEffect(() => {
-  //   dispatch(userProfileInfo(data));
-  //   dispatch(userAllStories(data));
-  //   const unsubscribe = nav.addListener(
-  //     'focus',
-  //     () => {
-  //       dispatch(userProfileInfo(data));
-  //       dispatch(userAllStories(data));
-  //       dispatch(userBookMarkedStories(dataBookMarked));
-  //     },
-  //     [],
-  //   );
 
-  //   // Return the function to unsubscribe from the event so it gets removed on unmount
-  //   return unsubscribe;
-  // }, []);
   const renderTag = ({item}) => {
     return (
       <View
@@ -204,7 +206,7 @@ const Profile = () => {
             style={styles.profile}
             source={{
               uri:
-                userProfile?.profile_image ||
+                userData?.profile_image ||
                 'https://icon-library.com/images/user-profile-icon/user-profile-icon-24.jpg',
             }}
           />
@@ -223,23 +225,23 @@ const Profile = () => {
         </TouchableOpacity>
       </View>
       <CustomText
-        title={`${userProfile?.first_name} ${userProfile?.last_name}`}
+        title={`${userData?.first_name} ${userData?.last_name}`}
         textcolor={color.primary}
         fontsize={Size(2.2)}
         aligntext={'center'}
         fontfamily={familyFont.semiBold}
       />
       <CustomText
-        title={userProfile?.about}
+        title={userData?.about !== 'null' ? userData?.about : ''}
         textcolor={color.primary}
         fontsize={Size(1.4)}
         fontfamily={familyFont.reg}
         aligntext={'center'}
-        marginvertical={hp(.5)}
+        marginvertical={hp(0.5)}
       />
       {userProfile?.slug && (
         <CustomButton
-          title={userProfile?.email}
+          title={userData?.email ? userData?.email : ''}
           fontsize={Size(1.4)}
           backgroundcolor={color.white}
           borderradius={hp(1)}
