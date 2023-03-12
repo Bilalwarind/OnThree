@@ -203,7 +203,7 @@ const PublishStory = ({route}) => {
             }}
             videoWidth={wp(100)}
             videoHeight={hp(100)}
-            // autoplay={true}
+            autoplay={true}
             thumbnail={{
               uri: videoData.uri,
             }}
