@@ -399,6 +399,7 @@ const StoryPlay = () => {
           thumbnail={{
             uri: item?.url,
           }}
+          resizeMode={'cover'}
         />
         {/* <ActivityIndicator
           animating
@@ -457,7 +458,7 @@ const StoryPlay = () => {
                   style={styles.profile2}
                   source={{
                     uri:
-                      userData?.profile_image ||
+                      userProfile?.profile_image ||
                       'https://icon-library.com/images/user-profile-icon/user-profile-icon-24.jpg',
                   }}
                 />
