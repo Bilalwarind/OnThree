@@ -173,6 +173,9 @@ export const getAllStories = data => {
             type: ALL_STORIES_SUCCESS,
             payload: res?.data?.data?.user,
           });
+          return res?.data?.data?.user;
+        } else {
+          return false;
         }
       })
       .catch(err => {

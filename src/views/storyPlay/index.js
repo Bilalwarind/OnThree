@@ -86,7 +86,9 @@ const StoryPlay = () => {
   const onBuffer = ({isBuffering}) => {
     setOpacity(isBuffering ? 1 : 0);
   };
-
+  useEffect(() => {
+    console.log('url', allStoriesData?.data);
+  }, []);
   useEffect(() => {
     setIsLiked(likeStoryStatus?.liked_story);
     fetcAllComments(likeStoryStatus.id);
@@ -158,12 +160,9 @@ const StoryPlay = () => {
         if (res?.data?.success !== 0) {
           setComment('');
           setloading(false);
-          console.log('comment', res?.data?.data);
           setComments(res?.data?.data);
           // setCommentLength(total_comments);
         } else {
-          console.log('comment', res?.data?.data);
-
           setloading(false);
           setComments([]);
         }
@@ -192,13 +191,9 @@ const StoryPlay = () => {
         if (res?.data?.success !== 0) {
           setloading(false);
           setLikesData(res?.data?.data?.story);
-          console.log('liked', res?.data?.data?.story?.liked);
-          console.log('likesdata', res?.data?.data?.story);
-          console.log('res?.data?.story?.likes', res?.data?.data?.story);
           setTotalLikes(res?.data?.data?.story.likes);
           return setIsLiked(res?.data?.data?.story.liked);
         } else {
-          console.log('comment', res?.data?.data);
           setLikesData(0);
           setloading(false);
         }
@@ -231,7 +226,6 @@ const StoryPlay = () => {
         setloading(false);
         if (res?.data?.success !== 0) {
           setloading(false);
-          console.log('res?.data?.message', res?.data?.message);
           alert(res?.data?.message);
           if (res?.data?.message === 'Bookmark removed successfully!') {
             setIsBookMarked(false);
@@ -323,7 +317,6 @@ const StoryPlay = () => {
     );
   };
   const renderLinks = ({item, index}) => {
-    console.log('item', item);
     return (
       <View
         style={{
@@ -363,18 +356,18 @@ const StoryPlay = () => {
       <View>
         <VideoPlayer
           key={index}
-          onVideoProgress={() => {
-            console.log('loadin', 'loadin');
-          }}
-          onVideoBuffer={() => {
-            console.log('isBuuber', 'onBuffer');
-          }}
-          isBuffering={() => {
-            console.log('isBuuber', 'isBuffer');
-          }}
-          onBuffer={() => {
-            console.log('buffer', 'buffer');
-          }}
+          // onVideoProgress={() => {
+          //   console.log('loadin', 'loadin');
+          // }}
+          // onVideoBuffer={() => {
+          //   console.log('isBuuber', 'onBuffer');
+          // }}
+          // isBuffering={() => {
+          //   console.log('isBuuber', 'isBuffer');
+          // }}
+          // onBuffer={() => {
+          //   console.log('buffer', 'buffer');
+          // }}
           seekBar="white"
           customStyles={{
             seekBarBackground: color.white,
@@ -388,16 +381,16 @@ const StoryPlay = () => {
           videoWidth={wp(100)}
           videoHeight={hp(100)}
           // onBuffer={onBuffer}
-          onLoadStart={() => {
-            console.log('onLoad', 'onLoad');
-          }}
-          onLoad={console.log('onLoad', 'onstart')}
-          onVideoLoadStart={() => {
-            console.log('ONVidoeload', 'ONVidoeload');
-          }}
+          // onLoadStart={() => {
+          //   console.log('onLoad', 'onLoad');
+          // }}
+          // onLoad={console.log('onLoad', 'onstart')}
+          // onVideoLoadStart={() => {
+          //   console.log('ONVidoeload', 'ONVidoeload');
+          // }}
           // autoplay={true}
           thumbnail={{
-            uri: item?.url,
+            uri: item?.thumbnail,
           }}
           resizeMode={'cover'}
         />

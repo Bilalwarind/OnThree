@@ -225,9 +225,10 @@ const Profile = () => {
               }}
               // autoplay={true}
               thumbnail={{
-                uri: item?.url,
+                uri: item?.thumbnail,
               }}
               customStyles={{seekBarBackground: 'white'}}
+              resizeMode={'cover'}
             />
           </View>
           <View style={styles.storyDetail}>
