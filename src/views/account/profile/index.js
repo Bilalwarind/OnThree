@@ -31,6 +31,7 @@ import moment from 'moment/moment';
 import VideoPlayer from 'react-native-video-player';
 import axios from 'axios';
 import CommentPlaceHolder from 'react-native-vector-icons/MaterialCommunityIcons';
+import {PROFILE_SUCCESS} from '../../../redux/actions/types';
 const Profile = () => {
   const nav = useNavigation();
   const dispatch = useDispatch();
@@ -126,6 +127,10 @@ const Profile = () => {
         if (res?.data?.success !== 0) {
           setloading(false);
           setUserData(res?.data?.data?.user);
+          dispatch({
+            type: PROFILE_SUCCESS,
+            payload: res?.data?.data?.user,
+          });
         } else {
           setloading(false);
           setUserData([]);

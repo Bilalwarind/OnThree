@@ -39,12 +39,12 @@ const UpdateProfile = () => {
   const [lname, setLname] = useState('');
   const [about, setAbout] = useState('');
   const {token, userId, userData} = useSelector(state => state.auth);
-  const {isLoading} = useSelector(state => state.home);
+  const {isLoading, userProfile} = useSelector(state => state.home);
   useEffect(() => {
-    setFname(userData?.first_name);
-    setLname(userData?.last_name);
-    setImg({uri: userData?.profile_image});
-    setAbout(userData?.about !== 'null' ? userData?.about : '');
+    setFname(userProfile?.first_name);
+    setLname(userProfile?.last_name);
+    setImg({uri: userProfile?.profile_image});
+    setAbout(userProfile?.about !== 'null' ? userProfile?.about : '');
   }, []);
 
   const onRegister = async () => {
