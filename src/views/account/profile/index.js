@@ -16,6 +16,7 @@ import {wp, hp, Size, color, Images, IOS, familyFont} from '../../../utils/';
 import CustomText from '../../../components/CustomText';
 import CustomButton from '../../../components/Button';
 import {useNavigation} from '@react-navigation/native';
+
 import {
   userProfileInfo,
   userAllStories,
@@ -33,9 +34,11 @@ import CommentPlaceHolder from 'react-native-vector-icons/MaterialCommunityIcons
 const Profile = () => {
   const nav = useNavigation();
   const dispatch = useDispatch();
+  const [allStories, setAllStories] = useState([]);
+  const [userData, setUserData] = useState('');
   const {userProfile, userStoriesData, bookMarkedStoriesData, isLoading} =
     useSelector(state => state.home);
-  const {token, userId, userData} = useSelector(state => state.auth);
+  const {token, userId} = useSelector(state => state.auth);
   const [activeBtn, setActiveBtn] = useState(1);
   const [bookMarks, setBookMarks] = useState([]);
 
@@ -52,8 +55,10 @@ const Profile = () => {
     fetachAllBookmarks();
   }, [activeBtn]);
   useEffect(() => {
-    dispatch(userProfileInfo(data));
-    dispatch(userAllStories(data));
+    // dispatch(userProfileInfo(data));
+    // dispatch(userAllStories(data));
+    fetchAllStories();
+    fetchUserInfo();
     // const unsubscribe = nav.addListener(
     //   'focus',
     //   () => {
@@ -100,6 +105,74 @@ const Profile = () => {
         setloading(false);
         console.log('3rd', err);
         setBookMarks([]);
+        return err;
+      });
+  };
+  const fetchUserInfo = async () => {
+    setloading(true);
+    const params = new FormData();
+    params.append('token', token);
+    params.append('user_id', userId);
+    console.log('params', params);
+    await axios
+      .post(`https://theonlinetest.info/onethree/api/getuserinfo`, params, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      })
+      .then(res => {
+        // alert(JSON.stringify(res.data.data.user[1].liked_story));
+        if (res?.data?.success !== 0) {
+          setloading(false);
+          setUserData(res?.data?.data?.user);
+        } else {
+          setloading(false);
+          setUserData([]);
+          console.log('sed', res?.data);
+        }
+      })
+      .catch(err => {
+        setloading(false);
+        console.log('3rd', err);
+        setUserData([]);
+        return err;
+      });
+  };
+  const fetchAllStories = async () => {
+    setloading(true);
+    const params = new FormData();
+    params.append('token', token);
+    params.append('user_id', userId);
+    params.append('story_user_id', userId);
+    console.log('params', params);
+    await axios
+      .post(
+        `https://theonlinetest.info/onethree/api/get-user-all-stories`,
+        params,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        },
+      )
+      .then(res => {
+        // alert(JSON.stringify(res.data.data.user[1].liked_story));
+        if (res?.data?.success !== 0) {
+          setloading(false);
+          console.log('stories', res?.data?.data?.stories);
+          setAllStories(res?.data?.data?.stories);
+        } else {
+          setloading(false);
+          setAllStories([]);
+          console.log('sed', res?.data);
+        }
+      })
+      .catch(err => {
+        setloading(false);
+        console.log('3rd', err);
+        setAllStories([]);
         return err;
       });
   };
@@ -421,7 +494,7 @@ const Profile = () => {
       {/* <ScrollView showsVerticalScrollIndicator={false}> */}
       {/* {renderStories()} */}
       <FlatList
-        data={activeBtn === 1 ? userStoriesData : bookMarks}
+        data={activeBtn === 1 ? allStories : bookMarks}
         style={{flex: 1}}
         renderItem={renderStories}
         keyExtractor={item => item?.id}
