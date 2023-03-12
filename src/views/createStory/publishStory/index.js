@@ -60,7 +60,7 @@ const PublishStory = ({route}) => {
     const data2 = new FormData();
     data2.append('token', token);
     data2.append('user_id', userId);
-    dispatch(getAllUserList(data2));
+    // dispatch(getAllUserList(data2));
 
     BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
     return () => {
@@ -70,7 +70,7 @@ const PublishStory = ({route}) => {
       );
     };
   }, [show, filteredDataSource]);
-  const onUpload = async () => {
+  const onUpload = async thumbnail => {
     setloading(true);
 
     const data = new FormData();
@@ -87,9 +87,13 @@ const PublishStory = ({route}) => {
           ? videoData.uri?.replace('file://', '/')
           : videoData.uri,
       type: 'video/mp4',
-      name: Math.floor(Math.random() * 100) + 1 + 'story.mp4',
+      name: Math.floor(Math.random() * 100) + 1 + 'thumnail.jpeg',
     });
-    data.append('thubmnail', thumbnail);
+    data.append('thumbnail', {
+      uri: thumbnail,
+      type: 'image/jpeg',
+      name: Math.floor(Math.random() * 100) + 1 + 'thumbnail.jpeg',
+    });
     data.append('external_link', url);
     data.append('story_tag[0]', tag);
     console.log('data', data);
@@ -105,8 +109,12 @@ const PublishStory = ({route}) => {
       url: url,
       timeStamp: 2000,
     })
-      .then(response => etThumbnail(response?.path))
-      .catch(err => console.log({err}));
+      .then(response => {
+        onUpload(response.path);
+      })
+      .catch(err => {
+        onUpload('');
+      });
   };
   const searchFilterFunction = text => {
     if (text !== null || '') {
@@ -345,12 +353,7 @@ const PublishStory = ({route}) => {
         flexdirection="row"
         alignitems="center"
         onpress={() => {
-          generateThumnail(
-            Platform.OS === 'ios'
-              ? videoData.uri?.replace('file://', '/')
-              : videoData.uri,
-          );
-          onUpload();
+          generateThumnail(videoData.uri);
         }}
         Icon={<Feather name="video" size={19} color={color.white} />}
       />
