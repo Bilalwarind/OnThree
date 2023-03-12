@@ -22,11 +22,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   profile: {
-    width: wp(15),
-    height: wp(15),
+    width: wp(12),
+    height: wp(12),
     borderRadius: wp(5),
     marginRight: wp(2),
-    borderRadius: wp(15),
+    borderRadius: wp(12),
     overflow: 'hidden',
   },
   profile3: {

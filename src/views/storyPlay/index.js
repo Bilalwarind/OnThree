@@ -12,6 +12,7 @@ import {
   Alert,
   FlatList,
   ActivityIndicator,
+  KeyboardAvoidingView,
 } from 'react-native';
 import {wp, hp, Size, color, Images, IOS, familyFont} from '../../utils/';
 import CustomText from '../../components/CustomText';
@@ -39,6 +40,8 @@ import Share from 'react-native-share';
 import {param} from 'express/lib/request';
 import BookMarkedIcon from 'react-native-vector-icons/Ionicons';
 import ChatIcon from 'react-native-vector-icons/Entypo';
+import CommentPlaceHolder from 'react-native-vector-icons/MaterialCommunityIcons';
+
 const StoryPlay = () => {
   const dispatch = useDispatch();
   const nav = useNavigation();
@@ -251,20 +254,30 @@ const StoryPlay = () => {
   }, []);
   const renderComments = ({item, index}) => {
     return (
-      <View style={{flex: 1, flexDirection: 'row', marginVertical: 32}}>
-        <Image
-          style={styles.profile}
-          source={{
-            uri: item?.user_details?.profile_image
-              ? item?.user_details?.profile_image
-              : 'https://icon-library.com/images/user-profile-icon/user-profile-icon-24.jpg',
-          }}
-        />
-        <View style={{alignContent: 'flex-start'}}>
+      <View style={{flex: 1, flexDirection: 'row', marginVertical: hp(1.6)}}>
+        {item?.user_details?.profile_image ? (
+          <Image
+            style={styles.profile}
+            source={{
+              uri: item?.user_details?.profile_image,
+            }}
+          />
+        ) : (
+          <CommentPlaceHolder
+            name="account-circle-outline"
+            color={'white'}
+            size={30}
+            style={{marginRight: wp(2)}}
+          />
+        )}
+        <View
+          style={{
+            alignContent: 'flex-start',
+          }}>
           <CustomText
             title={item?.comment}
             fontsize={Size(1.7)}
-            width={wp(78)}
+            width={wp(74)}
             textcolor={color.white}
             fontfamily={familyFont.reg}
             title2={`${item?.user_details?.first_name} ${item?.user_details.last_name} `}
@@ -813,148 +826,160 @@ const StoryPlay = () => {
             </View>
           </View>
         ) : (
-          <View style={styles.container}>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                marginBottom: hp(2),
-                paddingHorizontal: wp(7),
-              }}>
-              <View />
+          <KeyboardAvoidingView
+            keyboardVerticalOffset={100}
+            behavior="padding"
+            style={{flex: 1}}
+            enabled>
+            <View style={styles.container}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  marginBottom: hp(2),
+                  paddingHorizontal: wp(7),
+                }}>
+                <View />
 
-              <CustomText
-                title={
-                  comments?.story?.get_story_comment?.length
-                    ? comments?.story?.get_story_comment?.length + ' Comments'
-                    : 0 + ' Comments'
-                }
-                fontsize={Size(1.8)}
-                textcolor={color.white}
-                fontfamily={familyFont.bold}
-                flexdirection="row"
-                justifycontent="center"
-                Icon={
-                  <Image
-                    style={styles.chat2}
-                    source={Images.chat}
-                    resizeMode="contain"
-                  />
-                }
-              />
-              <TouchableOpacity style={styles.bookmark}>
-                <AntDesign
-                  name="close"
-                  size={25}
-                  color={color.white}
-                  onPress={() => {
-                    setIsComment(false);
-                  }}
-                />
-              </TouchableOpacity>
-            </View>
-
-            <View
-              style={{
-                borderTopWidth: hp(0.15),
-                borderColor: color.btnColor,
-                marginBottom: hp(1.8),
-              }}
-            />
-            <View style={styles.header5}>
-              {loading && (
-                <View
-                  style={{
-                    position: 'absolute',
-                    paddingTop: hp(25),
-                    backgroundColor: 'rgba(245, 245, 245, 0.3)',
-                    width: wp(100),
-                    height: hp(100),
-                  }}>
-                  <ActivityIndicator
-                    animating={true}
-                    color={color.primary}
-                    size="large"
-                  />
-                </View>
-              )}
-              <FlatList
-                data={comments?.story?.get_story_comment}
-                style={{flex: 1}}
-                renderItem={renderComments}
-                keyExtractor={item => item?.id}
-              />
-              {/* <FlatList data={likeStoryStatus?.get_story_comment} /> */}
-            </View>
-            <View
-              style={{
-                alignContent: 'flex-end',
-                flexDirection: 'column-reverse',
-                paddingHorizontal: wp(3),
-              }}>
-              {!joinChat && (
-                <CustomButton
-                  title="Join the Discussion"
-                  fontsize={Size(2.1)}
-                  textcolor={color.primary}
-                  fontfamily={familyFont.semiBold}
-                  backgroundcolor={color.white}
-                  borderradius={hp(1)}
-                  padding={hp(2)}
-                  flexdirection="row"
-                  alignitems="center"
-                  textalign="center"
-                  marginvertical={hp(3)}
-                  onpress={() => {
-                    setJoinChat(true);
-                  }}
-                  Icon={
-                    <ChatIcon name="chat" size={30} color={color.primary} />
+                <CustomText
+                  title={
+                    comments?.story?.get_story_comment?.length
+                      ? comments?.story?.get_story_comment?.length + ' Comments'
+                      : 0 + ' Comments'
                   }
-                />
-              )}
-              {joinChat && (
-                <CustomTextInput
-                  placeholder={'Add your comment here...'}
-                  borderradius={hp(1.5)}
-                  borderwidth={wp(0.6)}
-                  bordercolor={color.border}
-                  bgcolor={color.white}
-                  paddinghorizontal={hp(2)}
-                  flexdirection="row"
-                  alignitems={'center'}
-                  value={comment}
-                  // multiline={true}
-                  // numberOfLines={6}
-                  justifycontent="space-between"
-                  marginTop={Platform.OS === 'android' ? hp(2) : hp(5)}
-                  marginbottom={hp(5)}
-                  onchangetext={val => setComment(val)}
-                  paddingverti={Platform.OS === 'android' ? hp(0.2) : hp(2)}
-                  isButton={true}
-                  fontfamily={familyFont.semiBold}
                   fontsize={Size(1.8)}
-                  fontsize2={Size(1.4)}
-                  width2={wp(70)}
-                  oneyepress={
-                    () => {
-                      postComment(token, userId, likeStoryStatus?.id, comment);
-                    }
-                    // dispatch(
-
-                    // commentsStory({
-                    //   token: token,
-                    //   user_id: userId,
-                    //   story_id: likeStoryStatus[0]?.id,
-                    //   comment: comment,
-                    // }),
-                    // )
+                  textcolor={color.white}
+                  fontfamily={familyFont.bold}
+                  flexdirection="row"
+                  paddingHorizontal={wp(7)}
+                  justifycontent="center"
+                  Icon={
+                    <Image
+                      style={styles.chat2}
+                      source={Images.chat}
+                      resizeMode="contain"
+                    />
                   }
                 />
-              )}
+                <TouchableOpacity style={styles.bookmark}>
+                  <AntDesign
+                    name="close"
+                    size={25}
+                    color={color.white}
+                    onPress={() => {
+                      setIsComment(false);
+                    }}
+                  />
+                </TouchableOpacity>
+              </View>
+
+              <View
+                style={{
+                  borderTopWidth: hp(0.15),
+                  borderColor: color.btnColor,
+                  marginBottom: hp(1.8),
+                }}
+              />
+              <View style={styles.header5}>
+                {loading && (
+                  <View
+                    style={{
+                      position: 'absolute',
+                      paddingTop: hp(25),
+                      backgroundColor: 'rgba(245, 245, 245, 0.3)',
+                      width: wp(100),
+                      height: hp(100),
+                    }}>
+                    <ActivityIndicator
+                      animating={true}
+                      color={color.primary}
+                      size="large"
+                    />
+                  </View>
+                )}
+                <FlatList
+                  data={comments?.story?.get_story_comment}
+                  style={{flex: 1}}
+                  renderItem={renderComments}
+                  keyExtractor={item => item?.id}
+                />
+                {/* <FlatList data={likeStoryStatus?.get_story_comment} /> */}
+              </View>
+              <View
+                style={{
+                  alignContent: 'flex-end',
+                  flexDirection: 'column-reverse',
+                  paddingHorizontal: wp(3),
+                }}>
+                {!joinChat && (
+                  <CustomButton
+                    title="Join the Discussion"
+                    fontsize={Size(2.1)}
+                    textcolor={color.primary}
+                    fontfamily={familyFont.semiBold}
+                    backgroundcolor={color.white}
+                    borderradius={hp(1)}
+                    padding={hp(2)}
+                    flexdirection="row"
+                    alignitems="center"
+                    textalign="center"
+                    marginvertical={hp(3)}
+                    onpress={() => {
+                      setJoinChat(true);
+                    }}
+                    Icon={
+                      <ChatIcon name="chat" size={30} color={color.primary} />
+                    }
+                  />
+                )}
+                {joinChat && (
+                  <CustomTextInput
+                    placeholder={'Add your comment here...'}
+                    borderradius={hp(1.5)}
+                    borderwidth={wp(0.6)}
+                    bordercolor={color.border}
+                    bgcolor={color.white}
+                    paddinghorizontal={hp(2)}
+                    flexdirection="row"
+                    alignitems={'center'}
+                    value={comment}
+                    // multiline={true}
+                    // numberOfLines={6}
+                    justifycontent="space-between"
+                    marginTop={Platform.OS === 'android' ? hp(2) : hp(5)}
+                    marginbottom={hp(5)}
+                    onchangetext={val => setComment(val)}
+                    paddingverti={Platform.OS === 'android' ? hp(0.2) : hp(2)}
+                    isButton={true}
+                    fontfamily={familyFont.semiBold}
+                    fontsize={Size(1.8)}
+                    fontsize2={Size(1.4)}
+                    width2={wp(70)}
+                    oneyepress={
+                      () => {
+                        postComment(
+                          token,
+                          userId,
+                          likeStoryStatus?.id,
+                          comment,
+                        );
+                      }
+                      // dispatch(
+
+                      // commentsStory({
+                      //   token: token,
+                      //   user_id: userId,
+                      //   story_id: likeStoryStatus[0]?.id,
+                      //   comment: comment,
+                      // }),
+                      // )
+                    }
+                  />
+                )}
+              </View>
             </View>
-          </View>
+          </KeyboardAvoidingView>
         )}
       </RBSheet>
       {isLoading && (
