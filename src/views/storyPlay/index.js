@@ -86,9 +86,7 @@ const StoryPlay = () => {
   const onBuffer = ({isBuffering}) => {
     setOpacity(isBuffering ? 1 : 0);
   };
-  useEffect(() => {
-    console.log('url', allStoriesData?.data);
-  }, []);
+
   useEffect(() => {
     setIsLiked(likeStoryStatus?.liked_story);
     fetcAllComments(likeStoryStatus.id);
@@ -245,7 +243,7 @@ const StoryPlay = () => {
   useEffect(() => {
     dispatch(getAllStories(data));
     setPage(allStoriesData?.current_page);
-  }, []);
+  }, [isFocused]);
   const renderComments = ({item, index}) => {
     return (
       <View style={{flex: 1, flexDirection: 'row', marginVertical: hp(1.6)}}>
@@ -538,6 +536,10 @@ const StoryPlay = () => {
         data={allStoriesData?.data}
         keyExtractor={item => item?.id}
         renderItem={renderItems}
+        // refreshing={true}
+        // onRefresh={() => {
+        //   dispatch(getAllStories(data));
+        // }}
         onEndReached={() => {
           loadMore();
         }}

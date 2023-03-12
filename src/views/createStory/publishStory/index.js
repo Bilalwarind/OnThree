@@ -199,13 +199,13 @@ const PublishStory = ({route}) => {
         <View style={styles.story}>
           <VideoPlayer
             video={{
-              uri: videoData.url,
+              uri: videoData.uri,
             }}
             videoWidth={wp(100)}
             videoHeight={hp(100)}
             autoplay={true}
             thumbnail={{
-              uri: videoData.thumbnail,
+              uri: videoData.uri,
             }}
             style={{
               width: wp(50),
