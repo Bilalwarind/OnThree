@@ -79,8 +79,9 @@ export const userProfileInfo = data => {
       .post('getuserinfo', data)
       .then(async res => {
         if (res.data.success !== 0) {
+          console.log('profile ', res?.data?.data?.user);
           dispatch({
-            type: PROFILE_SUCCESS,
+            type: LOGIN_SUCCESS,
             payload: res?.data?.data?.user,
           });
         }
@@ -163,23 +164,26 @@ export const userProfileUpdate = (data, nav) => {
       });
   };
 };
-export const getAllStories = data => {
+export const getAllStories = (data, setIsLoading) => {
   return dispatch => {
-    dispatch({
-      type: DATA_LOADING,
-    });
+    // dispatch({
+    //   type: DATA_LOADING,
+    // });
     baseUrl
       .post('get-all-stories', data)
       .then(async res => {
         console.log('first', res.data.data.user);
         // alert(JSON.stringify(res.data.data.user[1].liked_story));
         if (res.data.success !== 0) {
+          setIsLoading(false);
           dispatch({
             type: ALL_STORIES_SUCCESS,
             payload: res?.data?.data?.user,
           });
           return res?.data?.data?.user;
         } else {
+          setIsLoading(false);
+
           return false;
         }
       })

@@ -48,9 +48,8 @@ const StoryPlay = () => {
   const refRBSheetComment = useRef();
   const [isComment, setIsComment] = useState(false);
   const isFocused = useIsFocused();
-  const {allStoriesData, userProfile, isLoading} = useSelector(
-    state => state.home,
-  );
+  const [isLoading, setIsLoading] = useState(false);
+  const {allStoriesData, userProfile} = useSelector(state => state.home);
   const {token, userId, userData} = useSelector(state => state.auth);
   const [secureTextEntry, setSecureTextEntry] = useState(true);
   const [likeStoryStatus, setLikeStoryStatus] = useState({});
@@ -96,11 +95,13 @@ const StoryPlay = () => {
     console.log('likeStoryStatus.links', likeStoryStatus);
   }, [likeStoryStatus]);
   const loadMore = () => {
+    setIsLoading(true);
     if (allStoriesData?.data?.length > 0) {
       setPage(page + 1);
-      dispatch(getAllStories(data));
+      dispatch(getAllStories(data, setIsLoading));
     }
   };
+
   const fetcAllComments = async storyId => {
     setloading(true);
     const params = new FormData();
@@ -241,7 +242,8 @@ const StoryPlay = () => {
       });
   };
   useEffect(() => {
-    dispatch(getAllStories(data));
+    setIsLoading(true);
+    dispatch(getAllStories(data, setIsLoading));
     setPage(allStoriesData?.current_page);
   }, [isFocused]);
   const renderComments = ({item, index}) => {
