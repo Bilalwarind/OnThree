@@ -65,6 +65,11 @@ const styles = StyleSheet.create({
     padding: hp(1.5),
     borderRadius: hp(1),
   },
+  bookmark2: {
+    backgroundColor: 'rgba(0,0,0,.2)',
+    padding: hp(1.5),
+    borderRadius: hp(1),
+  },
 
   header5: {
     paddingHorizontal: wp(5),
