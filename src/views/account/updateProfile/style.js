@@ -16,11 +16,15 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'flex-start',
     justifyContent: 'center',
+    marginTop: hp(1),
+    paddingHorizontal: wp(5),
   },
   header1: {
-    flex: 1,
+    flex: 0.2,
     alignItems: 'flex-end',
     justifyContent: 'center',
+    paddingHorizontal: wp(5),
+    marginTop: hp(1),
   },
   header2: {
     flex: 1,

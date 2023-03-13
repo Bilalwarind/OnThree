@@ -28,7 +28,8 @@ import styles from './style';
 import baseUrl from '../../../redux/baseUrl';
 import KeyboardAvoidingView from 'react-native/Libraries/Components/Keyboard/KeyboardAvoidingView';
 import {useHeaderHeight} from '@react-navigation/elements';
-
+import axios from 'axios';
+import {PROFILE_SUCCESS} from '../../../redux/actions/types';
 const UpdateProfile = () => {
   const height = useHeaderHeight();
 
@@ -38,13 +39,14 @@ const UpdateProfile = () => {
   const [fname, setFname] = useState('');
   const [lname, setLname] = useState('');
   const [about, setAbout] = useState('');
+  const [loading, setloading] = useState(false);
   const {token, userId, userData} = useSelector(state => state.auth);
   const {isLoading, userProfile} = useSelector(state => state.home);
   useEffect(() => {
-    setFname(userProfile?.first_name);
-    setLname(userProfile?.last_name);
-    setImg({uri: userProfile?.profile_image});
-    setAbout(userProfile?.about !== 'null' ? userProfile?.about : '');
+    setFname(userData?.first_name);
+    setLname(userData?.last_name);
+    setImg({uri: userData?.profile_image});
+    setAbout(userData?.about !== 'null' ? userData?.about : '');
   }, []);
 
   const onRegister = async () => {
@@ -74,7 +76,41 @@ const UpdateProfile = () => {
 
     dispatch(userProfileUpdate(formdata, nav));
   };
-
+  const removePic = async (token, userid) => {
+    setloading(true);
+    const params = new FormData();
+    params.append('token', token);
+    params.append('user_id', userid);
+    await axios
+      .post(
+        `https://theonlinetest.info/onethree/api/remove-profile-pic`,
+        params,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        },
+      )
+      .then(res => {
+        // alert(JSON.stringify(res.data.data.user[1].liked_story));
+        if (res?.data?.success !== 0) {
+          setloading(false);
+          dispatch({
+            type: PROFILE_SUCCESS,
+            payload: res?.data?.data?.user,
+          });
+        } else {
+          setloading(false);
+          console.log('sed', res?.data);
+        }
+      })
+      .catch(err => {
+        setloading(false);
+        console.log('3rd', err);
+        return err;
+      });
+  };
   const chooseFile = type => {
     let options = {
       mediaType: type,
@@ -128,6 +164,7 @@ const UpdateProfile = () => {
           text: 'Yes',
           onPress: () => {
             setImg(null);
+            removePic(token, userId);
           },
         },
       ],
@@ -179,7 +216,7 @@ const UpdateProfile = () => {
                   'https://icon-library.com/images/user-profile-icon/user-profile-icon-24.jpg',
               }}
             />
-            {img ? (
+            {img?.uri !== undefined ? (
               <TouchableOpacity onPress={deletePhoto}>
                 <AntDesign name="delete" size={20} color={color.primary} />
               </TouchableOpacity>

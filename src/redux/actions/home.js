@@ -7,6 +7,7 @@ import {
   USER_STORIES_SUCCESS,
   DATA_FAILED,
   DATA_LOADING,
+  LOGIN_SUCCESS,
 } from '../actions/types';
 import axios from 'axios';
 import {json} from 'stream/consumers';
@@ -149,6 +150,10 @@ export const userProfileUpdate = (data, nav) => {
       .post('profile-update', data)
       .then(async res => {
         Alert.alert(res?.data?.message);
+        dispatch({
+          type: LOGIN_SUCCESS,
+          payload: res?.data?.data?.user,
+        });
       })
       .catch(err => {
         console.log('res.data', err);

@@ -22,14 +22,11 @@ import {PersistGate} from 'redux-persist/lib/integration/react';
 import {persister, store} from './src/redux/store';
 const App = () => {
   return (
-    <>
-      {/* <StatusBar animated={true} backgroundColor={Colors.primary} /> */}
-      <Provider store={store}>
-        <PersistGate persistor={persister}>
-          <Navigation />
-        </PersistGate>
-      </Provider>
-    </>
+    <Provider store={store}>
+      <PersistGate persistor={persister}>
+        <Navigation />
+      </PersistGate>
+    </Provider>
   );
 };
 

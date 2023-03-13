@@ -31,7 +31,8 @@ import moment from 'moment/moment';
 import VideoPlayer from 'react-native-video-player';
 import axios from 'axios';
 import CommentPlaceHolder from 'react-native-vector-icons/MaterialCommunityIcons';
-import {PROFILE_SUCCESS} from '../../../redux/actions/types';
+import {LOGIN_SUCCESS, PROFILE_SUCCESS} from '../../../redux/actions/types';
+import {SafeAreaView} from 'react-native-safe-area-context';
 const Profile = () => {
   const nav = useNavigation();
   const dispatch = useDispatch();
@@ -128,7 +129,7 @@ const Profile = () => {
           setloading(false);
           setUserData(res?.data?.data?.user);
           dispatch({
-            type: PROFILE_SUCCESS,
+            type: LOGIN_SUCCESS,
             payload: res?.data?.data?.user,
           });
         } else {
@@ -266,7 +267,7 @@ const Profile = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <StatusBar
         translucent
         barStyle="dark-content"
@@ -511,7 +512,7 @@ const Profile = () => {
               ))
             : null} */}
       {/* </ScrollView> */}
-    </View>
+    </SafeAreaView>
   );
 };
 

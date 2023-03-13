@@ -12,10 +12,14 @@ import {useSelector} from 'react-redux';
 import {wp, hp, Size, color, Images, IOS} from '../../utils/';
 const Splash = ({params}) => {
   const navigation = useNavigation();
-  const {token} = useSelector(state => state.auth);
+  const {token, userData} = useSelector(state => state.auth);
 
   setTimeout(async () => {
-    navigation.navigate(token ?'StoryPlay':'Login');
+    if (userData) {
+      navigation.replace('StoryPlay');
+    } else {
+      navigation.replace('Login');
+    }
   }, 2000);
   return (
     <View style={styles.container}>

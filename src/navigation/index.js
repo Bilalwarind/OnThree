@@ -22,6 +22,7 @@ const Navigation = ({params}) => {
   return (
     <NavigationContainer>
       <Stack.Navigator
+        initialRouteName={'Splash'}
         screenOptions={{
           headerShown: false,
         }}>
