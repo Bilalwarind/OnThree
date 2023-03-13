@@ -30,6 +30,7 @@ import {BackHandler} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import KeyboardAvoidingView from 'react-native/Libraries/Components/Keyboard/KeyboardAvoidingView';
 import {createThumbnail} from 'react-native-create-thumbnail';
+import Tags from 'react-native-tags';
 
 const PublishStory = ({route}) => {
   const {videoData} = route.params;
@@ -120,7 +121,7 @@ const PublishStory = ({route}) => {
     if (text !== null || '') {
       setShow(true);
       setPartners(text);
-      const newData = allUserList.filter(function (item) {
+      const newData = allUserList?.filter(function (item) {
         const itemData = item?.first_name
           ? item?.first_name.toUpperCase()
           : ''.toUpperCase();
@@ -143,9 +144,9 @@ const PublishStory = ({route}) => {
           borderWidth: wp(0.45),
           borderColor: color.border,
           borderBottomLeftRadius:
-            index == filteredDataSource.length - 1 ? hp(1.5) : 0,
+            index == filteredDataSource?.length - 1 ? hp(1.5) : 0,
           borderBottomRightRadius:
-            index == filteredDataSource.length - 1 ? hp(1.5) : 0,
+            index == filteredDataSource?.length - 1 ? hp(1.5) : 0,
         }}>
         <Text
           style={{
@@ -270,7 +271,36 @@ const PublishStory = ({route}) => {
             marginleft={wp(2)}
             marginbottom={wp(1)}
           />
-          <CustomTextInput
+          <Tags
+            // initialText="monkey"
+            textInputProps={{
+              placeholder: 'Any type of animal',
+            }}
+            // initialTags={['dog', 'cat', 'chicken']}
+            onChangeTags={tags => setTag(tags)}
+            onTagPress={(index, tagLabel, event, deleted) =>
+              console.log(
+                index,
+                tagLabel,
+                event,
+                deleted ? 'deleted' : 'not deleted',
+              )
+            }
+            containerStyle={{
+              borderWidth: wp(0.6),
+              borderRadius: hp(1.5),
+              borderColor: color.border,
+              backgroundColor: color.white,
+              paddingHorizontal: hp(1),
+            }}
+            inputStyle={{backgroundColor: color.white}}
+            renderTag={({tag, index, onPress, deleteTagOnPress, readonly}) => (
+              <TouchableOpacity key={`${tag}-${index}`} onPress={onPress}>
+                <Text>{`${tag} `}</Text>
+              </TouchableOpacity>
+            )}
+          />
+          {/* <CustomTextInput
             placeholder={'Add Tags with #'}
             placeholderStyle={{fontWeight: 'bold'}}
             borderradius={hp(1.5)}
@@ -280,7 +310,7 @@ const PublishStory = ({route}) => {
             paddinghorizontal={hp(2)}
             onchangetext={val => setTag(val)}
             paddingverti={Platform.OS === 'android' ? hp(0.2) : hp(3)}
-          />
+          /> */}
         </View>
         <View style={{height: hp(12), justifyContent: 'center'}}>
           <CustomText
