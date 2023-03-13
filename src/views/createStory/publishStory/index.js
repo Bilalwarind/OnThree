@@ -41,7 +41,7 @@ const PublishStory = ({route}) => {
   const {token, userId} = useSelector(state => state.auth);
   const [title, setTiltle] = useState('');
   const [about, setAbout] = useState('');
-  const [tag, setTag] = useState('');
+  const [tag, setTag] = useState([]);
   const [Partners, setPartners] = useState('');
   const [url, setUrl] = useState('');
   const [show, setShow] = useState(false);
@@ -61,7 +61,7 @@ const PublishStory = ({route}) => {
     const data2 = new FormData();
     data2.append('token', token);
     data2.append('user_id', userId);
-    // dispatch(getAllUserList(data2));
+    dispatch(getAllUserList(data2));
 
     BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
     return () => {
@@ -96,7 +96,7 @@ const PublishStory = ({route}) => {
       name: Math.floor(Math.random() * 100) + 1 + 'thumbnail.jpeg',
     });
     data.append('external_link', url);
-    data.append('story_tag[0]', tag);
+    data.append('story_tag[]', tag);
     console.log('data', data);
     const res = await dispatch(addStory(data, token, nav));
     if (res) {
@@ -277,7 +277,9 @@ const PublishStory = ({route}) => {
               placeholder: 'Any type of animal',
             }}
             // initialTags={['dog', 'cat', 'chicken']}
-            onChangeTags={tags => setTag(tags)}
+            onChangeTags={tags => {
+              setTag(tags);
+            }}
             onTagPress={(index, tagLabel, event, deleted) =>
               console.log(
                 index,
