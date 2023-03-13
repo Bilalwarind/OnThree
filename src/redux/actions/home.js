@@ -176,10 +176,12 @@ export const getAllStories = (data, setIsLoading) => {
         // alert(JSON.stringify(res.data.data.user[1].liked_story));
         if (res.data.success !== 0) {
           setIsLoading(false);
-          dispatch({
-            type: ALL_STORIES_SUCCESS,
-            payload: res?.data?.data?.user,
-          });
+          if (res?.data?.data?.user?.data?.length > 0) {
+            dispatch({
+              type: ALL_STORIES_SUCCESS,
+              payload: res?.data?.data?.user,
+            });
+          }
           return res?.data?.data?.user;
         } else {
           setIsLoading(false);
