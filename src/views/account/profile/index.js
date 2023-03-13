@@ -11,6 +11,7 @@ import {
   StatusBar,
   StyleSheet,
   FlatList,
+  ActivityIndicator,
 } from 'react-native';
 import {wp, hp, Size, color, Images, IOS, familyFont} from '../../../utils/';
 import CustomText from '../../../components/CustomText';
@@ -498,6 +499,22 @@ const Profile = () => {
           Icon={<Feather name="search" size={17} color={color.white} />}
         />
       )}
+      {isLoading && (
+        <View
+          style={{
+            position: 'absolute',
+            paddingTop: hp(50),
+            backgroundColor: 'rgba(245, 245, 245, 0.3)',
+            width: wp(100),
+            height: hp(100),
+          }}>
+          <ActivityIndicator
+            animating={true}
+            color={color.primary}
+            size="large"
+          />
+        </View>
+      )}
       {/* <ScrollView showsVerticalScrollIndicator={false}> */}
       {/* {renderStories()} */}
       <FlatList
@@ -506,12 +523,6 @@ const Profile = () => {
         renderItem={renderStories}
         keyExtractor={item => item?.id}
       />
-      {/* {userProfile && userStoriesData
-            ? userStoriesData?.map(item => (
-                
-              ))
-            : null} */}
-      {/* </ScrollView> */}
     </SafeAreaView>
   );
 };

@@ -584,7 +584,7 @@ const StoryPlay = () => {
               left: wp(2),
               right: wp(2),
             }}>
-            <View>
+            <View style={{marginTop: Platform.OS === 'ios' ? hp(8) : 0}}>
               <TouchableOpacity
                 style={{
                   alignSelf: 'center',
@@ -596,9 +596,9 @@ const StoryPlay = () => {
                     show: 1,
                     top: 4,
                   });
-                  setLikeStoryStatus(item);
+                  setLikeStoryStatus(likeStoryStatus);
                   refRBSheet.current.open();
-                  console.log('item.liked_story', item.liked_story);
+                  // console.log('item.liked_story', item.liked_story);
                   // handleOpenPress();
                 }}>
                 <AntDesign name="up" size={25} color={color.white} />
