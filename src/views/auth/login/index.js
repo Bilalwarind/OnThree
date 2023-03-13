@@ -303,7 +303,7 @@ const Login = () => {
           </TouchableOpacity>
         </View>
       </View>
-      {isLoading && (
+      {/* {isLoading && (
         <View
           style={{
             position: 'absolute',
@@ -318,7 +318,7 @@ const Login = () => {
             size="large"
           />
         </View>
-      )}
+      )} */}
     </View>
   );
 };

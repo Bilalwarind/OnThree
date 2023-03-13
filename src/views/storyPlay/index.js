@@ -63,6 +63,8 @@ const StoryPlay = () => {
   const [isBookMarked, setIsBookMarked] = useState(false);
   const [commentlength, setCommentLength] = useState();
   const [page, setPage] = useState(1);
+  const [showStory, setShowStory] = useState(false);
+  const [storyUrl, setStoryUrl] = useState('');
   const [position, setPosition] = useState({
     show: 0,
     top: 70,
@@ -534,20 +536,192 @@ const StoryPlay = () => {
         barStyle="dark-content"
         backgroundColor="transparent"
       />
-      <FlatList
-        showsVerticalScrollIndicator={false}
-        data={allStoriesData?.data}
-        keyExtractor={item => item?.id}
-        renderItem={renderItems}
-        // refreshing={true}
-        // onRefresh={() => {
-        //   dispatch(getAllStories(data));
-        // }}
-        onEndReached={() => {
-          loadMore();
-        }}
-        onEndReachedThreshold={0.5}
-      />
+      {showStory ? (
+        <View>
+          <VideoPlayer
+            // onVideoProgress={() => {
+            //   console.log('loadin', 'loadin');
+            // }}
+            // onVideoBuffer={() => {
+            //   console.log('isBuuber', 'onBuffer');
+            // }}
+            // isBuffering={() => {
+            //   console.log('isBuuber', 'isBuffer');
+            // }}
+            // onBuffer={() => {
+            //   console.log('buffer', 'buffer');
+            // }}
+            seekBar="white"
+            customStyles={{
+              seekBarBackground: color.white,
+              seekBarKnobSeeking: color.white,
+              seekBarProgress: color.white,
+              seekBar: color.white,
+            }}
+            video={{
+              uri: storyUrl.url,
+            }}
+            videoWidth={wp(100)}
+            videoHeight={hp(100)}
+            // onBuffer={onBuffer}
+            // onLoadStart={() => {
+            //   console.log('onLoad', 'onLoad');
+            // }}
+            // onLoad={console.log('onLoad', 'onstart')}
+            // onVideoLoadStart={() => {
+            //   console.log('ONVidoeload', 'ONVidoeload');
+            // }}
+            // autoplay={true}
+            thumbnail={{
+              uri: storyUrl.thumbnail,
+            }}
+            resizeMode={'cover'}
+          />
+          <View
+            style={{
+              position: 'absolute',
+              top: hp(2),
+              left: wp(2),
+              right: wp(2),
+            }}>
+            <View>
+              <TouchableOpacity
+                style={{
+                  alignSelf: 'center',
+                  marginBottom: hp(4),
+                  marginTop: hp(position.top),
+                }}
+                onPress={() => {
+                  setPosition({
+                    show: 1,
+                    top: 4,
+                  });
+                  setLikeStoryStatus(item);
+                  refRBSheet.current.open();
+                  console.log('item.liked_story', item.liked_story);
+                  // handleOpenPress();
+                }}>
+                <AntDesign name="up" size={25} color={color.white} />
+              </TouchableOpacity>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                }}>
+                <TouchableOpacity
+                  onPress={() => {
+                    Share.open({
+                      title: likeStoryStatus?.title,
+                      failOnCancel: false,
+                      urls: [likeStoryStatus?.url],
+                    })
+                      .then(res => {
+                        console.log(res);
+                      })
+                      .catch(err => {
+                        err && console.log(err);
+                      });
+                  }}
+                  style={styles.bookmark2}>
+                  <Image
+                    style={styles.upload}
+                    source={Images.upload}
+                    resizeMode="contain"
+                  />
+                </TouchableOpacity>
+                <CustomButton
+                  title={totlaLikes}
+                  fontsize={Size(1.7)}
+                  backgroundcolor="rgba(0,0,0,.2)"
+                  borderradius={hp(1)}
+                  textcolor={color.white}
+                  padding={hp(1.5)}
+                  paddinghori={hp(2)}
+                  flexdirection="row"
+                  justifycontent="center"
+                  alignitems="center"
+                  fontfamily={familyFont.bold}
+                  onpress={() => {
+                    likeStoris(isLiked);
+                  }}
+                  Icon={
+                    isLiked === 0 ? (
+                      <AntDesign
+                        name="hearto"
+                        size={22}
+                        color={color.white}
+                        style={{paddingLeft: hp(2)}}
+                      />
+                    ) : (
+                      <AntDesign
+                        name="heart"
+                        size={22}
+                        color={color.white}
+                        style={{paddingLeft: hp(2)}}
+                      />
+                    )
+                  }
+                />
+                <CustomButton
+                  title={commentlength ? commentlength : 0}
+                  fontsize={Size(1.7)}
+                  backgroundcolor="rgba(0,0,0,.2)"
+                  borderradius={hp(1)}
+                  textcolor={color.white}
+                  padding={hp(1.5)}
+                  paddinghori={hp(2)}
+                  flexdirection="row"
+                  justifycontent="center"
+                  alignitems="center"
+                  fontfamily={familyFont.bold}
+                  onpress={() => {
+                    setIsComment(true);
+                    refRBSheet?.current?.open();
+                  }}
+                  Icon={
+                    <Image
+                      style={styles.chat}
+                      source={Images.chat}
+                      resizeMode="contain"
+                    />
+                  }
+                />
+
+                <TouchableOpacity
+                  onPress={() => {
+                    setStoryUrl({
+                      url: likeStoryStatus?.url,
+                      thumbnail: likeStoryStatus?.thumbnail,
+                    });
+                    setShowStory(false);
+                  }}>
+                  <AntDesign
+                    name="close"
+                    size={25}
+                    color={color.white}
+                    style={styles.bookmark2}
+                  />
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </View>
+      ) : (
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          data={allStoriesData?.data}
+          keyExtractor={item => item?.id}
+          renderItem={renderItems}
+          // refreshing={true}
+          // onRefresh={() => {
+          //   dispatch(getAllStories(data));
+          // }}
+          onEndReached={() => {
+            loadMore();
+          }}
+          onEndReachedThreshold={0.5}
+        />
+      )}
       <RBSheet
         height={hp(76)}
         key={likeStoryStatus.story_id}
@@ -816,7 +990,15 @@ const StoryPlay = () => {
                 marginvertical={hp(3)}
                 onpress={() => {
                   refRBSheet?.current?.close();
-                  nav.navigate('PlayFullStory', {url: likeStoryStatus?.url});
+                  setStoryUrl({
+                    url: likeStoryStatus?.url,
+                    thumbnail: likeStoryStatus?.thumbnail,
+                  });
+                  setShowStory(true);
+                  setPosition({
+                    show: 0,
+                    top: 70,
+                  });
                 }}
                 Icon={
                   <Feather name="play-circle" size={30} color={color.primary} />
@@ -981,7 +1163,7 @@ const StoryPlay = () => {
           </KeyboardAvoidingView>
         )}
       </RBSheet>
-      {isLoading && (
+      {/* {isLoading && (
         <View
           style={{
             position: 'absolute',
@@ -996,7 +1178,7 @@ const StoryPlay = () => {
             size="large"
           />
         </View>
-      )}
+      )} */}
     </View>
   );
 };
