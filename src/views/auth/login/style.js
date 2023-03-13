@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
   socialIcon: {
     width: wp(17),
     height: wp(13),
-    margin: wp(3),
+    margin: wp(1),
     borderRadius: wp(2),
     alignItems: 'center',
     justifyContent: 'center',

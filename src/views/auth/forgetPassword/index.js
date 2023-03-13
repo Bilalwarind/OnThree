@@ -59,8 +59,10 @@ const ForgetPassword = ({navigation}) => {
         barStyle="dark-content"
         backgroundColor="transparent"
       />
-      <TouchableOpacity onPress={()=>nav.navigate('Login')} style={styles.close}>
-      <AntDesign name="close" size={25} color={color.primary} />
+      <TouchableOpacity
+        onPress={() => nav.navigate('Login')}
+        style={styles.close}>
+        <AntDesign name="close" size={25} color={color.primary} />
       </TouchableOpacity>
       <Image style={styles.logo} source={Images.logo} resizeMode="contain" />
       <CustomText
@@ -73,41 +75,41 @@ const ForgetPassword = ({navigation}) => {
       />
       {!show ? (
         <View>
+          <CustomText
+            title={'Email'}
+            textcolor={isError ? color.red : color.primary}
+            fontsize={Size(1.4)}
+            fontfamily={familyFont.reg}
+            aligntext={'left'}
+            marginleft={wp(2)}
+            marginbottom={wp(1)}
+          />
+          <CustomTextInput
+            placeholder={'Enter your email'}
+            fontfamily={familyFont.semiBold}
+            borderradius={hp(1.5)}
+            bgcolor={color.white}
+            paddinghorizontal={hp(1)}
+            bordercolor="red"
+            borderwidth={isError ? 1 : 0}
+            onchangetext={text => {
+              setEmail(text);
+              setIsError(false);
+            }}
+            paddingverti={Platform.OS === 'android' ? hp(0.3) : hp(2.3)}
+          />
+          {isError && (
             <CustomText
-              title={'Email'}
-              textcolor={isError ? color.red : color.primary}
-              fontsize={Size(1.4)}
+              title={
+                'There is a problem with your email or password. Try again, or reset your password.'
+              }
+              textcolor={color.red}
+              fontsize={Size(1.3)}
               fontfamily={familyFont.reg}
-              aligntext={'left'}
               marginleft={wp(2)}
-              marginbottom={wp(1)}
+              marginTop={wp(1)}
             />
-            <CustomTextInput
-              placeholder={'Enter your email'}
-              fontfamily={familyFont.semiBold}
-              borderradius={hp(1.5)}
-              bgcolor={color.white}
-              paddinghorizontal={hp(1)}
-              bordercolor="red"
-              borderwidth={isError ? 1 : 0}
-              onchangetext={text => {
-                setEmail(text);
-                setIsError(false);
-              }}
-              paddingverti={Platform.OS === 'android' ? hp(0.2) : hp(3)}
-            />
-            {isError && (
-              <CustomText
-                title={
-                  'There is a problem with your email or password. Try again, or reset your password.'
-                }
-                textcolor={color.red}
-                fontsize={Size(1.3)}
-                fontfamily={familyFont.reg}
-                marginleft={wp(2)}
-                marginTop={wp(1)}
-              />
-            )}
+          )}
 
           <CustomButton
             title="Request Reset"

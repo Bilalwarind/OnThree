@@ -164,73 +164,44 @@ const Register = () => {
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={styles.container}>
-      <SafeAreaView>
-        <StatusBar
-          translucent
-          barStyle="dark-content"
-          backgroundColor="transparent"
-        />
-        <TouchableOpacity
-          onPress={() => nav.navigate('Login')}
-          style={styles.close}>
-          <AntDesign name="close" size={25} color={color.primary} />
-        </TouchableOpacity>
-        <Image style={styles.logo} source={Images.logo} resizeMode="contain" />
-        <CustomText
-          title={'Create Account'}
-          textcolor={color.primary}
-          fontsize={Size(2.2)}
-          fontfamily={familyFont.reg}
-          aligntext={'center'}
-          marginleft={wp(2)}
-          marginvertical={hp(5)}
-        />
-
-        <CustomText
-          title={'Email'}
-          textcolor={isError ? color.red : color.primary}
-          fontsize={Size(1.4)}
-          fontfamily={familyFont.reg}
-          aligntext={'left'}
-          marginleft={wp(2)}
-          marginbottom={wp(1)}
-        />
-        <CustomTextInput
-          placeholder={'Enter your email'}
-          fontfamily={familyFont.semiBold}
-          borderradius={hp(1.5)}
-          bgcolor={color.white}
-          paddinghorizontal={hp(1)}
-          bordercolor="red"
-          borderwidth={isError ? 1 : 0}
-          onchangetext={val => {
-            setEmail(val);
-            setIsError(false);
-          }}
-          paddingverti={Platform.OS === 'android' ? hp(0.2) : hp(3)}
-        />
-        {isError && (
-          <CustomText
-            title={'There is a problem with your email or password. Try again.'}
-            textcolor={color.red}
-            fontsize={Size(1.3)}
-            fontfamily={familyFont.reg}
-            marginleft={wp(2)}
-            marginTop={wp(1)}
+      <ScrollView>
+        <SafeAreaView>
+          <StatusBar
+            translucent
+            barStyle="dark-content"
+            backgroundColor="transparent"
           />
-        )}
+          <TouchableOpacity
+            onPress={() => nav.navigate('Login')}
+            style={styles.close}>
+            <AntDesign name="close" size={25} color={color.primary} />
+          </TouchableOpacity>
+          <Image
+            style={styles.logo}
+            source={Images.logo}
+            resizeMode="contain"
+          />
           <CustomText
-            title={'User Name'}
+            title={'Create Account'}
+            textcolor={color.primary}
+            fontsize={Size(2.2)}
+            fontfamily={familyFont.reg}
+            aligntext={'center'}
+            marginleft={wp(2)}
+            marginbottom={hp(3)}
+          />
+
+          <CustomText
+            title={'Email'}
             textcolor={isError ? color.red : color.primary}
             fontsize={Size(1.4)}
             fontfamily={familyFont.reg}
             aligntext={'left'}
             marginleft={wp(2)}
             marginbottom={wp(1)}
-          marginTop={hp(3)}
           />
           <CustomTextInput
-            placeholder={'Enter your user name'}
+            placeholder={'Enter your email'}
             fontfamily={familyFont.semiBold}
             borderradius={hp(1.5)}
             bgcolor={color.white}
@@ -238,10 +209,10 @@ const Register = () => {
             bordercolor="red"
             borderwidth={isError ? 1 : 0}
             onchangetext={val => {
-              setUserName(val);
+              setEmail(val);
               setIsError(false);
             }}
-            paddingverti={Platform.OS === 'android' ? hp(0.2) : hp(3)}
+            paddingverti={Platform.OS === 'android' ? hp(0.3) : hp(2.3)}
           />
           {isError && (
             <CustomText
@@ -255,122 +226,188 @@ const Register = () => {
               marginTop={wp(1)}
             />
           )}
-        <CustomText
-          title={'Password'}
-          textcolor={isError2 ? color.red : color.primary}
-          fontsize={Size(1.4)}
-          fontfamily={familyFont.reg}
-          aligntext={'left'}
-          marginleft={wp(2)}
-          marginbottom={wp(1)}
-          marginTop={hp(3)}
-        />
-        <CustomTextInput
-          placeholder={'Enter your password'}
-          fontfamily={familyFont.semiBold}
-          borderradius={hp(1.5)}
-          bgcolor={color.white}
-          isSecure={true}
-          paddinghorizontal={hp(1)}
-          bordercolor="red"
-          borderwidth={isError2 ? 1 : 0}
-          onchangetext={val => {
-            setPassword(val);
-            setIsError2(false);
-          }}
-          paddingverti={Platform.OS === 'android' ? hp(0.2) : hp(3)}
-        />
-        {isError2 && (
           <CustomText
-            title={'There is a problem with your email or password. Try again.'}
-            textcolor={color.red}
-            fontsize={Size(1.3)}
+            title={'User Name'}
+            textcolor={isError ? color.red : color.primary}
+            fontsize={Size(1.4)}
             fontfamily={familyFont.reg}
+            aligntext={'left'}
             marginleft={wp(2)}
-            marginTop={wp(1)}
+            marginbottom={wp(1)}
+            marginTop={hp(3)}
           />
-        )}
-        <CustomText
-          title={'Confirm Password'}
-          textcolor={isError3 ? color.red : color.primary}
-          fontsize={Size(1.4)}
-          fontfamily={familyFont.reg}
-          aligntext={'left'}
-          marginleft={wp(2)}
-          marginbottom={wp(1)}
-          marginTop={hp(3)}
-        />
-        <CustomTextInput
-          placeholder={'Enter your password'}
-          fontfamily={familyFont.semiBold}
-          borderradius={hp(1.5)}
-          bgcolor={color.white}
-          isSecure={true}
-          paddinghorizontal={hp(1)}
-          bordercolor="red"
-          borderwidth={isError3 ? 1 : 0}
-          onchangetext={val => {
-            setPasswordConfirm(val);
-            setIsError3(false);
-          }}
-          paddingverti={Platform.OS === 'android' ? hp(0.2) : hp(3)}
-        />
-        {isError3 && (
+          <CustomTextInput
+            placeholder={'Enter your user name'}
+            fontfamily={familyFont.semiBold}
+            borderradius={hp(1.5)}
+            bgcolor={color.white}
+            paddinghorizontal={hp(1)}
+            bordercolor="red"
+            borderwidth={isError ? 1 : 0}
+            onchangetext={val => {
+              setUserName(val);
+              setIsError(false);
+            }}
+            paddingverti={Platform.OS === 'android' ? hp(0.3) : hp(2.3)}
+          />
+          {isError && (
+            <CustomText
+              title={
+                'There is a problem with your email or password. Try again.'
+              }
+              textcolor={color.red}
+              fontsize={Size(1.3)}
+              fontfamily={familyFont.reg}
+              marginleft={wp(2)}
+              marginTop={wp(1)}
+            />
+          )}
           <CustomText
-            title={'There is a problem with your email or password. Try again.'}
-            textcolor={color.red}
-            fontsize={Size(1.3)}
+            title={'Password'}
+            textcolor={isError2 ? color.red : color.primary}
+            fontsize={Size(1.4)}
             fontfamily={familyFont.reg}
+            aligntext={'left'}
             marginleft={wp(2)}
-            marginTop={wp(1)}
+            marginbottom={wp(1)}
+            marginTop={hp(3)}
           />
-        )}
-        <CustomButton
-          title="Create Account"
-          fontsize={Size(2.1)}
-          textcolor={color.white}
-          fontfamily={familyFont.semiBold}
-          backgroundcolor={color.primary}
-          borderradius={hp(1)}
-          padding={hp(2)}
-          fontweight="bold"
-          textalign="center"
-          marginvertical={hp(5)}
-          onpress={onRegister}
-        />
-        {false && (
+          <CustomTextInput
+            placeholder={'Enter your password'}
+            fontfamily={familyFont.semiBold}
+            borderradius={hp(1.5)}
+            bgcolor={color.white}
+            isSecure={true}
+            paddinghorizontal={hp(1)}
+            bordercolor="red"
+            borderwidth={isError2 ? 1 : 0}
+            onchangetext={val => {
+              setPassword(val);
+              setIsError2(false);
+            }}
+            paddingverti={Platform.OS === 'android' ? hp(0.3) : hp(2.3)}
+          />
+          {isError2 && (
+            <CustomText
+              title={
+                'There is a problem with your email or password. Try again.'
+              }
+              textcolor={color.red}
+              fontsize={Size(1.3)}
+              fontfamily={familyFont.reg}
+              marginleft={wp(2)}
+              marginTop={wp(1)}
+            />
+          )}
+          <CustomText
+            title={'Confirm Password'}
+            textcolor={isError3 ? color.red : color.primary}
+            fontsize={Size(1.4)}
+            fontfamily={familyFont.reg}
+            aligntext={'left'}
+            marginleft={wp(2)}
+            marginbottom={wp(1)}
+            marginTop={hp(3)}
+          />
+          <CustomTextInput
+            placeholder={'Enter your password'}
+            fontfamily={familyFont.semiBold}
+            borderradius={hp(1.5)}
+            bgcolor={color.white}
+            isSecure={true}
+            paddinghorizontal={hp(1)}
+            bordercolor="red"
+            borderwidth={isError3 ? 1 : 0}
+            onchangetext={val => {
+              setPasswordConfirm(val);
+              setIsError3(false);
+            }}
+            paddingverti={Platform.OS === 'android' ? hp(0.3) : hp(2.3)}
+          />
+          {isError3 && (
+            <CustomText
+              title={
+                'There is a problem with your email or password. Try again.'
+              }
+              textcolor={color.red}
+              fontsize={Size(1.3)}
+              fontfamily={familyFont.reg}
+              marginleft={wp(2)}
+              marginTop={wp(1)}
+            />
+          )}
+          <CustomButton
+            title="Create Account"
+            fontsize={Size(2.1)}
+            textcolor={color.white}
+            fontfamily={familyFont.semiBold}
+            backgroundcolor={color.primary}
+            borderradius={hp(1)}
+            padding={hp(2)}
+            fontweight="bold"
+            textalign="center"
+            marginvertical={hp(5)}
+            onpress={onRegister}
+          />
+          {false && (
+            <View
+              style={{
+                position: 'absolute',
+                paddingTop: hp(50),
+                backgroundColor: 'rgba(245, 245, 245, 0.7)',
+                width: wp(100),
+                height: hp(100),
+              }}>
+              <ActivityIndicator
+                animating={true}
+                color={color.primary}
+                size="large"
+              />
+            </View>
+          )}
           <View
             style={{
-              position: 'absolute',
-              paddingTop: hp(50),
-              backgroundColor: 'rgba(245, 245, 245, 0.7)',
-              width: wp(100),
-              height: hp(100),
+              flexDirection: 'row',
+              justifyContent: 'center',
+              marginTop: hp(1),
             }}>
-            <ActivityIndicator
-              animating={true}
-              color={color.primary}
-              size="large"
-            />
+            {Platform.OS === 'ios' && (
+              <View style={styles.socialIcon}>
+                <TouchableOpacity
+                  onPress={() => {
+                    applelogin();
+                  }}>
+                  <AntDesign name="apple1" size={25} color={color.white} />
+                </TouchableOpacity>
+              </View>
+            )}
+            <View style={styles.socialIcon}>
+              <TouchableOpacity
+                onPress={() => {
+                  googlelogin();
+                }}>
+                <AntDesign name="google" size={25} color={color.white} />
+              </TouchableOpacity>
+            </View>
           </View>
-        )}
-        {isLoading && (
-          <View
-            style={{
-              position: 'absolute',
-              paddingTop: hp(50),
-              backgroundColor: 'rgba(245, 245, 245, 0.7)',
-              width: wp(100),
-              height: hp(100),
-            }}>
-            <ActivityIndicator
-              animating={true}
-              color={color.primary}
-              size="large"
-            />
-          </View>
-        )}
-      </SafeAreaView>
+          {isLoading && (
+            <View
+              style={{
+                position: 'absolute',
+                paddingTop: hp(50),
+                backgroundColor: 'rgba(245, 245, 245, 0.7)',
+                width: wp(100),
+                height: hp(100),
+              }}>
+              <ActivityIndicator
+                animating={true}
+                color={color.primary}
+                size="large"
+              />
+            </View>
+          )}
+        </SafeAreaView>
+      </ScrollView>
     </KeyboardAvoidingView>
   );
 };

@@ -11,14 +11,13 @@ const styles = StyleSheet.create({
   input: {
     height: hp(14),
     justifyContent: 'center',
-  }, 
-  close:{
-    alignSelf:'flex-end',
-    marginTop:hp(3),
-    marginRight:hp(1)
+  },
+  close: {
+    alignSelf: 'flex-end',
+    marginTop: hp(3),
+    marginRight: hp(1),
   },
   logo: {
-    marginTop: hp(3),
     alignSelf: 'center',
     width: wp(45),
     tintColor: '#000',
@@ -35,7 +34,7 @@ const styles = StyleSheet.create({
   socialIcon: {
     width: wp(17),
     height: wp(13),
-    margin: wp(3),
+    margin: wp(1),
     borderRadius: wp(2),
     alignItems: 'center',
     justifyContent: 'center',
