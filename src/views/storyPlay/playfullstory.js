@@ -8,6 +8,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 
 const PlayFullStory = ({route, navigation}) => {
   const [url, setUrl] = useState(route?.params?.url);
+  const [bufferVideo, setBufferVideo] = useState(false);
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar
@@ -36,12 +37,32 @@ const PlayFullStory = ({route, navigation}) => {
           }}
           videoWidth={wp(100)}
           videoHeight={hp(100)}
-          autoplay={true}
+          onStart={() => {
+            setBufferVideo(true);
+            // alert('hi saeed');
+          }}
+          onReadyForDisplay={() => setBufferVideo(false)}
           thumbnail={{
             uri: url,
           }}
         />
       </View>
+      {bufferVideo && (
+        <View
+          style={{
+            position: 'absolute',
+            paddingTop: hp(50),
+            backgroundColor: 'rgba(245, 245, 245, 0.3)',
+            width: wp(100),
+            height: hp(100),
+          }}>
+          <ActivityIndicator
+            animating={true}
+            color={color.white}
+            size="large"
+          />
+        </View>
+      )}
     </SafeAreaView>
   );
 };

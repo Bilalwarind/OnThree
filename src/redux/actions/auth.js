@@ -95,5 +95,6 @@ export const logoutUser = nav => {
       isLoading: false,
       payload: null,
     });
+    nav.navigate('Login');
   };
 };

@@ -41,6 +41,7 @@ import {param} from 'express/lib/request';
 import BookMarkedIcon from 'react-native-vector-icons/Ionicons';
 import ChatIcon from 'react-native-vector-icons/Entypo';
 import CommentPlaceHolder from 'react-native-vector-icons/MaterialCommunityIcons';
+
 const StoryPlay = () => {
   const dispatch = useDispatch();
   const nav = useNavigation();
@@ -55,6 +56,7 @@ const StoryPlay = () => {
   const [likeStoryStatus, setLikeStoryStatus] = useState({});
   const [comment, setComment] = useState('');
   const [joinChat, setJoinChat] = useState(false);
+  const [bufferVideo, setBufferVideo] = useState(false);
   const [loading, setloading] = useState(false);
   const [comments, setComments] = useState('');
   const [isLiked, setIsLiked] = useState(-1);
@@ -382,15 +384,11 @@ const StoryPlay = () => {
           }}
           videoWidth={wp(100)}
           videoHeight={hp(100)}
-          // onBuffer={onBuffer}
-          // onLoadStart={() => {
-          //   console.log('onLoad', 'onLoad');
-          // }}
-          // onLoad={console.log('onLoad', 'onstart')}
-          // onVideoLoadStart={() => {
-          //   console.log('ONVidoeload', 'ONVidoeload');
-          // }}
-          // autoplay={true}
+          onStart={() => {
+            setBufferVideo(true);
+            // alert('hi saeed');
+          }}
+          onReadyForDisplay={() => setBufferVideo(false)}
           thumbnail={{
             uri: item?.thumbnail,
           }}
@@ -563,15 +561,11 @@ const StoryPlay = () => {
             }}
             videoWidth={wp(100)}
             videoHeight={hp(100)}
-            // onBuffer={onBuffer}
-            // onLoadStart={() => {
-            //   console.log('onLoad', 'onLoad');
-            // }}
-            // onLoad={console.log('onLoad', 'onstart')}
-            // onVideoLoadStart={() => {
-            //   console.log('ONVidoeload', 'ONVidoeload');
-            // }}
-            // autoplay={true}
+            onStart={() => {
+              setBufferVideo(true);
+              // alert('hi saeed');
+            }}
+            onReadyForDisplay={() => setBufferVideo(false)}
             thumbnail={{
               uri: storyUrl.thumbnail,
             }}
@@ -1163,7 +1157,7 @@ const StoryPlay = () => {
           </KeyboardAvoidingView>
         )}
       </RBSheet>
-      {/* {isLoading && (
+      {bufferVideo && (
         <View
           style={{
             position: 'absolute',
@@ -1174,11 +1168,11 @@ const StoryPlay = () => {
           }}>
           <ActivityIndicator
             animating={true}
-            color={color.primary}
+            color={color.white}
             size="large"
           />
         </View>
-      )} */}
+      )}
     </View>
   );
 };
