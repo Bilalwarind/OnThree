@@ -15,7 +15,7 @@ const Splash = ({params}) => {
   const {token, userData} = useSelector(state => state.auth);
 
   setTimeout(async () => {
-    if (userData) {
+    if (token) {
       navigation.replace('StoryPlay');
     } else {
       navigation.replace('Login');

@@ -38,6 +38,7 @@ const Profile = () => {
   const nav = useNavigation();
   const dispatch = useDispatch();
   const [allStories, setAllStories] = useState([]);
+  const [bufferVideo, setBufferVideo] = useState(false);
   const [userData, setUserData] = useState('');
   const {userProfile, userStoriesData, bookMarkedStoriesData, isLoading} =
     useSelector(state => state.home);
@@ -62,18 +63,18 @@ const Profile = () => {
     // dispatch(userAllStories(data));
     fetchAllStories();
     fetchUserInfo();
-    // const unsubscribe = nav.addListener(
-    //   'focus',
-    //   () => {
-    //     dispatch(userProfileInfo(data));
-    //     dispatch(userAllStories(data));
-    //     dispatch(userBookMarkedStories(dataBookMarked));
-    //   },
-    // [],
-    // );
+    const unsubscribe = nav.addListener(
+      'focus',
+      () => {
+        fetchUserInfo();
+        // dispatch(userProfileInfo(data));
+        // dispatch(userAllStories(data));
+        // dispatch(userBookMarkedStories(dataBookMarked));
+      },
+      [],
+    );
 
-    // Return the function to unsubscribe from the event so it gets removed on unmount
-    // return unsubscribe;
+    return unsubscribe;
   }, []);
   const fetachAllBookmarks = async () => {
     setloading(true);
@@ -225,7 +226,11 @@ const Profile = () => {
               video={{
                 uri: item?.url,
               }}
-              // autoplay={true}
+              onStart={() => {
+                setBufferVideo(true);
+                // alert('hi saeed');
+              }}
+              onReadyForDisplay={() => setBufferVideo(false)}
               thumbnail={{
                 uri: item?.thumbnail,
               }}
@@ -511,6 +516,22 @@ const Profile = () => {
           <ActivityIndicator
             animating={true}
             color={color.primary}
+            size="large"
+          />
+        </View>
+      )}
+      {bufferVideo && (
+        <View
+          style={{
+            position: 'absolute',
+            paddingTop: hp(50),
+            backgroundColor: 'rgba(245, 245, 245, 0.3)',
+            width: wp(100),
+            height: hp(100),
+          }}>
+          <ActivityIndicator
+            animating={true}
+            color={color.white}
             size="large"
           />
         </View>

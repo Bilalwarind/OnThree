@@ -39,6 +39,7 @@ const PublishStory = ({route}) => {
   const nav = useNavigation();
   const {allUserList, isLoading} = useSelector(state => state.home);
   const {token, userId} = useSelector(state => state.auth);
+  const [bufferVideo, setBufferVideo] = useState(false);
   const [title, setTiltle] = useState('');
   const [about, setAbout] = useState('');
   const [tag, setTag] = useState([]);
@@ -204,7 +205,11 @@ const PublishStory = ({route}) => {
             }}
             videoWidth={wp(100)}
             videoHeight={hp(100)}
-            autoplay={true}
+            onStart={() => {
+              setBufferVideo(true);
+              // alert('hi saeed');
+            }}
+            onReadyForDisplay={() => setBufferVideo(false)}
             thumbnail={{
               uri: videoData.uri,
             }}
@@ -401,6 +406,22 @@ const PublishStory = ({route}) => {
           <ActivityIndicator
             animating={true}
             color={color.primary}
+            size="large"
+          />
+        </View>
+      )}
+      {bufferVideo && (
+        <View
+          style={{
+            position: 'absolute',
+            paddingTop: hp(50),
+            backgroundColor: 'rgba(245, 245, 245, 0.3)',
+            width: wp(100),
+            height: hp(100),
+          }}>
+          <ActivityIndicator
+            animating={true}
+            color={color.white}
             size="large"
           />
         </View>

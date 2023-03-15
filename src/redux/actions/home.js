@@ -143,21 +143,23 @@ export const userBookMarkedStories = data => {
   };
 };
 export const userProfileUpdate = (data, nav) => {
+  // alert(JSON.stringify(data));
   return dispatch => {
     dispatch({
       type: DATA_LOADING,
     });
     baseUrl
       .post('profile-update', data)
-      .then(async res => {
-        Alert.alert(res?.data?.message);
+      .then(res => {
         dispatch({
           type: LOGIN_SUCCESS,
           payload: res?.data?.data?.user,
         });
+        Alert.alert(res?.data?.message);
+        nav.navigate('Profile');
       })
       .catch(err => {
-        console.log('res.data', err);
+        console.error('res.data', err);
         dispatch({
           type: DATA_FAILED,
         });
